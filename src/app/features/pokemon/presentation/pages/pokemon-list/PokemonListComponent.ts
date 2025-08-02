@@ -18,7 +18,7 @@ import {take} from 'rxjs/operators';
 
       <h2 class="text-3xl font-bold mb-4">Pokemon List</h2>
       @if (pokemonList$ | async; as pokemon) {
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 angular-sm:grid-cols-2 angular-md:grid-cols-3 angular-lg:grid-cols-4 angular-xl:grid-cols-5 gap-4">
           @for (p of pokemon; track p.id) {
             <div class="bg-white rounded-lg shadow-md p-4 flex flex-col items-center">
               <img [src]="p.imageUrl" [alt]="p.name" class="w-24 h-24 object-contain mb-2" width="96" height="96">
