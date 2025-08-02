@@ -1,10 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Observable} from 'rxjs';
+import {Observable, withLatestFrom} from 'rxjs';
 import {Pokemon} from '../../../domain/model/Pokemon';
 import {SearchFormComponent} from './SearchForm';
 import {SearchPokemonUseCase} from '../../../application/use-cases/SearchPokemonUseCase';
 import {PaginationButtonsComponent} from './PaginationButtonsComponent';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -45,12 +47,33 @@ export class PokemonListComponent implements OnInit {
   currentOffset$!: Observable<number>;
 
   constructor(
+    private breakpointObserver: BreakpointObserver,
     private searchPokemonUseCase: SearchPokemonUseCase
   ) {}
 
   ngOnInit(): void {
     this.pokemonList$ = this.searchPokemonUseCase.results$;
-    this.currentOffset$ = this.searchPokemonUseCase.currentOffset$;
+    this.currentOffset$ = this.searchPokemonUseCase.offset$;
+    this.breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small,
+      Breakpoints.Medium,
+      Breakpoints.Large
+    ]).subscribe(result => {
+      let newLimit: number;
+      if (result.breakpoints[Breakpoints.XSmall]) {
+        newLimit = 8;
+      } else if (result.breakpoints[Breakpoints.Small]) {
+        newLimit = 12;
+      } else if (result.breakpoints[Breakpoints.Medium]) {
+        newLimit = 12;
+      } else if (result.breakpoints[Breakpoints.Large]) {
+        newLimit = 16;
+      } else {
+        newLimit = 50;
+      }
+      this.searchPokemonUseCase.setLimit(newLimit);
+    });
   }
 
   onSearchSubmitted(term: string): void {
@@ -62,8 +85,12 @@ export class PokemonListComponent implements OnInit {
    * Increments the offset by 50 using the use case.
    */
   onNextPage(): void {
-    const currentOffset = this.searchPokemonUseCase.currentOffset$.getValue();
-    this.searchPokemonUseCase.setOffset(currentOffset + 50);
+    this.searchPokemonUseCase
+      .offset$
+      .pipe(take(1), withLatestFrom(this.searchPokemonUseCase.limit$))
+      .subscribe(([offset, limit]) =>
+        this.searchPokemonUseCase.setOffset(offset + limit)
+      );
   }
 
   /**
@@ -71,7 +98,11 @@ export class PokemonListComponent implements OnInit {
    * Decrements the offset by 50, ensuring it doesn't go below 0.
    */
   onPreviousPage(): void {
-    const currentOffset = this.searchPokemonUseCase.currentOffset$.getValue();
-    this.searchPokemonUseCase.setOffset(Math.max(0, currentOffset - 50));
+    this.searchPokemonUseCase
+      .offset$
+      .pipe(take(1), withLatestFrom(this.searchPokemonUseCase.limit$))
+      .subscribe(([offset, limit]) =>
+        this.searchPokemonUseCase.setOffset(Math.max(0, offset - limit))
+      );
   }
 }

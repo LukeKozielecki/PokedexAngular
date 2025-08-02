@@ -17,13 +17,15 @@ export class SearchPokemonUseCase {
 
   // === Reactive State ===
   private searchTerm$ = new BehaviorSubject<string>('');
-  private offset$ = new BehaviorSubject<number>(0);
-  private limit$ = new BehaviorSubject<number>(50);
+  private _offset$ = new BehaviorSubject<number>(0);
+  private _limit$ = new BehaviorSubject<number>(10);
+  public offset$: BehaviorSubject<number> = this._offset$;
+  public limit$: BehaviorSubject<number> = this._limit$;
 
   public results$: Observable<Pokemon[]> = combineLatest([
     this.searchTerm$.pipe(map(term => term.trim()), distinctUntilChanged()),
-    this.offset$,
-    this.limit$
+    this._offset$,
+    this._limit$
   ]).pipe(
     switchMap(([term, offset, limit]) => {
       return term
@@ -31,8 +33,6 @@ export class SearchPokemonUseCase {
         : this.getDefaultPokemonList(offset, limit);
     })
   );
-
-  public currentOffset$: BehaviorSubject<number> = this.offset$;
 
   // === Exposed Methods ===
   /**
@@ -51,7 +51,7 @@ export class SearchPokemonUseCase {
    */
   public setOffset(newOffset: number): void {
     if (newOffset >= 0) {
-      this.offset$.next(newOffset);
+      this._offset$.next(newOffset);
     }
   }
 
@@ -62,7 +62,7 @@ export class SearchPokemonUseCase {
    */
   public setLimit(newLimit: number): void {
     if (newLimit > 0) {
-      this.limit$.next(newLimit);
+      this._limit$.next(newLimit);
     }
   }
 
