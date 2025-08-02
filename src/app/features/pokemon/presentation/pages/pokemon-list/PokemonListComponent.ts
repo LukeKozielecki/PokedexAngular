@@ -1,37 +1,63 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, debounceTime, Observable, startWith, switchMap} from 'rxjs';
 import {Pokemon} from '../../../domain/model/Pokemon';
 import {GetPokemonListUseCase} from '../../../application/use-cases/GetPokemonListUseCase';
+import {SearchFormComponent} from './SearchForm';
+import {SearchPokemonUseCase} from '../../../application/use-cases/SearchPokemonUseCase';
 
 @Component({
   selector: 'app-pokemon-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SearchFormComponent],
   template: `
-    <h2 class="text-3xl font-bold mb-4">Pokemon List</h2>
-    @if (pokemonList | async; as pokemon) {
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        @for (p of pokemon; track p.id) {
-          <div class="bg-white rounded-lg shadow-md p-4 flex flex-col items-center">
-            <img [src]="p.imageUrl" [alt]="p.name" class="w-24 h-24 object-contain mb-2" width="96" height="96">
-            <h3 class="text-xl font-semibold mb-1">{{ p.name | titlecase }}</h3>
-            <p class="text-gray-600 text-sm">ID: {{ p.id }}</p>
-            <p class="text-gray-700 text-sm">Types: {{ p.types.join(', ') | titlecase }}</p>
-          </div>
+    <div class="pokemon-list-container p-4">
+      <app-search-form (searchSubmitted)="onSearchSubmitted($event)"></app-search-form>
+
+      <h2 class="text-3xl font-bold mb-4">Pokemon List</h2>
+      @if (pokemonList$ | async; as pokemon) {
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          @for (p of pokemon; track p.id) {
+            <div class="bg-white rounded-lg shadow-md p-4 flex flex-col items-center">
+              <img [src]="p.imageUrl" [alt]="p.name" class="w-24 h-24 object-contain mb-2" width="96" height="96">
+              <h3 class="text-xl font-semibold mb-1">{{ p.name | titlecase }}</h3>
+              <p class="text-gray-600 text-sm">ID: {{ p.id }}</p>
+              <p class="text-gray-700 text-sm">Types: {{ p.types.join(', ') | titlecase }}</p>
+            </div>
+          }
+        </div>
+        @if (pokemon.length === 0) {
+          <div class="text-center text-lg text-gray-500 mt-8">No Pokemon found.</div>
         }
-      </div>
-    } @else {
-      <div class="text-center text-lg text-gray-500 mt-8">Loading Pokemon...</div>
-    }
+      } @else {
+        <div class="text-center text-lg text-gray-500 mt-8">Loading Pokemon...</div>
+      }
+    </div>
   `,
 })
 export class PokemonListComponent implements OnInit {
-  pokemonList!: Observable<Pokemon[]>;
+  pokemonList$!: Observable<Pokemon[]>;
+  private searchTerm$ = new BehaviorSubject<string>('');
 
-  constructor(private getPokemonListUseCase: GetPokemonListUseCase) {}
+  constructor(
+    private getPokemonListUseCase: GetPokemonListUseCase,
+    private searchPokemonUseCase: SearchPokemonUseCase
+  ) {}
 
   ngOnInit(): void {
-    this.pokemonList = this.getPokemonListUseCase.execute(0, 50);
+    this.pokemonList$ = this.searchTerm$.pipe(
+      startWith(''),
+      switchMap(searchTerm => {
+        if (searchTerm.trim()) {
+          return this.searchPokemonUseCase.execute(searchTerm.trim());
+        } else {
+          return this.getPokemonListUseCase.execute(0, 50);
+        }
+      })
+    );
+  }
+
+  onSearchSubmitted(term: string): void {
+    this.searchTerm$.next(term);
   }
 }
