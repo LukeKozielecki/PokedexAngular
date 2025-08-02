@@ -4,11 +4,12 @@ import {Observable} from 'rxjs';
 import {Pokemon} from '../../../domain/model/Pokemon';
 import {SearchFormComponent} from './SearchForm';
 import {SearchPokemonUseCase} from '../../../application/use-cases/SearchPokemonUseCase';
+import {PaginationButtonsComponent} from './PaginationButtonsComponent';
 
 @Component({
   selector: 'app-pokemon-list',
   standalone: true,
-  imports: [CommonModule, SearchFormComponent],
+  imports: [CommonModule, SearchFormComponent, PaginationButtonsComponent],
   template: `
     <div class="pokemon-list-container p-4">
       <app-search-form (searchSubmitted)="onSearchSubmitted($event)"></app-search-form>
@@ -31,11 +32,17 @@ import {SearchPokemonUseCase} from '../../../application/use-cases/SearchPokemon
       } @else {
         <div class="text-center text-lg text-gray-500 mt-8">Loading Pokemon...</div>
       }
+      <app-pagination-buttons
+        [currentOffset]="currentOffset$ | async"
+        (nextPage)="onNextPage()"
+        (prevPage)="onPreviousPage()"
+      ></app-pagination-buttons>
     </div>
   `,
 })
 export class PokemonListComponent implements OnInit {
   pokemonList$!: Observable<Pokemon[]>;
+  currentOffset$!: Observable<number>;
 
   constructor(
     private searchPokemonUseCase: SearchPokemonUseCase
@@ -43,9 +50,28 @@ export class PokemonListComponent implements OnInit {
 
   ngOnInit(): void {
     this.pokemonList$ = this.searchPokemonUseCase.results$;
+    this.currentOffset$ = this.searchPokemonUseCase.currentOffset$;
   }
 
   onSearchSubmitted(term: string): void {
     this.searchPokemonUseCase.search(term);
+  }
+
+  /**
+   * Handles the click event for the "Next" pagination button.
+   * Increments the offset by 50 using the use case.
+   */
+  onNextPage(): void {
+    const currentOffset = this.searchPokemonUseCase.currentOffset$.getValue();
+    this.searchPokemonUseCase.setOffset(currentOffset + 50);
+  }
+
+  /**
+   * Handles the click event for the "Previous" pagination button.
+   * Decrements the offset by 50, ensuring it doesn't go below 0.
+   */
+  onPreviousPage(): void {
+    const currentOffset = this.searchPokemonUseCase.currentOffset$.getValue();
+    this.searchPokemonUseCase.setOffset(Math.max(0, currentOffset - 50));
   }
 }
