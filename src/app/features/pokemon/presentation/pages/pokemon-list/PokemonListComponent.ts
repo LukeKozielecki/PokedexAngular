@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {BehaviorSubject, debounceTime, Observable, startWith, switchMap} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Pokemon} from '../../../domain/model/Pokemon';
-import {GetPokemonListUseCase} from '../../../application/use-cases/GetPokemonListUseCase';
 import {SearchFormComponent} from './SearchForm';
 import {SearchPokemonUseCase} from '../../../application/use-cases/SearchPokemonUseCase';
 
@@ -37,27 +36,16 @@ import {SearchPokemonUseCase} from '../../../application/use-cases/SearchPokemon
 })
 export class PokemonListComponent implements OnInit {
   pokemonList$!: Observable<Pokemon[]>;
-  private searchTerm$ = new BehaviorSubject<string>('');
 
   constructor(
-    private getPokemonListUseCase: GetPokemonListUseCase,
     private searchPokemonUseCase: SearchPokemonUseCase
   ) {}
 
   ngOnInit(): void {
-    this.pokemonList$ = this.searchTerm$.pipe(
-      startWith(''),
-      switchMap(searchTerm => {
-        if (searchTerm.trim()) {
-          return this.searchPokemonUseCase.execute(searchTerm.trim());
-        } else {
-          return this.getPokemonListUseCase.execute(0, 50);
-        }
-      })
-    );
+    this.pokemonList$ = this.searchPokemonUseCase.results$;
   }
 
   onSearchSubmitted(term: string): void {
-    this.searchTerm$.next(term);
+    this.searchPokemonUseCase.search(term);
   }
 }
