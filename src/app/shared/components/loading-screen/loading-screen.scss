@@ -1,0 +1,38 @@
+$overlay-bg-color: rgba(255, 255, 255, 0.9);
+$z-index-overlay: 9999;
+$spinner-container-size: 8rem;
+$spinner-icon-size: 6rem;
+$z-index-icon: 0;
+$z-index-loader: 10;
+
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $overlay-bg-color;
+  z-index: $z-index-overlay;
+
+  .spinner-container {
+    position: relative;
+    width: $spinner-container-size;
+    height: $spinner-container-size;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .spinner-icon {
+      position: absolute;
+      width: $spinner-icon-size;
+      height: $spinner-icon-size;
+      object-fit: contain;
+      z-index: $z-index-icon;
+    }
+
+    .spinner-loader {
+      position: relative;
+      z-index: $z-index-loader;
+    }
+  }
+}
