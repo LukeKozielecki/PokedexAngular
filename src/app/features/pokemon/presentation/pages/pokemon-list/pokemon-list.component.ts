@@ -1,21 +1,21 @@
-import {Component, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {Component, OnInit, signal} from '@angular/core';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {Observable, withLatestFrom} from 'rxjs';
 import {Pokemon} from '../../../domain/model/Pokemon';
-import {SearchFormComponent} from './SearchForm';
+import {SearchFormComponent} from './search-form.component';
 import {SearchPokemonUseCase} from '../../../application/use-cases/SearchPokemonUseCase';
-import {PaginationButtonsComponent} from './PaginationButtonsComponent';
+import {PaginationButtonsComponent} from './pagination-buttons.component';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {take} from 'rxjs/operators';
+import {LoadingScreenComponent} from '../../../../../shared/components/loading-screen/loading-screen.component';
 
 @Component({
   selector: 'app-pokemon-list',
   standalone: true,
-  imports: [CommonModule, SearchFormComponent, PaginationButtonsComponent],
+  imports: [CommonModule, SearchFormComponent, PaginationButtonsComponent, LoadingScreenComponent],
   template: `
     <div class="pokemon-list-container p-4">
       <app-search-form (searchSubmitted)="onSearchSubmitted($event)"></app-search-form>
-
       <h2 class="text-3xl font-bold mb-4">Pokemon List</h2>
       @if (pokemonList$ | async; as pokemon) {
         <div class="grid grid-cols-1 angular-sm:grid-cols-2 angular-md:grid-cols-3 angular-lg:grid-cols-4 angular-xl:grid-cols-5 gap-4">
@@ -32,7 +32,7 @@ import {take} from 'rxjs/operators';
           <div class="text-center text-lg text-gray-500 mt-8">No Pokemon found.</div>
         }
       } @else {
-        <div class="text-center text-lg text-gray-500 mt-8">Loading Pokemon...</div>
+        <app-loading-screen></app-loading-screen>
       }
       <app-pagination-buttons
         [currentOffset]="currentOffset$ | async"
@@ -45,6 +45,7 @@ import {take} from 'rxjs/operators';
 export class PokemonListComponent implements OnInit {
   pokemonList$!: Observable<Pokemon[]>;
   currentOffset$!: Observable<number>;
+  isLoadingSignal = signal(true);
 
   constructor(
     private breakpointObserver: BreakpointObserver,
