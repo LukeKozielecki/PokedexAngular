@@ -1,5 +1,6 @@
-import {Component, EventEmitter, HostListener, OnInit, Output, signal} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit, signal} from '@angular/core';
 import {NgOptimizedImage} from '@angular/common';
+import {ScrollToTopService} from '../../../../../../shared/services/scroll-to-top.service';
 
 @Component({
   selector: 'app-pokemon-compendium-header',
@@ -10,8 +11,7 @@ import {NgOptimizedImage} from '@angular/common';
   styleUrl: './pokemon-compendium-header.scss',
   host: { '[class.scrolled]': 'hasScrolled()' }
 })
-export class PokemonCompendiumHeaderComponent implements OnInit {
-  @Output() scrolledToTopRequest = new EventEmitter<void>();
+export class PokemonCompendiumHeaderComponent implements OnInit, OnDestroy {
 
   hasScrolled = signal(false);
 
@@ -41,6 +41,8 @@ export class PokemonCompendiumHeaderComponent implements OnInit {
    * Used to prevent rapid state changes during scrolling.
    */
   private cooldownTimeout: number | undefined;
+
+  constructor(private scrollService: ScrollToTopService) {}
 
   ngOnInit(): void {
     this.onScrollRequest();
@@ -106,7 +108,7 @@ export class PokemonCompendiumHeaderComponent implements OnInit {
    */
   private emitScrollToTopRequest() : void {
     setTimeout(() => {
-      this.scrolledToTopRequest.emit();
+      this.scrollService.requestScrollToTop();
     }, this.SCROLL_TO_TOP_EMIT_DELAY_MS);
   }
 }

@@ -1,6 +1,6 @@
-import {Component, OnInit, signal} from '@angular/core';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
-import {Observable, withLatestFrom} from 'rxjs';
+import {Component, OnDestroy, OnInit, signal} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Observable, Subject, takeUntil, withLatestFrom} from 'rxjs';
 import {Pokemon} from '../../../domain/model/Pokemon';
 import {SearchFormComponent} from './search-form.component';
 import {SearchPokemonUseCase} from '../../../application/use-cases/SearchPokemonUseCase';
@@ -9,13 +9,14 @@ import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {take} from 'rxjs/operators';
 import {LoadingScreenComponent} from '../../../../../shared/components/loading-screen/loading-screen.component';
 import {PokemonCompendiumHeaderComponent} from '../components/pokemon-compendium-header/pokemon-compendium-header.component';
+import {ScrollToTopService} from '../../../../../shared/services/scroll-to-top.service';
 
 @Component({
   selector: 'app-pokemon-list',
   standalone: true,
   imports: [CommonModule, SearchFormComponent, PaginationButtonsComponent, LoadingScreenComponent, PokemonCompendiumHeaderComponent],
   template: `
-    <app-pokemon-compendium-header (scrolledToTopRequest)="onHeaderScrolledToTop()"/>
+    <app-pokemon-compendium-header/>
     <div class="pokemon-list-container p-4">
       <app-search-form (searchSubmitted)="onSearchSubmitted($event)"></app-search-form>
       @if (pokemonList$ | async; as pokemon) {
@@ -43,14 +44,17 @@ import {PokemonCompendiumHeaderComponent} from '../components/pokemon-compendium
     </div>
   `,
 })
-export class PokemonListComponent implements OnInit {
+export class PokemonListComponent implements OnInit, OnDestroy {
   pokemonList$!: Observable<Pokemon[]>;
   currentOffset$!: Observable<number>;
   isLoadingSignal = signal(true);
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private searchPokemonUseCase: SearchPokemonUseCase
+    private searchPokemonUseCase: SearchPokemonUseCase,
+    private scrollService: ScrollToTopService
   ) {}
 
   ngOnInit(): void {
@@ -76,14 +80,21 @@ export class PokemonListComponent implements OnInit {
       }
       this.searchPokemonUseCase.setLimit(newLimit);
     });
+
+    this.scrollService.scrollToTopRequested$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      })
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onSearchSubmitted(term: string): void {
     this.searchPokemonUseCase.search(term);
-  }
-
-  onHeaderScrolledToTop(): void {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   /**
