@@ -1,0 +1,56 @@
+$header-transition-speed: 0.3s;
+$header-transition-easing: ease-out;
+$header-box-shadow-base: rgba(0, 0, 0, 0.1);
+$header-box-shadow-scrolled: rgba(0, 0, 0, 0.2);
+
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: white;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px $header-box-shadow-base;
+  transition: padding $header-transition-speed $header-transition-easing,
+  box-shadow $header-transition-speed $header-transition-easing;
+
+  &.scrolled {
+    padding: 0.5rem 0;
+    box-shadow: 0 2px 8px $header-box-shadow-scrolled;
+
+    .compendium-logo {
+      width: 64px;
+      height: 64px;
+    }
+
+    .compendium-title {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.compendium-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.compendium-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.compendium-logo {
+  width: 128px;
+  height: 128px;
+  transition: width $header-transition-speed $header-transition-easing,
+  height $header-transition-speed $header-transition-easing;
+}
+
+.compendium-title {
+  font-size: 1.875rem;
+  font-weight: bold;
+  margin-bottom: 0;
+  transition: font-size $header-transition-speed $header-transition-easing;
+}
