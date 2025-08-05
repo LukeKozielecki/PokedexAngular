@@ -8,7 +8,16 @@
           <img [src]="p.imageUrl" [alt]="p.name" class="pokemon-image" width="96" height="96">
           <h3 class="pokemon-name">{{ p.name | titlecase }}</h3>
           <p class="pokemon-id">ID: {{ p.id }}</p>
-          <p class="pokemon-types">Types: {{ p.types.join(', ') | titlecase }}</p>
+          <div class="pokemon-types-container">
+            @for (type  of p.types; track type){
+              <span
+                class="type-pill"
+                [ngClass]="'type-' + type.toLowerCase()"
+              >
+                {{ type }}
+              </span>
+            }
+          </div>
         </div>
       }
     </div>

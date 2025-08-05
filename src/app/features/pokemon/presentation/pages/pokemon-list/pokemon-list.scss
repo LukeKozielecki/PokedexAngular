@@ -8,6 +8,9 @@ $color-text-tertiary: #374151;
 $color-text-placeholder: #6b7280;
 $color-card-active: #f1f1f1;
 
+@use '../../../../../shared/constants/pokemon-types-mixins' as mixins;
+@include mixins.type-pill-colors;
+
 .pokemon-list-container {
   padding: $spacing-unit $mobile-horizontal-list-padding;
 
@@ -79,11 +82,24 @@ $color-card-active: #f1f1f1;
   font-size: 0.875rem;
 }
 
-.pokemon-types {
-  color: $color-text-tertiary;
-  font-size: 0.875rem;
+.pokemon-types-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  justify-content: center;
+  margin-top: 0.5rem;
 }
 
+.type-pill {
+  display: inline-block;
+  margin: 0.125rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  border-radius: 999px;
+  transition: background-color 0.2s ease;
+}
 .no-pokemon-found {
   text-align: center;
   font-size: 1.125rem;
