@@ -24,6 +24,12 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   currentOffset$!: Observable<number>;
   isLoadingSignal = signal(true);
 
+  /**
+   * Variable storing a navigation delay, to provide less abrupt
+   * transition and to facilitate tactile feeling when navigating
+   */
+  readonly NAVIGATION_DELAY = 100;
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -70,11 +76,15 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   }
 
   onPokemonCardClick(id: number | string) {
-    this.router.navigate(['/pokemon-details', id])
+    setTimeout(() => {
+      this.router.navigate(['/pokemon-details', id]);
+    }, this.NAVIGATION_DELAY);
   }
 
   onSearchSubmitted(term: string): void {
-    this.searchPokemonUseCase.search(term);
+    setTimeout(() => {
+      this.searchPokemonUseCase.search(term);
+    }, this.NAVIGATION_DELAY);
   }
 
   /**
