@@ -11,6 +11,7 @@ import {LoadingScreenComponent} from '../../../../../shared/components/loading-s
 import {PokemonCompendiumHeaderComponent} from '../components/pokemon-compendium-header/pokemon-compendium-header.component';
 import {ScrollToTopService} from '../../../../../shared/services/scroll-to-top.service';
 import {Router} from '@angular/router';
+import {NAVIGATION_DELAY} from '../../../../../shared/constants/app.constants';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -23,12 +24,6 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   pokemonList$!: Observable<Pokemon[]>;
   currentOffset$!: Observable<number>;
   isLoadingSignal = signal(true);
-
-  /**
-   * Variable storing a navigation delay, to provide less abrupt
-   * transition and to facilitate tactile feeling when navigating
-   */
-  readonly NAVIGATION_DELAY = 100;
 
   private destroy$ = new Subject<void>();
 
@@ -78,13 +73,13 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   onPokemonCardClick(id: number | string) {
     setTimeout(() => {
       this.router.navigate(['/pokemon-details', id]);
-    }, this.NAVIGATION_DELAY);
+    }, NAVIGATION_DELAY);
   }
 
   onSearchSubmitted(term: string): void {
     setTimeout(() => {
       this.searchPokemonUseCase.search(term);
-    }, this.NAVIGATION_DELAY);
+    }, NAVIGATION_DELAY);
   }
 
   /**
