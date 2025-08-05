@@ -1,0 +1,8 @@
+<div class="pagination-controls">
+  <button class="pagination-button" (click)="prevPage.emit()" [disabled]="currentOffset === 0">
+    Previous
+  </button>
+  <button class="pagination-button" (click)="nextPage.emit()" >
+    Next
+  </button>
+</div>

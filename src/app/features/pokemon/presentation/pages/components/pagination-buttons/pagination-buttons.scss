@@ -1,0 +1,40 @@
+$color-primary: #3b82f6;
+$color-primary-dark: #2563eb;
+$color-text-light: #ffffff;
+$spacing-unit: 1rem;
+$border-radius-lg: 0.5rem;
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+$ring-color: #60a5fa;
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  gap: $spacing-unit;
+  margin-top: 2rem;
+}
+
+.pagination-button {
+  padding: 0.75rem 1.5rem;
+  background-color: $color-primary;
+  color: $color-text-light;
+  font-weight: 600;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-md;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    background-color: $color-primary-dark;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px $ring-color, 0 0 0 2px $ring-color;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

@@ -1,14 +1,13 @@
-import {Component, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Observable, Subject, takeUntil, withLatestFrom} from 'rxjs';
 import {Pokemon} from '../../../domain/model/Pokemon';
 import {SearchFormComponent} from './search-form.component';
 import {SearchPokemonUseCase} from '../../../application/use-cases/SearchPokemonUseCase';
-import {PaginationButtonsComponent} from './pagination-buttons.component';
+import {PaginationButtonsComponent} from '../components/pagination-buttons/pagination-buttons.component';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {take} from 'rxjs/operators';
 import {LoadingScreenComponent} from '../../../../../shared/components/loading-screen/loading-screen.component';
-import {PokemonCompendiumHeaderComponent} from '../components/pokemon-compendium-header/pokemon-compendium-header.component';
 import {ScrollToTopService} from '../../../../../shared/services/scroll-to-top.service';
 import {Router} from '@angular/router';
 import {NAVIGATION_DELAY} from '../../../../../shared/constants/app.constants';
@@ -16,14 +15,13 @@ import {NAVIGATION_DELAY} from '../../../../../shared/constants/app.constants';
 @Component({
   selector: 'app-pokemon-list',
   standalone: true,
-  imports: [CommonModule, SearchFormComponent, PaginationButtonsComponent, LoadingScreenComponent, PokemonCompendiumHeaderComponent],
+  imports: [CommonModule, SearchFormComponent, PaginationButtonsComponent, LoadingScreenComponent],
   templateUrl: './pokemon-list.html',
   styleUrl: './pokemon-list.scss',
 })
 export class PokemonListComponent implements OnInit, OnDestroy {
   pokemonList$!: Observable<Pokemon[]>;
   currentOffset$!: Observable<number>;
-  isLoadingSignal = signal(true);
 
   private destroy$ = new Subject<void>();
 
