@@ -6,6 +6,8 @@ $border-radius-lg: 0.5rem;
 $shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
 $ring-color: #60a5fa;
 
+@use '../../../../../../shared/constants/theme' as theme;
+
 .pagination-controls {
   display: flex;
   justify-content: center;
@@ -15,8 +17,8 @@ $ring-color: #60a5fa;
 
 .pagination-button {
   padding: 0.75rem 1.5rem;
-  background-color: $color-primary;
-  color: $color-text-light;
+  background-color: theme.$primary-color;
+  color: white;
   font-weight: 600;
   border-radius: $border-radius-lg;
   box-shadow: $shadow-md;
@@ -25,7 +27,7 @@ $ring-color: #60a5fa;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
-    background-color: $color-primary-dark;
+    background-color: theme.$primary-color-dark;
   }
 
   &:focus {
