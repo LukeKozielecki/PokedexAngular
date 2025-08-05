@@ -16,34 +16,8 @@ import {Router} from '@angular/router';
   selector: 'app-pokemon-list',
   standalone: true,
   imports: [CommonModule, SearchFormComponent, PaginationButtonsComponent, LoadingScreenComponent, PokemonCompendiumHeaderComponent],
-  template: `
-    <app-pokemon-compendium-header/>
-    <div class="pokemon-list-container p-4">
-      <app-search-form (searchSubmitted)="onSearchSubmitted($event)"></app-search-form>
-      @if (pokemonList$ | async; as pokemon) {
-        <div class="grid grid-cols-1 angular-sm:grid-cols-2 angular-md:grid-cols-3 angular-lg:grid-cols-4 angular-xl:grid-cols-5 gap-4">
-          @for (p of pokemon; track p.id) {
-            <div (click)="onPokemonCardClick(p.id)" class="bg-white rounded-lg shadow-md p-4 flex flex-col items-center">
-              <img [src]="p.imageUrl" [alt]="p.name" class="w-24 h-24 object-contain mb-2" width="96" height="96">
-              <h3 class="text-xl font-semibold mb-1">{{ p.name | titlecase }}</h3>
-              <p class="text-gray-600 text-sm">ID: {{ p.id }}</p>
-              <p class="text-gray-700 text-sm">Types: {{ p.types.join(', ') | titlecase }}</p>
-            </div>
-          }
-          <app-pagination-buttons
-            [currentOffset]="currentOffset$ | async"
-            (nextPage)="onNextPage()"
-            (prevPage)="onPreviousPage()"
-          ></app-pagination-buttons>
-        </div>
-        @if (pokemon.length === 0) {
-          <div class="text-center text-lg text-gray-500 mt-8">No Pokemon found.</div>
-        }
-      } @else {
-        <app-loading-screen></app-loading-screen>
-      }
-    </div>
-  `,
+  templateUrl: './pokemon-list.html',
+  styleUrl: './pokemon-list.scss',
 })
 export class PokemonListComponent implements OnInit, OnDestroy {
   pokemonList$!: Observable<Pokemon[]>;

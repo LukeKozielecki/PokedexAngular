@@ -1,0 +1,26 @@
+<app-pokemon-compendium-header/>
+<div class="pokemon-list-container">
+  <app-search-form (searchSubmitted)="onSearchSubmitted($event)"></app-search-form>
+  @if (pokemonList$ | async; as pokemon) {
+    <div class="pokemon-grid">
+      @for (p of pokemon; track p.id) {
+        <div (click)="onPokemonCardClick(p.id)" class="pokemon-card">
+          <img [src]="p.imageUrl" [alt]="p.name" class="pokemon-image" width="96" height="96">
+          <h3 class="pokemon-name">{{ p.name | titlecase }}</h3>
+          <p class="pokemon-id">ID: {{ p.id }}</p>
+          <p class="pokemon-types">Types: {{ p.types.join(', ') | titlecase }}</p>
+        </div>
+      }
+    </div>
+    <app-pagination-buttons
+      [currentOffset]="currentOffset$ | async"
+      (nextPage)="onNextPage()"
+      (prevPage)="onPreviousPage()"
+    ></app-pagination-buttons>
+    @if (pokemon.length === 0) {
+      <div class="no-pokemon-found">No Pokemon found.</div>
+    }
+  } @else {
+    <app-loading-screen></app-loading-screen>
+  }
+</div>
