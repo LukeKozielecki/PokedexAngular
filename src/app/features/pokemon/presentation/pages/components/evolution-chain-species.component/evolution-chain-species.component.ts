@@ -5,6 +5,7 @@ import {Pokemon} from '../../../../domain/model/Pokemon';
 import {PokemonDataService} from '../../../../infrastructure/services/PokemonDataService';
 import {CommonModule} from '@angular/common';
 import {Router} from '@angular/router';
+import {NAVIGATION_DELAY} from '../../../../../../shared/constants/app.constants';
 
 @Component({
   selector: 'app-evolution-chain-species',
@@ -28,6 +29,8 @@ export class EvolutionChainSpeciesComponent implements OnInit {
   }
 
   onPokemonVariantClick(id: number | string) {
-    this.router.navigate(['/pokemon-details', id])
+    setTimeout(() => {
+      this.router.navigate(['/pokemon-details', id])
+    }, NAVIGATION_DELAY);
   }
 }
