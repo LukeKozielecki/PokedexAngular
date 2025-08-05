@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {map, Observable, Subject, switchMap, takeUntil} from 'rxjs';
+import {map, Observable, Subject, switchMap} from 'rxjs';
 import {PokeApiPokemonDataSource} from '../../../infrastructure/data-sources/PokeApiPokemonDataSource';
 import {ActivatedRoute} from '@angular/router';
 import {PokemonDetails} from '../../../domain/model/PokemonDetails';
@@ -7,7 +7,6 @@ import {CommonModule} from '@angular/common';
 import {LoadingScreenComponent} from '../../../../../shared/components/loading-screen/loading-screen.component';
 import {EvolutionChain} from '../../../domain/model/EvolutionChain';
 import {EvolutionChainSpeciesComponent} from '../components/evolution-chain-species.component/evolution-chain-species.component';
-import {ScrollToTopService} from '../../../../../shared/services/scroll-to-top.service';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -23,8 +22,7 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
 
   constructor(
     private route: ActivatedRoute,
-    private pokemonDataSource: PokeApiPokemonDataSource,
-    private scrollService: ScrollToTopService
+    private pokemonDataSource: PokeApiPokemonDataSource
   ) {}
 
   ngOnInit(): void {
@@ -49,12 +47,6 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
         return this.pokemonDataSource.getEvolutionChainById(evolutionChainId);
       })
     );
-
-    this.scrollService.scrollToTopRequested$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      })
   }
 
   ngOnDestroy(): void {

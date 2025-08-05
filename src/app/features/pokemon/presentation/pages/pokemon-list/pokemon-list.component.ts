@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Observable, Subject, takeUntil, withLatestFrom} from 'rxjs';
+import {Observable, Subject, withLatestFrom} from 'rxjs';
 import {Pokemon} from '../../../domain/model/Pokemon';
 import {SearchFormComponent} from './search-form.component';
 import {SearchPokemonUseCase} from '../../../application/use-cases/SearchPokemonUseCase';
@@ -8,7 +8,6 @@ import {PaginationButtonsComponent} from '../components/pagination-buttons/pagin
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {take} from 'rxjs/operators';
 import {LoadingScreenComponent} from '../../../../../shared/components/loading-screen/loading-screen.component';
-import {ScrollToTopService} from '../../../../../shared/services/scroll-to-top.service';
 import {Router} from '@angular/router';
 import {NAVIGATION_DELAY} from '../../../../../shared/constants/app.constants';
 
@@ -28,7 +27,6 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private searchPokemonUseCase: SearchPokemonUseCase,
-    private scrollService: ScrollToTopService,
     private router: Router
   ) {}
 
@@ -55,12 +53,6 @@ export class PokemonListComponent implements OnInit, OnDestroy {
       }
       this.searchPokemonUseCase.setLimit(newLimit);
     });
-
-    this.scrollService.scrollToTopRequested$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      })
   }
 
   ngOnDestroy(): void {

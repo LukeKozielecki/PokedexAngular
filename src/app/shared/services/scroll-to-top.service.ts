@@ -10,13 +10,19 @@ import { Subject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ScrollToTopService {
-  private scrollToTopSubject = new Subject<void>();
+  private readonly scrollToTopSubject = new Subject<void>();
 
   /**
    * An Observable that components can subscribe to in order to react
    * to scroll-to-top requests.
    */
-  public scrollToTopRequested$: Observable<void> = this.scrollToTopSubject.asObservable();
+  readonly scrollToTopRequested$: Observable<void> = this.scrollToTopSubject.asObservable()
+
+  constructor() {
+    this.scrollToTopRequested$.subscribe(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 
   /**
    * Triggers a request to scroll the window to the top.
