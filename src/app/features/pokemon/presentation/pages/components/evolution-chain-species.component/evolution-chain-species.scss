@@ -4,10 +4,33 @@ $breakpoint-lg: 700px;
 $font-weight-medium: 500;
 $font-weight-bold: 700;
 $pokemon-image-size: 5rem;
+$color-card-active: #f1f1f1;
+
+$type-colors: (
+  normal:   #a4acaf,
+  electric: #eed535,
+  fire:     #fd7d23,
+  water:    #4592c4,
+  grass:    #9bcc50,
+  dark:     #707070,
+  fairy:    #fdb9e9,
+  psychic:  #f366b9,
+  poison:   #b97fc9,
+  bug:      #729f3f,
+  fighting: #d56723,
+  ice:      #51c4e7,
+  ghost:    #7b62a3,
+  dragon:   #be5644,
+  steel:    #9eb7b8,
+  rock:     #a38c21,
+  ground:   #ab9842,
+  flying:   #2987a2
+);
 
 .pokemon-container {
   display: flex;
   align-items: center;
+  cursor: pointer;
 
   .pokemon-details {
     width: 10rem;
@@ -15,8 +38,44 @@ $pokemon-image-size: 5rem;
     flex-direction: column;
     align-items: center;
 
+    .type-pill {
+      display: inline-block;
+      margin: 0.125rem;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: $font-weight-medium;
+      text-transform: capitalize;
+      border-radius: 999px;
+      transition: background-color 0.2s ease;
+    }
+    @each $type, $color in $type-colors {
+      .type-#{$type} {
+        background-color: $color;
+      }
+    }
+
+    .pokemon-image-wrapper {
+      display: inline-block;
+      padding: 8px;
+      border: 2px solid #ccc;
+      border-radius: 50%;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      }
+
+      &:active {
+        transform: scale(0.95);
+        box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.1);
+        //background-color: darken(inherit, 20%);
+      }
+    }
+
     .pokemon-image {
       height: $pokemon-image-size;
+      width: $pokemon-image-size;
       object-fit: contain;
     }
 
