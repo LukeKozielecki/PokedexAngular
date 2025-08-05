@@ -6,13 +6,12 @@ import {PokemonDetails} from '../../../domain/model/PokemonDetails';
 import {CommonModule} from '@angular/common';
 import {LoadingScreenComponent} from '../../../../../shared/components/loading-screen/loading-screen.component';
 import {EvolutionChain} from '../../../domain/model/EvolutionChain';
-import {PokemonDataService} from '../../../infrastructure/services/PokemonDataService';
-import {Pokemon} from '../../../domain/model/Pokemon';
+import {EvolutionChainSpeciesComponent} from '../components/evolution-chain-species.component/evolution-chain-species.component';
 
 @Component({
   selector: 'app-pokemon-details',
   standalone: true,
-  imports: [CommonModule, LoadingScreenComponent],
+  imports: [CommonModule, LoadingScreenComponent, EvolutionChainSpeciesComponent],
   templateUrl: './pokemon-details.html',
   styleUrl: './pokemon-details.scss'
 })
@@ -22,8 +21,7 @@ export class PokemonDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private pokemonDataSource: PokeApiPokemonDataSource,
-    private dataService: PokemonDataService
+    private pokemonDataSource: PokeApiPokemonDataSource
   ) {}
 
   ngOnInit(): void {
@@ -47,12 +45,6 @@ export class PokemonDetailsComponent implements OnInit {
         const evolutionChainId = parseInt(evolutionChainUrl.match(/\/(\d+)\/$/)![1], 10);
         return this.pokemonDataSource.getEvolutionChainById(evolutionChainId);
       })
-    );
-  }
-
-  getPokemonFromCache(name: string): Observable<Pokemon | undefined> {
-    return this.dataService.getAllPokemon().pipe(
-      map(allPokemon => allPokemon.find(pokemon => pokemon.name === name))
     );
   }
 }

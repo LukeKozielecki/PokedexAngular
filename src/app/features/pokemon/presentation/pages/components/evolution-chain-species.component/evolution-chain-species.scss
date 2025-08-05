@@ -1,0 +1,94 @@
+$breakpoint-sm: 350px;
+$breakpoint-md: 550px;
+$breakpoint-lg: 700px;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+$pokemon-image-size: 5rem;
+
+.pokemon-container {
+  display: flex;
+  align-items: center;
+
+  .pokemon-details {
+    width: 10rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .pokemon-image {
+      height: $pokemon-image-size;
+      object-fit: contain;
+    }
+
+    span {
+      font-weight: $font-weight-medium;
+      text-transform: capitalize;
+      text-align: center;
+    }
+  }
+
+  .evolution-indicator {
+    font-size: 1.5rem;
+    font-weight: $font-weight-bold;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+
+  .evolved-species-list {
+    display: flex;
+    flex-direction: column;
+    align-items: start; // this is here if a pokemon can evolve into A -> B2 | C2 | D2 -> D3
+    gap: 1rem;
+  }
+
+  .evolved-species-list.multi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: $breakpoint-lg) {
+  .pokemon-details {
+    width: fit-content;
+  }
+
+  .pokemon-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pokemon-container .evolution-indicator {
+    transform: rotate(90deg);
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .pokemon-container .evolved-species-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .pokemon-container {
+    .pokemon-details {
+      width: 8rem;
+    }
+    .evolved-species-list.multi-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .pokemon-container .evolved-species-list.multi-row {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1rem;
+  }
+}

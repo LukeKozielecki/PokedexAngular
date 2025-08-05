@@ -35,41 +35,16 @@
     </div>
 
     @if (pokemonEvolution$ | async; as evolutionChain) {
-      <div class="evolution-chain-container">
-        @for (species of evolutionChain.chain; track species.name) {
-          @if (getPokemonFromCache(species.name) | async; as pokemon) {
-            <div class="evolution-item">
-              <img [src]="pokemon.imageUrl" [alt]="pokemon.name" class="evolution-image">
-              <span class="evolution-name">{{ pokemon.name }} #{{ pokemon.id }}</span>
-            </div>
+      <div class="evolution-container">
+        <h2>Evolution</h2>
+        <div class="flex flex-wrap items-center justify-center space-x-4">
+          @if (evolutionChain.chain.length > 0) {
+            <app-evolution-chain-species [species]="evolutionChain.chain[0]"></app-evolution-chain-species>
           }
-
-          @if (species.evolvesTo.length > 0) {
-            <span class="evolution-arrow">&gt;</span>
-            @for (evolvedSpecies of species.evolvesTo; track evolvedSpecies.name) {
-              @if (getPokemonFromCache(evolvedSpecies.name) | async; as evolvedPokemon) {
-                <div class="evolution-item">
-                  <img [src]="evolvedPokemon.imageUrl" [alt]="evolvedPokemon.name" class="evolution-image">
-                  <span class="evolution-name">{{ evolvedPokemon.name }} #{{ evolvedPokemon.id }}</span>
-                </div>
-              }
-
-              @if (evolvedSpecies.evolvesTo.length > 0) {
-                <span class="evolution-arrow">&gt;</span>
-                @for (furtherEvolvedSpecies of evolvedSpecies.evolvesTo; track furtherEvolvedSpecies.name) {
-                  @if (getPokemonFromCache(furtherEvolvedSpecies.name) | async; as furtherEvolvedPokemon) {
-                    <div class="evolution-item">
-                      <img [src]="furtherEvolvedPokemon.imageUrl" [alt]="furtherEvolvedPokemon.name" class="evolution-image">
-                      <span class="evolution-name">{{ furtherEvolvedPokemon.name }} #{{ furtherEvolvedPokemon.id }}</span>
-                    </div>
-                  }
-                }
-              }
-            }
-          }
-        }
+        </div>
       </div>
     }
+
   </div>
 } @else {
   <app-loading-screen/>

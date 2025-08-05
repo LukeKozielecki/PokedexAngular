@@ -1,0 +1,17 @@
+@if (pokemon$ | async; as pokemon) {
+  <div (click)="onPokemonVariantClick(pokemon.id); $event.stopPropagation()" class="pokemon-container">
+    <div class="pokemon-details">
+      <img [src]="pokemon.imageUrl" [alt]="pokemon.name" class="pokemon-image">
+      <span>{{ pokemon.name }} #{{ pokemon.id }}</span>
+    </div>
+
+    @if (species.evolvesTo.length > 0) {
+      <span class="evolution-indicator">&gt;</span>
+      <div class="evolved-species-list" [ngClass]="{ 'multi-row': species.evolvesTo.length > 4 }">
+        @for (evolvedSpecies of species.evolvesTo; track evolvedSpecies.name) {
+          <app-evolution-chain-species [species]="evolvedSpecies"></app-evolution-chain-species>
+        }
+      </div>
+    }
+  </div>
+}

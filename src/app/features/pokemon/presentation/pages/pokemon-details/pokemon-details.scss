@@ -1,7 +1,9 @@
 $primary-text-color: #1f2937;
 $secondary-text-color: #4b5563;
-$card-bg-color: #ffffff;
-$card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+$details-card-bg-color: #ffffff;
+$evolution-card-bg-color: #b1b1b1;
+$details-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+$evolution-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
 $card-border-radius: 0.5rem;
 $page-max-width: 48rem;
 $spacing-large: 1.5rem;
@@ -18,9 +20,9 @@ $font-size-text-large: 1.125rem;
 $font-size-text-base: 1rem;
 
 .pokemon-details-card {
-  background-color: $card-bg-color;
+  background-color: $details-card-bg-color;
   border-radius: $card-border-radius;
-  box-shadow: $card-shadow;
+  box-shadow: $details-card-shadow;
   padding: $spacing-large;
   max-width: $page-max-width;
   margin: $spacing-large auto;
@@ -69,33 +71,17 @@ $font-size-text-base: 1rem;
   }
 }
 
-.evolution-chain-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: $spacing-medium;
+.evolution-container {
+  background-color: $evolution-card-bg-color;
+  border-radius: $card-border-radius;
+  box-shadow: $evolution-card-shadow;
+  padding: $spacing-large;
+  margin-top: $spacing-large;
 
-  .evolution-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    .evolution-image {
-      width: 5rem;
-      height: 5rem;
-      object-fit: contain;
-    }
-
-    .evolution-name {
-      font-weight: $font-weight-medium;
-      text-transform: capitalize;
-      text-align: center;
-    }
-  }
-
-  .evolution-arrow {
-    font-size: $font-size-h3;
+  h2 {
+    font-size: $font-size-h2;
     font-weight: $font-weight-bold;
+    color: $primary-text-color;
+    margin-bottom: $spacing-large;
   }
 }
