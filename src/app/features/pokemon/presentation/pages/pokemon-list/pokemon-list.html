@@ -1,4 +1,3 @@
-<app-pokemon-compendium-header/>
 <div class="pokemon-list-container">
   <app-search-form (searchSubmitted)="onSearchSubmitted($event)"></app-search-form>
   @if (pokemonList$ | async; as pokemon) {
