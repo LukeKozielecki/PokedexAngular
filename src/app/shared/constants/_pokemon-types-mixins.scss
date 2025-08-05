@@ -1,9 +1,16 @@
+@use "sass:color";
 @use './pokemon-types-colors' as types;
 
 @mixin type-pill-colors {
   @each $type, $color in types.$type-colors {
     .type-#{$type} {
       background-color: $color;
+
+      @if (color.lightness($color) < 50%) {
+        color: #ffffff;
+      } @else {
+        color: #000000;
+      }
     }
   }
 }
