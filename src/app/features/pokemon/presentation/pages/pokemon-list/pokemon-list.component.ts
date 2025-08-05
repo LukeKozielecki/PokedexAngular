@@ -10,6 +10,7 @@ import {take} from 'rxjs/operators';
 import {LoadingScreenComponent} from '../../../../../shared/components/loading-screen/loading-screen.component';
 import {PokemonCompendiumHeaderComponent} from '../components/pokemon-compendium-header/pokemon-compendium-header.component';
 import {ScrollToTopService} from '../../../../../shared/services/scroll-to-top.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -22,7 +23,7 @@ import {ScrollToTopService} from '../../../../../shared/services/scroll-to-top.s
       @if (pokemonList$ | async; as pokemon) {
         <div class="grid grid-cols-1 angular-sm:grid-cols-2 angular-md:grid-cols-3 angular-lg:grid-cols-4 angular-xl:grid-cols-5 gap-4">
           @for (p of pokemon; track p.id) {
-            <div class="bg-white rounded-lg shadow-md p-4 flex flex-col items-center">
+            <div (click)="onPokemonCardClick(p.id)" class="bg-white rounded-lg shadow-md p-4 flex flex-col items-center">
               <img [src]="p.imageUrl" [alt]="p.name" class="w-24 h-24 object-contain mb-2" width="96" height="96">
               <h3 class="text-xl font-semibold mb-1">{{ p.name | titlecase }}</h3>
               <p class="text-gray-600 text-sm">ID: {{ p.id }}</p>
@@ -54,7 +55,8 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private searchPokemonUseCase: SearchPokemonUseCase,
-    private scrollService: ScrollToTopService
+    private scrollService: ScrollToTopService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -91,6 +93,10 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  onPokemonCardClick(id: number | string) {
+    this.router.navigate(['/pokemon-details', id])
   }
 
   onSearchSubmitted(term: string): void {

@@ -4,7 +4,12 @@ import {HttpClient} from '@angular/common/http';
 import {forkJoin, map, Observable, switchMap} from 'rxjs';
 import {Pokemon} from '../../domain/model/Pokemon';
 import {PokemonDetailDto} from '../dtos/PokemonDetailDto';
-import {mapPokemonDetailDtoToPokemon} from '../mappers/PokemonMappers';
+import {mapPokemonDetailDtoToPokemon, mapPokemonDetailDtoToPokemonDetails} from '../mappers/PokemonMappers';
+import {EvolutionChainDto} from '../dtos/EvolutionChainDto';
+import {EvolutionChain} from '../../domain/model/EvolutionChain';
+import {mapEvolutionChainDtoToEvolutionChain} from '../mappers/EvolutionChainMappers';
+import {PokemonDetails} from '../../domain/model/PokemonDetails';
+import {PokemonSpeciesDto} from '../dtos/PokemonSpeciesDto';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +41,28 @@ export class PokeApiPokemonDataSource implements PokemonRepository {
         });
         return forkJoin(pokemonDetailsRequests);
       })
+    );
+  }
+
+  getPokemonDetailsById(id: number): Observable<PokemonDetails> {
+    return this.http.get<PokemonDetailDto>(`${this.BASE_URL}/pokemon/${id}`).pipe(
+      map(mapPokemonDetailDtoToPokemonDetails)
+    );
+  }
+
+  getPokemonDetailsByName(name: string): Observable<PokemonDetails> {
+    return this.http.get<PokemonDetailDto>(`${this.BASE_URL}/pokemon/${name.toLowerCase()}`).pipe(
+      map(mapPokemonDetailDtoToPokemonDetails)
+    );
+  }
+
+  getPokemonSpeciesById(id: number): Observable<PokemonSpeciesDto> {
+    return this.http.get<PokemonSpeciesDto>(`${this.BASE_URL}/pokemon-species/${id}`);
+  }
+
+  getEvolutionChainById(id: number): Observable<EvolutionChain> {
+    return this.http.get<EvolutionChainDto>(`${this.BASE_URL}/evolution-chain/${id}`).pipe(
+      map(mapEvolutionChainDtoToEvolutionChain)
     );
   }
 }

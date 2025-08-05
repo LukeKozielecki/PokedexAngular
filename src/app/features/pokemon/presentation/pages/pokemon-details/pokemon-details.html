@@ -1,0 +1,76 @@
+@if (pokemonDetails$ | async; as pokemon) {
+  <div class="pokemon-details-card">
+    <div class="details-header">
+      <img [src]="pokemon.imageUrl" [alt]="pokemon.name" class="pokemon-image">
+      <h2 class="pokemon-name">{{ pokemon.name }}</h2>
+      <p class="pokemon-id">ID: {{ pokemon.id }}</p>
+    </div>
+
+    <div class="details-section">
+      <h3 class="section-title">Details</h3>
+      <ul class="section-list">
+        <li>Types: {{ pokemon.types.join(', ') | titlecase }}</li>
+        <li>Height: {{ pokemon.height }}</li>
+        <li>Weight: {{ pokemon.weight }}</li>
+        <li>Base Experience: {{ pokemon.base_experience }}</li>
+      </ul>
+    </div>
+
+    <div class="details-section">
+      <h3 class="section-title">Abilities</h3>
+      <ul class="section-list">
+        @for (ability of pokemon.abilities; track ability.name) {
+          <li>{{ ability.name }} @if (ability.isHidden) { (Hidden) }</li>
+        }
+      </ul>
+    </div>
+
+    <div class="details-section">
+      <h3 class="section-title">Stats</h3>
+      <ul class="section-list">
+        @for (stat of pokemon.stats; track stat.name) {
+          <li>{{ stat.name | titlecase }}: {{ stat.baseStat }}</li>
+        }
+      </ul>
+    </div>
+
+    @if (pokemonEvolution$ | async; as evolutionChain) {
+      <div class="evolution-chain-container">
+        @for (species of evolutionChain.chain; track species.name) {
+          @if (getPokemonFromCache(species.name) | async; as pokemon) {
+            <div class="evolution-item">
+              <img [src]="pokemon.imageUrl" [alt]="pokemon.name" class="evolution-image">
+              <span class="evolution-name">{{ pokemon.name }} #{{ pokemon.id }}</span>
+            </div>
+          }
+
+          @if (species.evolvesTo.length > 0) {
+            <span class="evolution-arrow">&gt;</span>
+            @for (evolvedSpecies of species.evolvesTo; track evolvedSpecies.name) {
+              @if (getPokemonFromCache(evolvedSpecies.name) | async; as evolvedPokemon) {
+                <div class="evolution-item">
+                  <img [src]="evolvedPokemon.imageUrl" [alt]="evolvedPokemon.name" class="evolution-image">
+                  <span class="evolution-name">{{ evolvedPokemon.name }} #{{ evolvedPokemon.id }}</span>
+                </div>
+              }
+
+              @if (evolvedSpecies.evolvesTo.length > 0) {
+                <span class="evolution-arrow">&gt;</span>
+                @for (furtherEvolvedSpecies of evolvedSpecies.evolvesTo; track furtherEvolvedSpecies.name) {
+                  @if (getPokemonFromCache(furtherEvolvedSpecies.name) | async; as furtherEvolvedPokemon) {
+                    <div class="evolution-item">
+                      <img [src]="furtherEvolvedPokemon.imageUrl" [alt]="furtherEvolvedPokemon.name" class="evolution-image">
+                      <span class="evolution-name">{{ furtherEvolvedPokemon.name }} #{{ furtherEvolvedPokemon.id }}</span>
+                    </div>
+                  }
+                }
+              }
+            }
+          }
+        }
+      </div>
+    }
+  </div>
+} @else {
+  <app-loading-screen/>
+}
