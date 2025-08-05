@@ -6,26 +6,8 @@ $font-weight-bold: 700;
 $pokemon-image-size: 5rem;
 $color-card-active: #f1f1f1;
 
-$type-colors: (
-  normal:   #a4acaf,
-  electric: #eed535,
-  fire:     #fd7d23,
-  water:    #4592c4,
-  grass:    #9bcc50,
-  dark:     #707070,
-  fairy:    #fdb9e9,
-  psychic:  #f366b9,
-  poison:   #b97fc9,
-  bug:      #729f3f,
-  fighting: #d56723,
-  ice:      #51c4e7,
-  ghost:    #7b62a3,
-  dragon:   #be5644,
-  steel:    #9eb7b8,
-  rock:     #a38c21,
-  ground:   #ab9842,
-  flying:   #2987a2
-);
+@use '../../../../../../shared/constants/pokemon-types-mixins' as mixins;
+@include mixins.type-pill-colors;
 
 .pokemon-container {
   display: flex;
@@ -47,11 +29,6 @@ $type-colors: (
       text-transform: capitalize;
       border-radius: 999px;
       transition: background-color 0.2s ease;
-    }
-    @each $type, $color in $type-colors {
-      .type-#{$type} {
-        background-color: $color;
-      }
     }
 
     .pokemon-image-wrapper {

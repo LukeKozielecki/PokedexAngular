@@ -1,0 +1,9 @@
+@use './pokemon-types-colors' as types;
+
+@mixin type-pill-colors {
+  @each $type, $color in types.$type-colors {
+    .type-#{$type} {
+      background-color: $color;
+    }
+  }
+}
