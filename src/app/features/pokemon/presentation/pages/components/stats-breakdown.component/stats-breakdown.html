@@ -1,0 +1,20 @@
+<div>
+  <h3 class="section-title">Stats</h3>
+  <ul class="section-list">
+    @for (stat of stats; track stat.name) {
+      <li>
+        <span class="stat-name">{{ stat.name | titlecase }}</span>
+        <div class="stat-bar-container">
+          @for (i of [].constructor(numberOfStatSlices); track $index) {
+            @if ($index < (stat.baseStat / maxStatValue) * numberOfStatSlices) {
+              <div class="stat-slice filled"></div>
+            } @else {
+              <div class="stat-slice"></div>
+            }
+          }
+        </div>
+        <span class="stat-value">{{ stat.baseStat }}</span>
+      </li>
+    }
+  </ul>
+</div>

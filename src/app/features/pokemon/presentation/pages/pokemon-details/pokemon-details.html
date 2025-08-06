@@ -27,12 +27,7 @@
       </div>
 
       <div class="details-section">
-        <h3 class="section-title">Stats</h3>
-        <ul class="section-list">
-          @for (stat of pokemon.stats; track stat.name) {
-            <li>{{ stat.name | titlecase }}: {{ stat.baseStat }}</li>
-          }
-        </ul>
+        <app-stats-breakdown [stats]="pokemon.stats"></app-stats-breakdown>
       </div>
 
       @if (pokemonEvolution$ | async; as evolutionChain) {

@@ -7,11 +7,17 @@ import {CommonModule} from '@angular/common';
 import {LoadingScreenComponent} from '../../../../../shared/components/loading-screen/loading-screen.component';
 import {EvolutionChain} from '../../../domain/model/EvolutionChain';
 import {EvolutionChainSpeciesComponent} from '../components/evolution-chain-species.component/evolution-chain-species.component';
+import {StatsBreakdownComponent} from '../components/stats-breakdown.component/stats-breakdown.component';
 
 @Component({
   selector: 'app-pokemon-details',
   standalone: true,
-  imports: [CommonModule, LoadingScreenComponent, EvolutionChainSpeciesComponent],
+  imports: [
+    CommonModule,
+    LoadingScreenComponent,
+    EvolutionChainSpeciesComponent,
+    StatsBreakdownComponent
+  ],
   templateUrl: './pokemon-details.html',
   styleUrl: './pokemon-details.scss'
 })

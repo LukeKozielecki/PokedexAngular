@@ -1,0 +1,54 @@
+$font-weight-bold: 700;
+$font-weight-semibold: 600;
+$font-size-h3: 1.25rem;
+
+$spacing-large: 1.5rem;
+$spacing-medium: 1rem;
+$spacing-small: 0.5rem;
+
+@use '../../../../../../shared/constants/theme' as theme;
+
+.section-title {
+  font-size: $font-size-h3;
+  font-weight: $font-weight-semibold;
+  margin-bottom: $spacing-small;
+}
+
+.section-list {
+  list-style: none;
+  padding: 0;
+}
+
+.section-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.stat-name {
+  flex: 0 0 80px;
+  text-align: right;
+}
+
+.stat-bar-container {
+  display: flex;
+  flex-grow: 1;
+  gap: 2px;
+  height: 15px;
+}
+
+.stat-slice {
+  flex-grow: 1;
+  background-color: #ddd;
+  border-radius: 2px;
+}
+
+.stat-slice.filled {
+  background-color: theme.$primary-color-dark;
+}
+
+.stat-value {
+  width: 30px;
+  text-align: left;
+}
