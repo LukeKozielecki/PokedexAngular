@@ -8,13 +8,12 @@
       </div>
 
       <div class="details-section">
-        <h3 class="section-title">Details</h3>
-        <ul class="section-list">
-          <li>Types: {{ pokemon.types.join(', ') | titlecase }}</li>
-          <li>Height: {{ pokemon.height }}</li>
-          <li>Weight: {{ pokemon.weight }}</li>
-          <li>Base Experience: {{ pokemon.base_experience }}</li>
-        </ul>
+        <app-pokemon-details-summary
+          [types]="pokemon.types"
+          [height]="pokemon.height"
+          [weight]="pokemon.weight"
+          [baseExperience]="pokemon.base_experience"
+        ></app-pokemon-details-summary>
       </div>
 
       <div class="details-section">

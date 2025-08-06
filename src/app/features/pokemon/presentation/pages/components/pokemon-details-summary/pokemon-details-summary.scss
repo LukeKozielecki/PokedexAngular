@@ -1,0 +1,57 @@
+@use '../../../../../../shared/constants/theme' as theme;$font-weight-bold: 700;
+
+$font-weight-semibold: 600;
+$font-size-h3: 1.25rem;
+
+$spacing-large: 1.5rem;
+$spacing-medium: 1rem;
+$spacing-small: 0.5rem;
+
+$details-card-bg-color: rgba(theme.$primary-color, 0.5);
+$details-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+$card-border-radius: 0.5rem;
+$primary-text-color: #1f2937;
+$secondary-text-color: #4b5563;
+
+.details-section {
+  display: flex;
+  justify-content: center;
+  margin-top: $spacing-large;
+}
+
+.summary-card {
+  background-color: $details-card-bg-color;
+  border-radius: $card-border-radius;
+  box-shadow: $details-card-shadow;
+  padding: $spacing-large;
+  text-align: center;
+  width: 100%;
+}
+
+.section-title {
+  font-size: $font-size-h3;
+  font-weight: $font-weight-semibold;
+  margin-bottom: $spacing-medium;
+}
+
+.summary-grid {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-small;
+}
+
+.summary-item {
+  h3 {
+    font-size: 1rem;
+    font-weight: $font-weight-bold;
+    color: $primary-text-color;
+    margin: 0;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: $secondary-text-color;
+    margin: 0;
+  }
+}

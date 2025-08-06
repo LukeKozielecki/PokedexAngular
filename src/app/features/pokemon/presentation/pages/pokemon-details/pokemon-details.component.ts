@@ -8,6 +8,7 @@ import {LoadingScreenComponent} from '../../../../../shared/components/loading-s
 import {EvolutionChain} from '../../../domain/model/EvolutionChain';
 import {EvolutionChainSpeciesComponent} from '../components/evolution-chain-species.component/evolution-chain-species.component';
 import {StatsBreakdownComponent} from '../components/stats-breakdown.component/stats-breakdown.component';
+import {PokemonDetailsSummaryComponent} from '../components/pokemon-details-summary/pokemon-details-summary.component';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -16,7 +17,8 @@ import {StatsBreakdownComponent} from '../components/stats-breakdown.component/s
     CommonModule,
     LoadingScreenComponent,
     EvolutionChainSpeciesComponent,
-    StatsBreakdownComponent
+    StatsBreakdownComponent,
+    PokemonDetailsSummaryComponent
   ],
   templateUrl: './pokemon-details.html',
   styleUrl: './pokemon-details.scss'
