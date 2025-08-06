@@ -1,0 +1,7 @@
+@use './shared/constants/theme' as theme;
+
+.content-wrapper {
+  min-height: calc(100vh - #{theme.$scaffold-size});
+  background-image: url('../../public/poke-background-dark.png');
+  background-repeat: repeat;
+}

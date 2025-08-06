@@ -19,13 +19,17 @@ $font-size-h3: 1.25rem;
 $font-size-text-large: 1.125rem;
 $font-size-text-base: 1rem;
 
+.pokemon-details-wrapper{
+  padding-top: $spacing-large;
+}
+
 .pokemon-details-card {
   background-color: $details-card-bg-color;
   border-radius: $card-border-radius;
   box-shadow: $details-card-shadow;
   padding: $spacing-large;
   max-width: $page-max-width;
-  margin: $spacing-large auto;
+  margin: 0 auto;
 }
 
 .details-header {

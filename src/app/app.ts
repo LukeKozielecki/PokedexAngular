@@ -6,7 +6,7 @@ import { PokemonCompendiumHeaderComponent } from './features/pokemon/presentatio
   selector: 'app-root',
   imports: [RouterOutlet, PokemonCompendiumHeaderComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.scss'
 })
 export class App {
   protected readonly title = signal('pokedex-v2-angular');

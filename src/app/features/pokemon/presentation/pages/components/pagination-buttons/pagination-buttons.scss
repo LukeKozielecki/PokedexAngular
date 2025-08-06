@@ -36,7 +36,7 @@ $ring-color: #60a5fa;
   }
 
   &:disabled {
-    opacity: 0.5;
+    background-color: rgba(theme.$primary-color, 0.7);
     cursor: not-allowed;
   }
 }
