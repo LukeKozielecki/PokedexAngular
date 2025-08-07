@@ -1,0 +1,56 @@
+@use '../../../../../../../shared/constants/theme' as theme;
+
+$primary-text-color: #1f2937;
+$secondary-text-color: #4b5563;
+$font-weight-bold: 700;
+$font-weight-medium: 500;
+$font-size-text-large: 1.125rem;
+
+$spacing-large: 1.5rem;
+$spacing-medium: 1rem;
+$spacing-small: 0.5rem;
+$spacing-x-small: 0.25rem;
+
+.search-section {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  margin-bottom: $spacing-large;
+  gap: $spacing-small;
+}
+
+.search-input {
+  border: 1px solid theme.$secondary-color;
+  border-radius: $spacing-x-small;
+  margin-right: $spacing-small;
+  font-size: $font-size-text-large;
+  transition: all 0.2s ease-in-out;
+  padding-left: $spacing-medium;
+  padding-right: $spacing-medium;
+
+  &:focus {
+    outline: none;
+    border-color: theme.$primary-color-dark;
+    box-shadow: 0 0 0 2px theme.$primary-color;
+  }
+}
+
+.search-button {
+  padding: $spacing-small $spacing-medium;
+  background-color: theme.$primary-color;
+  color: #fff;
+  border: none;
+  border-radius: $spacing-x-small;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-weight: $font-weight-bold;
+
+  &:hover {
+    background-color: darken(theme.$primary-color, 5%);
+  }
+
+  &:active {
+    background-color: darken(theme.$primary-color, 10%);
+    transform: scale(0.95);
+  }
+}

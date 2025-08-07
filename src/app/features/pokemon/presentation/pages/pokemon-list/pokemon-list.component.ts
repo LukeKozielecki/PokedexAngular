@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Observable, Subject, withLatestFrom} from 'rxjs';
 import {Pokemon} from '../../../domain/model/Pokemon';
-import {SearchFormComponent} from './search-form.component';
+import {SearchFormComponent} from './components/search-form/search-form.component';
 import {SearchPokemonUseCase} from '../../../application/use-cases/SearchPokemonUseCase';
 import {PaginationButtonsComponent} from './components/pagination-buttons/pagination-buttons.component';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
