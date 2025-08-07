@@ -1,7 +1,8 @@
-@use '../../../../../../shared/constants/theme' as theme;$font-weight-bold: 700;
+@use '../../../../../../shared/constants/theme' as theme;
 @use '../../../../../../shared/constants/pokemon-types-mixins' as mixins;
 @include mixins.type-pill-colors;
 
+$font-weight-bold: 700;
 $font-weight-semibold: 600;
 $font-weight-medium: 500;
 $font-size-h3: 1.25rem;
