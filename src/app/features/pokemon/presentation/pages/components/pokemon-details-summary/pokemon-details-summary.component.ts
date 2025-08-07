@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {PokemonAbility} from '../../../../domain/model/PokemonDetails';
 
 @Component({
   selector: 'app-pokemon-details-summary',
@@ -13,5 +14,6 @@ export class PokemonDetailsSummaryComponent {
   @Input() height!: number;
   @Input() weight!: number;
   @Input() baseExperience!: number;
+  @Input() abilities!: PokemonAbility[];
 
 }

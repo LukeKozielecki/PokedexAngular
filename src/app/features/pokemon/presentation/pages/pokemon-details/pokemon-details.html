@@ -13,16 +13,8 @@
           [height]="pokemon.height"
           [weight]="pokemon.weight"
           [baseExperience]="pokemon.base_experience"
+          [abilities]="pokemon.abilities"
         ></app-pokemon-details-summary>
-      </div>
-
-      <div class="details-section">
-        <h3 class="section-title">Abilities</h3>
-        <ul class="section-list">
-          @for (ability of pokemon.abilities; track ability.name) {
-            <li>{{ ability.name }} @if (ability.isHidden) { (Hidden) }</li>
-          }
-        </ul>
       </div>
 
       <div class="details-section">

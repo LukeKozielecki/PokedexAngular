@@ -25,6 +25,15 @@
         <h3>Base Experience</h3>
         <p>{{ baseExperience }}</p>
       </div>
+      <div class="summary-item">
+        <h3 class="section-title">Abilities</h3>
+        <ul class="section-list">
+          @for (ability of abilities; track ability.name) {
+            <li>{{ ability.name }} @if (ability.isHidden) { (Hidden) }</li>
+          }
+        </ul>
+      </div>
+
     </div>
   </div>
 </div>
