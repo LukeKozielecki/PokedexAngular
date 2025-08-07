@@ -9,6 +9,7 @@ import {EvolutionChain} from '../../../domain/model/EvolutionChain';
 import {EvolutionChainSpeciesComponent} from '../components/evolution-chain-species.component/evolution-chain-species.component';
 import {StatsBreakdownComponent} from '../components/stats-breakdown.component/stats-breakdown.component';
 import {PokemonDetailsSummaryComponent} from '../components/pokemon-details-summary/pokemon-details-summary.component';
+import {PokemonDetailsHeader} from '../components/details-header/details-header.component';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -18,7 +19,8 @@ import {PokemonDetailsSummaryComponent} from '../components/pokemon-details-summ
     LoadingScreenComponent,
     EvolutionChainSpeciesComponent,
     StatsBreakdownComponent,
-    PokemonDetailsSummaryComponent
+    PokemonDetailsSummaryComponent,
+    PokemonDetailsHeader
   ],
   templateUrl: './pokemon-details.html',
   styleUrl: './pokemon-details.scss'
