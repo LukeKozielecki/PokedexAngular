@@ -6,8 +6,8 @@ import {PokemonDetails} from '../../../domain/model/PokemonDetails';
 import {CommonModule} from '@angular/common';
 import {LoadingScreenComponent} from '../../../../../shared/components/loading-screen/loading-screen.component';
 import {EvolutionChain} from '../../../domain/model/EvolutionChain';
-import {EvolutionChainSpeciesComponent} from './components/evolution-chain-species.component/evolution-chain-species.component';
-import {StatsBreakdownComponent} from './components/stats-breakdown.component/stats-breakdown.component';
+import {EvolutionChainSpeciesComponent} from './components/evolution-chain-species/evolution-chain-species.component';
+import {StatsBreakdownComponent} from './components/stats-breakdown/stats-breakdown.component';
 import {PokemonDetailsSummaryComponent} from './components/pokemon-details-summary/pokemon-details-summary.component';
 import {PokemonDetailsHeader} from './components/details-header/details-header.component';
 
