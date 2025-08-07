@@ -26,7 +26,10 @@
           <h2>Evolution</h2>
           <div class="flex flex-wrap items-center justify-center space-x-4">
             @if (evolutionChain.chain.length > 0) {
-              <app-evolution-chain-species [species]="evolutionChain.chain[0]"></app-evolution-chain-species>
+              <app-evolution-chain-species
+                [species]="evolutionChain.chain[0]"
+                [pokemonDetails]="pokemon"
+              ></app-evolution-chain-species>
             }
           </div>
         </div>

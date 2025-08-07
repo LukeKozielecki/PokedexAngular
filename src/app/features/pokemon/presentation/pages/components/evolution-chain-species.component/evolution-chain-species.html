@@ -24,4 +24,13 @@
       </div>
     }
   </div>
+} @else {
+  <h2>This Pokémon does not evolve.</h2>
+  <div class="pokemon-container">
+    <div class="pokemon-details">
+      <div class="pokemon-image-wrapper">
+        <img [src]="pokemonDetails.imageUrl" [alt]="pokemonDetails.name" class="pokemon-image">
+      </div>
+    </div>
+  </div>
 }

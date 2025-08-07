@@ -6,15 +6,18 @@ import {PokemonDataService} from '../../../../infrastructure/services/PokemonDat
 import {CommonModule} from '@angular/common';
 import {Router} from '@angular/router';
 import {NAVIGATION_DELAY} from '../../../../../../shared/constants/app.constants';
+import {PokemonDetails} from '../../../../domain/model/PokemonDetails';
+import {PokemonDetailsHeader} from '../details-header/details-header.component';
 
 @Component({
   selector: 'app-evolution-chain-species',
-  imports: [CommonModule],
+  imports: [CommonModule, PokemonDetailsHeader],
   templateUrl: './evolution-chain-species.html',
   styleUrl: './evolution-chain-species.scss'
 })
 export class EvolutionChainSpeciesComponent implements OnInit {
   @Input({required: true}) species!: EvolutionSpecies;
+  @Input() pokemonDetails!: PokemonDetails
   pokemon$!: Observable<Pokemon | undefined>;
 
   constructor(
