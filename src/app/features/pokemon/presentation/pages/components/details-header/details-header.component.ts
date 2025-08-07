@@ -1,8 +1,9 @@
 import {Component, Input} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'details-page-header',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './details-header.html',
   styleUrl: './details-header.scss'
 })

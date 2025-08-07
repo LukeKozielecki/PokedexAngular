@@ -1,9 +1,20 @@
+@use '../../../../../../shared/constants/theme' as theme;
+
 $primary-text-color: #1f2937;
 $secondary-text-color: #4b5563;
 $font-weight-bold: 700;
 $font-size-h2: 1.875rem;
 $font-size-text-large: 1.125rem;
 $spacing-medium: 1rem;
+$id-badge-bg-color: #{theme.$secondary-color-dark};
+
+//=== Badge Manipulation ===
+$badge-translate-x: 25%;
+$badge-translate-y: -25%;
+$badge-initial-scale: 0.5;
+$badge-grown-scale-multiplier: 2;
+$badge-size: 40px;
+$badge-size-grown-multiplier: 1.5;
 
 .details-header {
   display: flex;
@@ -23,8 +34,44 @@ $spacing-medium: 1rem;
     text-transform: capitalize;
   }
 
-  .pokemon-id {
-    color: $secondary-text-color;
+  .pokemon-image-container {
+    position: relative;
+    width: 12rem;
+    height: 12rem;
+    margin-bottom: $spacing-medium;
+
+    &:hover .pokemon-id-hover-container {
+      opacity: 1;
+      transform: translate($badge-translate-x, $badge-translate-y) scale($badge-initial-scale*$badge-grown-scale-multiplier);
+    }
+  }
+
+  .pokemon-id-hover-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $badge-size;
+    height: $badge-size;
+    background-color: $id-badge-bg-color;
+    color: $primary-text-color;
+    border-radius: 50%;
+    font-size: $font-size-text-large;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+    text-align: center;
+    z-index: 2;
+    opacity: 0;
+    transform: translate($badge-translate-x, $badge-translate-y) scale($badge-initial-scale);
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .long-id {
+    width: #{ $badge-size * $badge-size-grown-multiplier };
+    height: #{ $badge-size * $badge-size-grown-multiplier };
     font-size: $font-size-text-large;
   }
 }

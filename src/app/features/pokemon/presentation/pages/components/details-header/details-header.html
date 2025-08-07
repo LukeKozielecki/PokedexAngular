@@ -1,5 +1,12 @@
 <div class="details-header">
-  <img [src]="imageUrl" [alt]="name" class="pokemon-image">
+  <div class="pokemon-image-container">
+    <img [src]="imageUrl"
+         [alt]="name"
+         class="pokemon-image">
+    <div class="pokemon-id-hover-container"
+         [ngClass]="{'long-id': id.toString().length > 4}">
+      #{{ id }}
+    </div>
+  </div>
   <h2 class="pokemon-name">{{ name }}</h2>
-  <p class="pokemon-id">ID: {{ id }}</p>
 </div>
