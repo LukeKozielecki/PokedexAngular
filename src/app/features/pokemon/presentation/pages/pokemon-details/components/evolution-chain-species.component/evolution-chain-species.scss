@@ -6,7 +6,7 @@ $font-weight-bold: 700;
 $pokemon-image-size: 5rem;
 $color-card-active: #f1f1f1;
 
-@use '../../../../../../shared/constants/pokemon-types-mixins' as mixins;
+@use '../../../../../../../shared/constants/pokemon-types-mixins' as mixins;
 @include mixins.type-pill-colors;
 
 .pokemon-container {

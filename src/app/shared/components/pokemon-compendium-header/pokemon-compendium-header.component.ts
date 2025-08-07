@@ -1,6 +1,6 @@
 import {Component, HostListener, OnDestroy, OnInit, signal} from '@angular/core';
 import {NgOptimizedImage} from '@angular/common';
-import {ScrollToTopService} from '../../../../../../shared/services/scroll-to-top.service';
+import {ScrollToTopService} from '../../services/scroll-to-top.service';
 
 @Component({
   selector: 'app-pokemon-compendium-header',

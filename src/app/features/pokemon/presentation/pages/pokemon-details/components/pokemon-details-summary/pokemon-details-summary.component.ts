@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {PokemonAbility} from '../../../../domain/model/PokemonDetails';
+import {PokemonAbility} from '../../../../../domain/model/PokemonDetails';
 
 @Component({
   selector: 'app-pokemon-details-summary',

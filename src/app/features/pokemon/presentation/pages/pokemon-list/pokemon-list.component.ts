@@ -4,7 +4,7 @@ import {Observable, Subject, withLatestFrom} from 'rxjs';
 import {Pokemon} from '../../../domain/model/Pokemon';
 import {SearchFormComponent} from './search-form.component';
 import {SearchPokemonUseCase} from '../../../application/use-cases/SearchPokemonUseCase';
-import {PaginationButtonsComponent} from '../components/pagination-buttons/pagination-buttons.component';
+import {PaginationButtonsComponent} from './components/pagination-buttons/pagination-buttons.component';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {take} from 'rxjs/operators';
 import {LoadingScreenComponent} from '../../../../../shared/components/loading-screen/loading-screen.component';

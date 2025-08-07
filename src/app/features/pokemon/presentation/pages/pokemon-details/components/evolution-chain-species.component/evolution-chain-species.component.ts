@@ -1,12 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {EvolutionSpecies} from '../../../../domain/model/EvolutionChain';
+import {EvolutionSpecies} from '../../../../../domain/model/EvolutionChain';
 import {map, Observable} from 'rxjs';
-import {Pokemon} from '../../../../domain/model/Pokemon';
-import {PokemonDataService} from '../../../../infrastructure/services/PokemonDataService';
+import {Pokemon} from '../../../../../domain/model/Pokemon';
+import {PokemonDataService} from '../../../../../infrastructure/services/PokemonDataService';
 import {CommonModule} from '@angular/common';
 import {Router} from '@angular/router';
-import {NAVIGATION_DELAY} from '../../../../../../shared/constants/app.constants';
-import {PokemonDetails} from '../../../../domain/model/PokemonDetails';
+import {NAVIGATION_DELAY} from '../../../../../../../shared/constants/app.constants';
+import {PokemonDetails} from '../../../../../domain/model/PokemonDetails';
 import {PokemonDetailsHeader} from '../details-header/details-header.component';
 
 @Component({

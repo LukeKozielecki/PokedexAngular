@@ -6,7 +6,7 @@ $spacing-large: 1.5rem;
 $spacing-medium: 1rem;
 $spacing-small: 0.5rem;
 
-@use '../../../../../../shared/constants/theme' as theme;
+@use '../../../../../../../shared/constants/theme' as theme;
 
 .section-title {
   font-size: $font-size-h3;

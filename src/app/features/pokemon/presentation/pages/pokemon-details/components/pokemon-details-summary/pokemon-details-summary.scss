@@ -1,5 +1,5 @@
-@use '../../../../../../shared/constants/theme' as theme;
-@use '../../../../../../shared/constants/pokemon-types-mixins' as mixins;
+@use '../../../../../../../shared/constants/theme' as theme;
+@use '../../../../../../../shared/constants/pokemon-types-mixins' as mixins;
 @include mixins.type-pill-colors;
 
 $font-weight-bold: 700;
