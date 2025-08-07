@@ -4,7 +4,14 @@
     <div class="summary-grid">
       <div class="summary-item">
         <h3>Types</h3>
-        <p>{{ types.join(', ') | titlecase }}</p>
+        @for (type of types; track type){
+          <span
+            class="type-pill"
+            [ngClass]="'type-' + type.toLowerCase()"
+          >
+          {{ type }}
+        </span>
+        }
       </div>
       <div class="summary-item">
         <h3>Height</h3>

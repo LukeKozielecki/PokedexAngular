@@ -1,6 +1,9 @@
 @use '../../../../../../shared/constants/theme' as theme;$font-weight-bold: 700;
+@use '../../../../../../shared/constants/pokemon-types-mixins' as mixins;
+@include mixins.type-pill-colors;
 
 $font-weight-semibold: 600;
+$font-weight-medium: 500;
 $font-size-h3: 1.25rem;
 
 $spacing-large: 1.5rem;
@@ -54,4 +57,15 @@ $secondary-text-color: #4b5563;
     color: $secondary-text-color;
     margin: 0;
   }
+}
+
+.type-pill {
+  display: inline-block;
+  margin: 0.125rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: $font-weight-medium;
+  text-transform: capitalize;
+  border-radius: 999px;
+  transition: background-color 0.2s ease;
 }
