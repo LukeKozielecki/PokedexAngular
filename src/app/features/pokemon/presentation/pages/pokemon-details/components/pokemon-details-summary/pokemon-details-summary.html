@@ -1,39 +1,36 @@
 <div class="details-section">
-  <div class="summary-card">
-    <h3 class="section-title">Details</h3>
-    <div class="summary-grid">
-      <div class="summary-item">
-        <h3>Types</h3>
-        @for (type of types; track type){
-          <span
-            class="type-pill"
-            [ngClass]="'type-' + type.toLowerCase()"
-          >
-          {{ type }}
-        </span>
-        }
-      </div>
-      <div class="summary-item">
-        <h3>Height</h3>
-        <p>{{ height }}</p>
-      </div>
-      <div class="summary-item">
-        <h3>Weight</h3>
-        <p>{{ weight }}</p>
-      </div>
-      <div class="summary-item">
-        <h3>Base Experience</h3>
-        <p>{{ baseExperience }}</p>
-      </div>
-      <div class="summary-item">
-        <h3 class="section-title">Abilities</h3>
-        <ul class="section-list">
-          @for (ability of abilities; track ability.name) {
-            <li>{{ ability.name }} @if (ability.isHidden) { (Hidden) }</li>
-          }
-        </ul>
-      </div>
-
+  <div class="summary-grid">
+    <div class="summary-item">
+      <h3>Types</h3>
+      @for (type of types; track type){
+        <span
+          class="type-pill"
+          [ngClass]="'type-' + type.toLowerCase()"
+        >
+        {{ type }}
+      </span>
+      }
     </div>
+    <div class="summary-item">
+      <h3>Height</h3>
+      <p>{{ height }}</p>
+    </div>
+    <div class="summary-item">
+      <h3>Weight</h3>
+      <p>{{ weight }}</p>
+    </div>
+    <div class="summary-item">
+      <h3>Base Experience</h3>
+      <p>{{ baseExperience }}</p>
+    </div>
+    <div class="summary-item">
+      <h3 class="section-title">Abilities</h3>
+      <ul class="section-list">
+        @for (ability of abilities; track ability.name) {
+          <li>{{ ability.name }} @if (ability.isHidden) { (Hidden) }</li>
+        }
+      </ul>
+    </div>
+
   </div>
 </div>
