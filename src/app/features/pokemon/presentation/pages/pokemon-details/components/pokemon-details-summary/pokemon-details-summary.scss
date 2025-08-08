@@ -21,15 +21,6 @@ $secondary-text-color: #4b5563;
 .details-section {
   display: flex;
   justify-content: center;
-  margin-top: $spacing-large;
-}
-
-.summary-card {
-  background-color: $details-card-bg-color;
-  border-radius: $card-border-radius;
-  box-shadow: $details-card-shadow;
-  padding: $spacing-large;
-  text-align: center;
   width: 100%;
 }
 
@@ -41,8 +32,20 @@ $secondary-text-color: #4b5563;
 
 .summary-grid {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: $spacing-small;
+  justify-content: center;
+  text-align: center;
+
+  > * {
+    width: calc(50% - #{$spacing-small} / 2);
+  }
+
+  > *:last-child:nth-child(odd) {
+    flex-basis: calc(50% - #{$spacing-small} / 2);
+    width: auto;
+    margin-right: auto;
+  }
 }
 
 .summary-item {
@@ -57,6 +60,19 @@ $secondary-text-color: #4b5563;
     font-size: 0.9rem;
     color: $secondary-text-color;
     margin: 0;
+  }
+}
+
+.section-list {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  margin: 0 auto;
+
+  li {
+    list-style-type: disc;
+    list-style-position: outside;
+    text-align: left;
   }
 }
 
