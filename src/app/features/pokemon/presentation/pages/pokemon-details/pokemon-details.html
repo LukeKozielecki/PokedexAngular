@@ -1,13 +1,16 @@
 @if (pokemonDetails$ | async; as pokemon) {
   <div class="pokemon-details-wrapper">
     <div class="pokemon-details-card">
-      <details-page-header
-        [imageUrl]="pokemon.imageUrl"
-        [name]="pokemon.name"
-        [id]="pokemon.id"
-      ></details-page-header>
+      <div class="details-header-container">
+        <details-page-header
+          [imageUrl]="pokemon.imageUrl"
+          [name]="pokemon.name"
+          [id]="pokemon.id"
+        ></details-page-header>
+      </div>
 
-      <div class="details-section">
+      <div class="summary-card-container">
+        <h2>Details</h2>
         <app-pokemon-details-summary
           [types]="pokemon.types"
           [height]="pokemon.height"
@@ -18,13 +21,14 @@
       </div>
 
       <div class="details-section">
+        <h2>Stats</h2>
         <app-stats-breakdown [stats]="pokemon.stats"></app-stats-breakdown>
       </div>
 
       @if (pokemonEvolution$ | async; as evolutionChain) {
         <div class="evolution-container">
           <h2>Evolution</h2>
-          <div class="flex flex-wrap items-center justify-center space-x-4">
+          <div class="evolution-chain-wrapper">
             @if (evolutionChain.chain.length > 0) {
               <app-evolution-chain-species
                 [species]="evolutionChain.chain[0]"
