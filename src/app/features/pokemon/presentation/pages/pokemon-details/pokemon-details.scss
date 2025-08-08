@@ -1,3 +1,5 @@
+@use '../../../../../shared/constants/theme' as theme;
+
 $primary-text-color: #1f2937;
 $secondary-text-color: #4b5563;
 $details-card-bg-color: #ffffff;
@@ -14,10 +16,13 @@ $font-weight-bold: 700;
 $font-weight-semibold: 600;
 $font-weight-medium: 500;
 
-$font-size-h2: 1.875rem;
+$font-size-h2: 1.5rem;
 $font-size-h3: 1.25rem;
 $font-size-text-large: 1.125rem;
 $font-size-text-base: 1rem;
+
+$summary-card-container-bg-color: rgba(theme.$primary-color, 0.5);
+$summary-card-container-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
 .pokemon-details-wrapper{
   padding: $spacing-large 2px;
@@ -28,6 +33,10 @@ $font-size-text-base: 1rem;
   }
 }
 
+.details-header-container {
+  margin-bottom: $spacing-large;
+}
+
 .pokemon-details-card {
   background-color: $details-card-bg-color;
   border-radius: $card-border-radius;
@@ -35,6 +44,7 @@ $font-size-text-base: 1rem;
   padding: $spacing-large;
   max-width: $page-max-width;
   margin: 0 auto;
+  transition: max-width 0.3s ease-in-out;
 
   @media (min-width: 768px) {
     max-width: #{$page-max-width*1.5};
@@ -72,9 +82,30 @@ $font-size-text-base: 1rem;
   margin-top: $spacing-large;
 
   h2 {
-    font-size: $font-size-h2;
-    font-weight: $font-weight-bold;
-    color: $primary-text-color;
     margin-bottom: $spacing-large;
   }
+
+  .evolution-chain-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-medium;
+  }
+}
+
+.summary-card-container {
+  background-color: $summary-card-container-bg-color;
+  border-radius: $card-border-radius;
+  box-shadow: $summary-card-container-shadow;
+  padding: $spacing-large;
+  width: 100%;
+
+}
+
+h2 {
+  font-size: $font-size-h2;
+  font-weight: $font-weight-bold;
+  color: $primary-text-color;
+  margin-bottom: $spacing-small;
 }
