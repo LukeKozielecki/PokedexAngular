@@ -1,5 +1,6 @@
 <div class="pokemon-list-container">
   <app-search-form (searchSubmitted)="onSearchSubmitted($event)"></app-search-form>
+
   @if (pokemonList$ | async; as pokemon) {
     <div class="pokemon-grid">
       @for (p of pokemon; track p.id) {
@@ -20,12 +21,24 @@
         </div>
       }
     </div>
-    <app-pagination-buttons
-      [currentOffset]="currentOffset$ | async"
-      (nextPage)="onNextPage()"
-      (prevPage)="onPreviousPage()"
-    ></app-pagination-buttons>
-    @if (pokemon.length === 0) {
+
+    @if (!isInSearchState) {
+      <app-pagination-buttons
+        [currentOffset]="currentOffset$ | async"
+        (nextPage)="onNextPage()"
+        (prevPage)="onPreviousPage()"
+      ></app-pagination-buttons>
+    }
+
+    @if (pokemon.length === 0 && isInSearchState) {
+      <div class="search-failed">
+        <h3>No Pokémon Matched Your Search!</h3>
+        <p><strong>Please try different search term</strong></p>
+        <pre>{{ noPokemonArt }}</pre>
+      </div>
+    }
+
+    @if (pokemon.length === 0 && !isInSearchState) {
       <div class="no-pokemon-found">No Pokemon found.</div>
     }
   } @else {

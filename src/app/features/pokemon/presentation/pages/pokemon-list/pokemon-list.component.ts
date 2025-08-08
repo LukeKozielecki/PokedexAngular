@@ -10,6 +10,7 @@ import {take} from 'rxjs/operators';
 import {LoadingScreenComponent} from '../../../../../shared/components/loading-screen/loading-screen.component';
 import {Router} from '@angular/router';
 import {NAVIGATION_DELAY} from '../../../../../shared/constants/app.constants';
+import {NO_POKEMON_ART} from '../../../../../shared/constants/sad-pikachu-ASCII';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -23,6 +24,9 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   currentOffset$!: Observable<number>;
 
   private destroy$ = new Subject<void>();
+
+  public isInSearchState = false;
+  public noPokemonArt = NO_POKEMON_ART;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -67,6 +71,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   }
 
   onSearchSubmitted(term: string): void {
+    this.isInSearchState = !!term.trim();
     setTimeout(() => {
       this.searchPokemonUseCase.search(term);
     }, NAVIGATION_DELAY);

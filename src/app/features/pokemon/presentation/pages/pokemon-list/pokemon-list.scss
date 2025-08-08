@@ -7,7 +7,9 @@ $color-text-secondary: #4b5563;
 $color-text-tertiary: #374151;
 $color-text-placeholder: #6b7280;
 $color-card-active: #f1f1f1;
+$font-size-h3: 1.25rem;
 
+@use '../../../../../shared/constants/theme' as theme;
 @use '../../../../../shared/constants/pokemon-types-mixins' as mixins;
 @include mixins.type-pill-colors;
 
@@ -111,9 +113,31 @@ $color-card-active: #f1f1f1;
   border-radius: 999px;
   transition: background-color 0.2s ease;
 }
+
 .no-pokemon-found {
   text-align: center;
   font-size: 1.125rem;
   color: $color-text-placeholder;
   margin-top: 2rem;
+}
+
+.search-failed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  outline: 2px solid darken(theme.$primary-color, 10%);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  background-color: #fff2f2;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1.5rem;
+
+  h3 {
+    color: #b91c1c;
+    margin-bottom: 10px;
+    font-size: $font-size-h3;
+    text-align: center;
+  }
 }
