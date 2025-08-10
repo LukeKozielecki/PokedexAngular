@@ -4,8 +4,10 @@ $primary-text-color: #1f2937;
 $secondary-text-color: #4b5563;
 $details-card-bg-color: #ffffff;
 $evolution-card-bg-color: #b1b1b1;
+$similar-pokemon-container-bg-color: rgba(theme.$secondary-color, 0.5);
 $details-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 $evolution-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+$similar-pokemon-container-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 $card-border-radius: 0.5rem;
 $page-max-width: 32rem;
 $spacing-large: 1.5rem;
@@ -101,6 +103,41 @@ $summary-card-container-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: $spacing-large;
   width: 100%;
 
+}
+
+.similar-pokemon-container {
+  background-color: $similar-pokemon-container-bg-color;
+  border-radius: $card-border-radius;
+  box-shadow: $similar-pokemon-container-shadow;
+  padding: $spacing-large;
+  margin-top: $spacing-large;
+}
+
+.similar-pokemon-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-medium;
+  justify-content: center;
+
+  .pokemon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 80px;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    p {
+      margin-top: $spacing-small;
+      font-size: $font-size-text-base;
+      font-weight: $font-weight-medium;
+      color: $primary-text-color;
+    }
+  }
 }
 
 h2 {

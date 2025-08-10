@@ -39,6 +39,19 @@
         </div>
       }
 
+      @if (equalTypePokemonList$ | async; as equalTypePokemon) {
+        <div class="similar-pokemon-container">
+          <h2>Pokemon of similar type</h2>
+          <div class="similar-pokemon-list">
+            @for (equalTypePokemon of equalTypePokemon; track equalTypePokemon.id) {
+              <div class="pokemon-item" (click)="onPokemonCardClick(equalTypePokemon.id)">
+                <img [src]="equalTypePokemon.imageUrl" [alt]="equalTypePokemon.name" />
+                <p>{{ equalTypePokemon.name }}</p>
+              </div>
+            }
+          </div>
+        </div>
+      }
     </div>
   </div>
 } @else {

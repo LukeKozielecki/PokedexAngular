@@ -21,16 +21,48 @@ export class SearchPokemonUseCase {
   private _limit$ = new BehaviorSubject<number>(10);
   public offset$: BehaviorSubject<number> = this._offset$;
   public limit$: BehaviorSubject<number> = this._limit$;
+  private filterTypes$ = new BehaviorSubject<string[]>([]);
 
   public results$: Observable<Pokemon[]> = combineLatest([
     this.searchTerm$.pipe(map(term => term.trim()), distinctUntilChanged()),
     this._offset$,
-    this._limit$
+    this._limit$,
+    this.filterTypes$
   ]).pipe(
-    switchMap(([term, offset, limit]) => {
-      return term
-        ? this.filterPokemon(term)
-        : this.getDefaultPokemonList(offset, limit);
+    switchMap(([term, offset, limit, types]) => {
+      // If there's a search term, filter all Pokémon.
+      if (term) {
+        return this.dataService.getAllPokemon().pipe(
+          map(allPokemon => this.applyTermAndTypeFilters(allPokemon, term, types))
+        );
+      }
+
+      // If there are types but no term, filter all Pokémon by type.
+      if (types.length > 0) {
+        return this.dataService.getAllPokemon().pipe(
+          map(allPokemon => this.applyTypesArrayFilters(allPokemon, types)),
+          map(filteredPokemon => filteredPokemon.slice(offset, offset + limit))
+        );
+      }
+
+      // Default case: no term or types, just get the paginated list.
+      return this.getDefaultPokemonList(offset, limit);
+    })
+  );
+
+  public randomizedTypedPokemonList$: Observable<Pokemon[]> = this.filterTypes$.pipe(
+    switchMap(types => {
+      if (types.length === 0) {
+        return of([]);
+      }
+      return this.dataService.getAllPokemon().pipe(
+        map(allPokemon => this.applyTypesArrayFilters(allPokemon, types)),
+        map(filteredPokemon => this.shuffleAndSlice(filteredPokemon, 5)),
+        catchError(error => {
+          console.error('Error fetching random typed Pokémon:', error);
+          return of([]);
+        })
+      );
     })
   );
 
@@ -42,6 +74,10 @@ export class SearchPokemonUseCase {
    */
   public search(term: string): void {
     this.searchTerm$.next(term);
+  }
+
+  public filterByTypes(types: string[]): void {
+    this.filterTypes$.next(types);
   }
 
   /**
@@ -107,5 +143,44 @@ export class SearchPokemonUseCase {
     return isNumeric
       ? pokemonList.filter(pokemon => pokemon.id.toString().includes(term))
       : pokemonList.filter(pokemon => pokemon.name.toLowerCase().includes(term.toLowerCase()));
+  }
+
+  /**
+   * Filters a list of Pokémon to find those with at least one matching type.
+   * This function checks if any of the provided types exist within the Pokémon's types.
+   *
+   * @param pokemonList The array of all Pokémon to filter.
+   * @param types The array of types to match against.
+   * @returns A new array containing only the Pokémon that have at least one matching type.
+   */
+  private applyTypesArrayFilters(pokemonList: Pokemon[], types: string[]): Pokemon[] {
+    return pokemonList.filter(pokemon =>
+      types.some(type => pokemon.types.includes(type))
+    );
+  }
+
+  /**
+   * Filters a list of Pokémon first by a search term and then by a list of types.
+   *
+   * @param pokemonList The array of all Pokémon to filter.
+   * @param term The search string to apply (matches against ID or name).
+   * @param types The array of types to match against.
+   * @returns A new array containing Pokémon that match both the search term and at least one of the provided types.
+   */
+  private applyTermAndTypeFilters(pokemonList: Pokemon[], term: string, types: string[]): Pokemon[] {
+    const filteredByTerm = this.applyTermFilter(pokemonList, term);
+    return types.length > 0 ? this.applyTypesArrayFilters(filteredByTerm, types) : filteredByTerm;
+  }
+
+  /**
+   * Randomizes the order of a Pokémon list and returns a new list containing a specified number of items from the shuffled list.
+   *
+   * @param pokemonList The array of Pokémon to shuffle and slice.
+   * @param count The number of Pokémon to return from the shuffled list.
+   * @returns A new array containing a random selection of Pokémon.
+   */
+  private shuffleAndSlice(pokemonList: Pokemon[], count: number): Pokemon[] {
+    const shuffled = [...pokemonList].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
   }
 }
