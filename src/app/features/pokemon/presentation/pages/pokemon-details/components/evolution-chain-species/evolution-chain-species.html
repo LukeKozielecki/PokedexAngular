@@ -24,7 +24,7 @@
       </div>
     }
   </div>
-} @else {
+} @else if (!species.evolvesTo.length) {
   <h2>This Pokémon does not evolve.</h2>
   <div class="pokemon-container">
     <div class="pokemon-details">
@@ -34,3 +34,4 @@
     </div>
   </div>
 }
+<!--todo: add loading composable; better ux when loading pokemon evolution sprites-->
