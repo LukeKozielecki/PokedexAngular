@@ -35,6 +35,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.searchPokemonUseCase.search("");
     this.searchPokemonUseCase.filterByTypes([]);
     this.pokemonList$ = this.searchPokemonUseCase.results$;
     this.currentOffset$ = this.searchPokemonUseCase.offset$;
