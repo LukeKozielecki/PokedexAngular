@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {debounceTime, forkJoin, map, Observable, of, Subject, switchMap, takeUntil, tap} from 'rxjs';
 import {PokeApiPokemonDataSource} from '../../../infrastructure/data-sources/PokeApiPokemonDataSource';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {PokemonDetails} from '../../../domain/model/PokemonDetails';
 import {CommonModule} from '@angular/common';
 import {LoadingScreenComponent} from '../../../../../shared/components/loading-screen/loading-screen.component';
@@ -15,6 +15,7 @@ import {Pokemon} from '../../../domain/model/Pokemon';
 import {NAVIGATION_DELAY} from '../../../../../shared/constants/app.constants';
 import {take} from 'rxjs/operators';
 import {ScrollToTopService} from '../../../../../shared/services/scroll-to-top.service';
+import {MatIconModule} from '@angular/material/icon'
 
 @Component({
   selector: 'app-pokemon-details',
@@ -25,7 +26,9 @@ import {ScrollToTopService} from '../../../../../shared/services/scroll-to-top.s
     EvolutionChainSpeciesComponent,
     StatsBreakdownComponent,
     PokemonDetailsSummaryComponent,
-    PokemonDetailsHeader
+    PokemonDetailsHeader,
+    RouterLink,
+    MatIconModule
   ],
   templateUrl: './pokemon-details.html',
   styleUrl: './pokemon-details.scss'

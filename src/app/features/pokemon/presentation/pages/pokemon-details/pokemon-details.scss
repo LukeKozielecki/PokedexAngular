@@ -57,6 +57,24 @@ $summary-card-container-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 }
 
+.navigate-to-home {
+  background-color: theme.$primary-color;
+  color: white;
+  border: none;
+  border-radius: $card-border-radius;
+  padding: $spacing-small $spacing-medium;
+  cursor: pointer;
+  font-size: $font-size-text-base;
+  font-weight: $font-weight-semibold;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: darken(theme.$primary-color, 10%);
+  }
+}
 .details-section {
   margin-top: $spacing-large;
 

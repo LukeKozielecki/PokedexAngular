@@ -2,6 +2,8 @@
   @if (pokemonDetails$ | async; as pokemon) {
     <div class="pokemon-details-wrapper">
       <div class="pokemon-details-card">
+        <button routerLink="/pokemon" class="navigate-to-home"><mat-icon>arrow_back</mat-icon></button>
+
         <div class="details-header-container">
           <details-page-header
             [imageUrl]="pokemon.imageUrl"
