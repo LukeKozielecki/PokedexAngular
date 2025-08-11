@@ -1,7 +1,7 @@
-<div class="pokemon-list-container">
+@if (pokemonList$ | async; as pokemon) {
+  <div class="pokemon-list-container">
   <app-search-form (searchSubmitted)="onSearchSubmitted($event)"></app-search-form>
 
-  @if (pokemonList$ | async; as pokemon) {
     <div class="pokemon-grid">
       @for (p of pokemon; track p.id) {
         <div (click)="onPokemonCardClick(p.id)" class="pokemon-card">
@@ -36,7 +36,7 @@
 
     <div class="lazy-loader"></div>
 
-  } @else {
-    <app-loading-screen></app-loading-screen>
-  }
-</div>
+  </div>
+} @else {
+  <app-loading-screen></app-loading-screen>
+}

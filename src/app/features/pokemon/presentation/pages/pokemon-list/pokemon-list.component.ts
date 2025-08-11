@@ -91,12 +91,13 @@ export class PokemonListComponent implements OnInit, OnDestroy {
     }, NAVIGATION_DELAY);
   }
 
-  onSearchSubmitted(term: string): void {
-    this.isInSearchState = !!term.trim();
-    setTimeout(() => {
-      this.searchPokemonUseCase.search(term);
-    }, NAVIGATION_DELAY);
+  onSearchSubmitted(searchPayload: { term: string; types: string[] }): void {
+    const { term, types } = searchPayload;
+    this.isInSearchState = !!(term.trim() || types.length > 0);
+    this.searchPokemonUseCase.search(term);
+    this.searchPokemonUseCase.filterByTypes(types);
   }
+
 
   /**
    * Handles the click event for the "Next" pagination button.

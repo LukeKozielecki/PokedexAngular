@@ -2,14 +2,18 @@
   <input
     type="text"
     [(ngModel)]="searchTerm"
-    (keyup.enter)="onSearch()"
+    (keyup)="onSearchInput()"
     placeholder="Search Pokemon by name..."
     class="search-input"
   />
-  <button
-    (click)="onSearch()"
-    class="search-button"
+  <select
+    [(ngModel)]="selectedType"
+    (change)="onTypeSelected()"
+    class="pokemon-type-selector"
   >
-    Search
-  </button>
+    <option value="">All Types</option>
+    @for (type of pokemonTypes; track type) {
+      <option [value]="type">{{ type | titlecase }}</option>
+    }
+  </select>
 </div>
