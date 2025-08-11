@@ -1,5 +1,15 @@
 import {Injectable} from '@angular/core';
-import {Observable, catchError, of, map, distinctUntilChanged, switchMap, BehaviorSubject, combineLatest} from 'rxjs';
+import {
+  Observable,
+  catchError,
+  of,
+  map,
+  distinctUntilChanged,
+  switchMap,
+  BehaviorSubject,
+  combineLatest,
+  concatMap, tap, Subscription
+} from 'rxjs';
 import {Pokemon} from '../../domain/model/Pokemon';
 import {PokemonDataService} from '../../infrastructure/services/PokemonDataService';
 import {GetPokemonListUseCase} from './GetPokemonListUseCase';
@@ -22,31 +32,29 @@ export class SearchPokemonUseCase {
   public offset$: BehaviorSubject<number> = this._offset$;
   public limit$: BehaviorSubject<number> = this._limit$;
   private filterTypes$ = new BehaviorSubject<string[]>([]);
+  private pokemonList$ = new BehaviorSubject<Pokemon[]>([]);
+  private infiniteScrollSubscription: Subscription | undefined;
 
   public results$: Observable<Pokemon[]> = combineLatest([
     this.searchTerm$.pipe(map(term => term.trim()), distinctUntilChanged()),
-    this._offset$,
-    this._limit$,
     this.filterTypes$
   ]).pipe(
-    switchMap(([term, offset, limit, types]) => {
-      // If there's a search term, filter all Pokémon.
-      if (term) {
+    switchMap(([term, types]) => {
+      // If there's a search term or types, filter all Pokémon.
+      if (term || types.length > 0) {
+        // Stop infinite scroll when a search or filter is active
+        if (this.infiniteScrollSubscription) {
+          this.infiniteScrollSubscription.unsubscribe();
+          this.infiniteScrollSubscription = undefined;
+        }
         return this.dataService.getAllPokemon().pipe(
           map(allPokemon => this.applyTermAndTypeFilters(allPokemon, term, types))
         );
       }
 
-      // If there are types but no term, filter all Pokémon by type.
-      if (types.length > 0) {
-        return this.dataService.getAllPokemon().pipe(
-          map(allPokemon => this.applyTypesArrayFilters(allPokemon, types)),
-          map(filteredPokemon => filteredPokemon.slice(offset, offset + limit))
-        );
-      }
-
-      // Default case: no term or types, just get the paginated list.
-      return this.getDefaultPokemonList(offset, limit);
+      // Default case: no term or types, use infinite scroll.
+      this.initInfiniteScroll();
+      return this.pokemonList$;
     })
   );
 
@@ -74,6 +82,27 @@ export class SearchPokemonUseCase {
    */
   public search(term: string): void {
     this.searchTerm$.next(term);
+    this._offset$.next(0);
+  }
+
+  public initInfiniteScroll(): void {
+    // Unsubscribe from any previous scroll.
+    if (this.infiniteScrollSubscription) {
+      this.infiniteScrollSubscription.unsubscribe();
+    }
+
+    // Reset the list and offset.
+    this.pokemonList$.next([]);
+    this._offset$.next(0);
+
+    // Subscribe to offset/limit changes to fetch new pages.
+    this.infiniteScrollSubscription = combineLatest([this._offset$, this._limit$]).pipe(
+      concatMap(([offset, limit]) => this.getPokemonListUseCase.invoke(offset, limit)),
+      tap(newPokemon => {
+        const currentList = this.pokemonList$.getValue();
+        this.pokemonList$.next([...currentList, ...newPokemon]);
+      })
+    ).subscribe();
   }
 
   public filterByTypes(types: string[]): void {

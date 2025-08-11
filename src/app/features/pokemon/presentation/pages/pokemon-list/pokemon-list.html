@@ -22,14 +22,6 @@
       }
     </div>
 
-    @if (!isInSearchState) {
-      <app-pagination-buttons
-        [currentOffset]="currentOffset$ | async"
-        (nextPage)="onNextPage()"
-        (prevPage)="onPreviousPage()"
-      ></app-pagination-buttons>
-    }
-
     @if (pokemon.length === 0 && isInSearchState) {
       <div class="search-failed">
         <h3>No Pokémon Matched Your Search!</h3>
@@ -41,6 +33,9 @@
     @if (pokemon.length === 0 && !isInSearchState) {
       <div class="no-pokemon-found">No Pokemon found.</div>
     }
+
+    <div class="lazy-loader"></div>
+
   } @else {
     <app-loading-screen></app-loading-screen>
   }

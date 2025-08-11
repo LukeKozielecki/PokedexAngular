@@ -4,7 +4,6 @@ import {Observable, Subject, withLatestFrom} from 'rxjs';
 import {Pokemon} from '../../../domain/model/Pokemon';
 import {SearchFormComponent} from './components/search-form/search-form.component';
 import {SearchPokemonUseCase} from '../../../application/use-cases/SearchPokemonUseCase';
-import {PaginationButtonsComponent} from './components/pagination-buttons/pagination-buttons.component';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {take} from 'rxjs/operators';
 import {LoadingScreenComponent} from '../../../../../shared/components/loading-screen/loading-screen.component';
@@ -15,7 +14,7 @@ import {NO_POKEMON_ART} from '../../../../../shared/constants/sad-pikachu-ASCII'
 @Component({
   selector: 'app-pokemon-list',
   standalone: true,
-  imports: [CommonModule, SearchFormComponent, PaginationButtonsComponent, LoadingScreenComponent],
+  imports: [CommonModule, SearchFormComponent, LoadingScreenComponent],
   templateUrl: './pokemon-list.html',
   styleUrl: './pokemon-list.scss',
 })
@@ -24,6 +23,8 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   currentOffset$!: Observable<number>;
 
   private destroy$ = new Subject<void>();
+  private observer!: IntersectionObserver;
+  private sentinel: Element | null = null;
 
   public isInSearchState = false;
   public noPokemonArt = NO_POKEMON_ART;
@@ -59,9 +60,27 @@ export class PokemonListComponent implements OnInit, OnDestroy {
       }
       this.searchPokemonUseCase.setLimit(newLimit);
     });
+
+    this.observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !this.isInSearchState) {
+        this.loadNextPage();
+      }
+    });
+
+    setTimeout(() => {
+      this.sentinel = document.querySelector('.lazy-loader');
+      if (this.sentinel) {
+        this.observer.observe(this.sentinel);
+      }
+    }, 0)
   }
 
   ngOnDestroy(): void {
+    if (this.observer && this.sentinel) {
+      this.observer.unobserve(this.sentinel);
+      this.observer.disconnect();
+    }
+
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -102,6 +121,15 @@ export class PokemonListComponent implements OnInit, OnDestroy {
       .pipe(take(1), withLatestFrom(this.searchPokemonUseCase.limit$))
       .subscribe(([offset, limit]) =>
         this.searchPokemonUseCase.setOffset(Math.max(0, offset - limit))
+      );
+  }
+
+  private loadNextPage(): void {
+    this.searchPokemonUseCase
+      .offset$
+      .pipe(take(1), withLatestFrom(this.searchPokemonUseCase.limit$))
+      .subscribe(([offset, limit]) =>
+        this.searchPokemonUseCase.setOffset(offset + limit)
       );
   }
 }
