@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {map, Observable, Subject, switchMap} from 'rxjs';
+import {debounceTime, forkJoin, map, Observable, of, Subject, switchMap, takeUntil, tap} from 'rxjs';
 import {PokeApiPokemonDataSource} from '../../../infrastructure/data-sources/PokeApiPokemonDataSource';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PokemonDetails} from '../../../domain/model/PokemonDetails';
@@ -13,6 +13,8 @@ import {PokemonDetailsHeader} from './components/details-header/details-header.c
 import {SearchPokemonUseCase} from '../../../application/use-cases/SearchPokemonUseCase';
 import {Pokemon} from '../../../domain/model/Pokemon';
 import {NAVIGATION_DELAY} from '../../../../../shared/constants/app.constants';
+import {take} from 'rxjs/operators';
+import {ScrollToTopService} from '../../../../../shared/services/scroll-to-top.service';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -32,16 +34,19 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
   pokemonDetails$!: Observable<PokemonDetails>;
   pokemonEvolution$!: Observable<EvolutionChain>;
   equalTypePokemonList$!: Observable<Pokemon[]>;
+  isLoading = true;
   private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
     private pokemonDataSource: PokeApiPokemonDataSource,
     private searchPokemonUseCase: SearchPokemonUseCase,
-    private router: Router
+    private router: Router,
+    private scrollService: ScrollToTopService
   ) {}
 
   ngOnInit(): void {
+    this.scrollService.requestScrollToTop();
     const pokemonId$ = this.route.paramMap.pipe(
       map(params => {
         const id = params.get('id');
@@ -51,26 +56,42 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
         return +id;
       })
     );
-    this.pokemonDetails$ = pokemonId$.pipe(
-      switchMap(id => this.pokemonDataSource.getPokemonDetailsById(id))
-    );
 
-    this.pokemonEvolution$ = pokemonId$.pipe(
-      switchMap(id => this.pokemonDataSource.getPokemonSpeciesById(id)),
-      switchMap(species => {
-        const evolutionChainUrl = species.evolution_chain.url;
-        const evolutionChainId = parseInt(evolutionChainUrl.match(/\/(\d+)\/$/)![1], 10);
-        return this.pokemonDataSource.getEvolutionChainById(evolutionChainId);
-      })
-    );
+    pokemonId$.pipe(
+      tap(() => this.isLoading = true),
+      switchMap(id => {
+        return forkJoin({
+          details: this.pokemonDataSource.getPokemonDetailsById(id),
+          species: this.pokemonDataSource.getPokemonSpeciesById(id)
+        }).pipe(
+          switchMap(({ details, species }) => {
+            const evolutionChainUrl = species.evolution_chain.url;
+            const evolutionChainId = parseInt(evolutionChainUrl.match(/\/(\d+)\/$/)![1], 10);
 
-    this.equalTypePokemonList$ = this.pokemonDetails$.pipe(
-      switchMap(pokemonDetails => {
-        const types = pokemonDetails.types;
-        this.searchPokemonUseCase.filterByTypes(types);
-        return this.searchPokemonUseCase.randomizedTypedPokemonList$;
-      })
-    );
+            this.searchPokemonUseCase.filterByTypes(details.types);
+
+            return forkJoin({
+              pokemonDetails: of(details),
+              pokemonEvolution: this.pokemonDataSource.getEvolutionChainById(evolutionChainId),
+              equalTypePokemonList: this.searchPokemonUseCase.randomizedTypedPokemonList$.pipe(take(1))
+            });
+          })
+        );
+      }),
+      debounceTime(500),
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: ({ pokemonDetails, pokemonEvolution, equalTypePokemonList }) => {
+        this.pokemonDetails$ = of(pokemonDetails);
+        this.pokemonEvolution$ = of(pokemonEvolution);
+        this.equalTypePokemonList$ = of(equalTypePokemonList);
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error fetching Pokemon data', error);
+        this.isLoading = false;
+      }
+    });
   }
 
   ngOnDestroy(): void {
