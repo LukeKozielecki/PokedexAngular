@@ -2,7 +2,27 @@
   @if (pokemonDetails$ | async; as pokemon) {
     <div class="pokemon-details-wrapper">
       <div class="pokemon-details-card">
-        <button routerLink="/pokemon" class="navigate-to-home"><mat-icon>arrow_back</mat-icon></button>
+        <div class="header-buttons">
+          <button routerLink="/pokemon" class="navigate-to-home"><mat-icon>arrow_back</mat-icon></button>
+
+          @if (isLoggedIn$ | async) {
+            <button
+              class="favorite-button"
+              (click)="onToggleFavorite(pokemon)"
+              [class.is-favorite]="isFavorite$ | async"
+            >
+              @if (isFavorite$ | async) {
+                <mat-icon>favorite</mat-icon>
+              } @else {
+                <mat-icon>favorite_border</mat-icon>
+              }
+            </button>
+          } @else {
+            <button class="favorite-button disabled-button" disabled>
+              <mat-icon>favorite_border</mat-icon>
+            </button>
+          }
+        </div>
 
         <div class="details-header-container">
           <details-page-header
