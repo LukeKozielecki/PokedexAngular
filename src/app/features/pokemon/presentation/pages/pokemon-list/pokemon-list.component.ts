@@ -38,6 +38,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.searchPokemonUseCase.search("");
     this.searchPokemonUseCase.filterByTypes([]);
+    this.searchPokemonUseCase.setFavoritesOnly(false);
     this.pokemonList$ = this.searchPokemonUseCase.results$;
     this.currentOffset$ = this.searchPokemonUseCase.offset$;
     this.breakpointObserver.observe([
@@ -91,11 +92,12 @@ export class PokemonListComponent implements OnInit, OnDestroy {
     }, NAVIGATION_DELAY);
   }
 
-  onSearchSubmitted(searchPayload: { term: string; types: string[] }): void {
-    const { term, types } = searchPayload;
-    this.isInSearchState = !!(term.trim() || types.length > 0);
+  onSearchSubmitted(searchPayload: { term: string; types: string[]; favoritesOnly: boolean }): void {
+    const { term, types, favoritesOnly } = searchPayload;
+    this.isInSearchState = !!(term.trim() || types.length > 0 || favoritesOnly);
     this.searchPokemonUseCase.search(term);
     this.searchPokemonUseCase.filterByTypes(types);
+    this.searchPokemonUseCase.setFavoritesOnly(favoritesOnly);
   }
 
 

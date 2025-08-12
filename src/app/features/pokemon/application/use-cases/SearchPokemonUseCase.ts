@@ -13,6 +13,8 @@ import {
 import {Pokemon} from '../../domain/model/Pokemon';
 import {PokemonDataService} from '../../infrastructure/services/PokemonDataService';
 import {GetPokemonListUseCase} from './GetPokemonListUseCase';
+import {PokemonFavoriteService} from '../../../auth/services/pokemon-favorite.service';
+import {AuthService} from '../../../auth/services/authService';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +24,65 @@ export class SearchPokemonUseCase {
   // === Dependencies ===
   constructor(
     private dataService: PokemonDataService,
-    private getPokemonListUseCase: GetPokemonListUseCase
-  ) {}
+    private getPokemonListUseCase: GetPokemonListUseCase,
+    private favoriteService: PokemonFavoriteService,
+    private authService: AuthService
+  ) {
+    this.results$ = combineLatest([
+      this.searchTerm$.pipe(map(term => term.trim()), distinctUntilChanged()),
+      this.filterTypes$,
+      this.favoritesOnly$,
+      this.authService.getCurrentUser().pipe(
+        switchMap(user => user ? of(user.uid) : of(null)) //
+      )
+    ]).pipe(
+      switchMap(([term, types, favoritesOnly, userId]) => {
+        // If a search term, type filter, or favoritesOnly filter is active, filter all Pokémon.
+        if (term || types.length > 0 || favoritesOnly) {
+          // Stop infinite scroll when a search or filter is active
+          if (this.infiniteScrollSubscription) {
+            this.infiniteScrollSubscription.unsubscribe();
+            this.infiniteScrollSubscription = undefined;
+          }
+
+          const allPokemon$ = this.dataService.getAllPokemon();
+
+          // Filtering logic when favoritesOnly is true
+          if (favoritesOnly) {
+            if (!userId) {
+              return of([]);
+            }
+
+            // Fetch the list of favorite IDs first.
+            return this.favoriteService.getFavoritePokemonIds(userId).pipe(
+              switchMap(favoriteIds => {
+                if (favoriteIds.length === 0) {
+                  return of([]);
+                }
+                // This is the new, more efficient part
+                return this.dataService.getPokemonByIds(favoriteIds).pipe(
+                  map(favoritePokemon => this.applyTermAndTypeFilters(favoritePokemon, term, types))
+                );
+              }),
+              catchError(error => {
+                console.error('Error fetching favorites:', error);
+                return of([]);
+              })
+            );
+          } else {
+            // Standard filtering logic when favoritesOnly is false
+            return allPokemon$.pipe(
+              map(allPokemon => this.applyTermAndTypeFilters(allPokemon, term, types))
+            );
+          }
+        }
+
+        // Default case: no term or types, use infinite scroll.
+        this.initInfiniteScroll();
+        return this.pokemonList$;
+      })
+    );
+  }
 
   // === Reactive State ===
   private searchTerm$ = new BehaviorSubject<string>('');
@@ -32,31 +91,11 @@ export class SearchPokemonUseCase {
   public offset$: BehaviorSubject<number> = this._offset$;
   public limit$: BehaviorSubject<number> = this._limit$;
   private filterTypes$ = new BehaviorSubject<string[]>([]);
+  private favoritesOnly$ = new BehaviorSubject<boolean>(false);
   private pokemonList$ = new BehaviorSubject<Pokemon[]>([]);
   private infiniteScrollSubscription: Subscription | undefined;
 
-  public results$: Observable<Pokemon[]> = combineLatest([
-    this.searchTerm$.pipe(map(term => term.trim()), distinctUntilChanged()),
-    this.filterTypes$
-  ]).pipe(
-    switchMap(([term, types]) => {
-      // If there's a search term or types, filter all Pokémon.
-      if (term || types.length > 0) {
-        // Stop infinite scroll when a search or filter is active
-        if (this.infiniteScrollSubscription) {
-          this.infiniteScrollSubscription.unsubscribe();
-          this.infiniteScrollSubscription = undefined;
-        }
-        return this.dataService.getAllPokemon().pipe(
-          map(allPokemon => this.applyTermAndTypeFilters(allPokemon, term, types))
-        );
-      }
-
-      // Default case: no term or types, use infinite scroll.
-      this.initInfiniteScroll();
-      return this.pokemonList$;
-    })
-  );
+  public results$: Observable<Pokemon[]>;
 
   public randomizedTypedPokemonList$: Observable<Pokemon[]> = this.filterTypes$.pipe(
     switchMap(types => {
@@ -107,6 +146,10 @@ export class SearchPokemonUseCase {
 
   public filterByTypes(types: string[]): void {
     this.filterTypes$.next(types);
+  }
+
+  public setFavoritesOnly(value: boolean): void {
+    this.favoritesOnly$.next(value);
   }
 
   /**

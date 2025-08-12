@@ -48,4 +48,26 @@ export class PokemonFavoriteService {
     const favoriteRef = ref(this.db, `users/${userId}/favorites/${pokemonId}`);
     return from(remove(favoriteRef));
   }
+
+  /**
+   * Retrieves an observable of a user's favorite Pokémon IDs from Firebase.
+   * @param userId The ID of the user.
+   * @returns An Observable of an array of Pokémon IDs.
+   */
+  getFavoritePokemonIds(userId: string): Observable<number[]> {
+    const favoriteRef = ref(this.db, `users/${userId}/favorites`);
+    return from(get(favoriteRef)).pipe(
+      map(snapshot => {
+        const favorites = snapshot.val();
+        if (!favorites) {
+          return [];
+        }
+        return Object.keys(favorites).map(id => +id);
+      }),
+      catchError(error => {
+        console.error('Error fetching favorite Pokemon IDs:', error);
+        return of([]);
+      })
+    );
+  }
 }
