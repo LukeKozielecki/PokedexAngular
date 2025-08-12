@@ -16,7 +16,7 @@ import {NAVIGATION_DELAY} from '../../../../../shared/constants/app.constants';
 import {take} from 'rxjs/operators';
 import {ScrollToTopService} from '../../../../../shared/services/scroll-to-top.service';
 import {MatIconModule} from '@angular/material/icon'
-import {AuthService} from '../../../../auth/services/authService';
+import {AuthService} from '../../../../auth/services/auth.service';
 import {PokemonFavoriteService} from '../../../../auth/services/pokemon-favorite.service';
 
 @Component({

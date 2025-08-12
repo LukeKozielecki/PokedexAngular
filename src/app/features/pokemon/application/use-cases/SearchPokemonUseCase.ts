@@ -14,7 +14,7 @@ import {Pokemon} from '../../domain/model/Pokemon';
 import {PokemonDataService} from '../../infrastructure/services/PokemonDataService';
 import {GetPokemonListUseCase} from './GetPokemonListUseCase';
 import {PokemonFavoriteService} from '../../../auth/services/pokemon-favorite.service';
-import {AuthService} from '../../../auth/services/authService';
+import {AuthService} from '../../../auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root'

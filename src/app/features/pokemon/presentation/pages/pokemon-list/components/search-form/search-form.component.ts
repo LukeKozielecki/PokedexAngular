@@ -2,7 +2,7 @@ import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core'
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {debounceTime, distinctUntilChanged, Observable, Subject, Subscription, tap} from 'rxjs';
-import {AuthService} from '../../../../../../auth/services/authService';
+import {AuthService} from '../../../../../../auth/services/auth.service';
 import {MatIconModule} from '@angular/material/icon';
 
 @Component({

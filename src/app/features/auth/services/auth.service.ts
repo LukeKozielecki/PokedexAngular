@@ -8,7 +8,7 @@ import {
   onAuthStateChanged,
   User
 } from 'firebase/auth';
-import { from, Observable } from 'rxjs';
+import {BehaviorSubject, from, Observable} from 'rxjs';
 import {app} from '../../../firebaseConfig';
 
 const auth = getAuth(app);
@@ -17,7 +17,13 @@ const auth = getAuth(app);
   providedIn: 'root',
 })
 export class AuthService {
-  constructor() {}
+  private userSubject = new BehaviorSubject<User | null>(null);
+
+  constructor() {
+    onAuthStateChanged(auth, (user) => {
+      this.userSubject.next(user);
+    });
+  }
 
   loginUser(email: string, password: string): Observable<UserCredential> {
     return from(signInWithEmailAndPassword(auth, email, password));
@@ -45,11 +51,6 @@ export class AuthService {
   }
 
   getCurrentUser(): Observable<User | null> {
-    return new Observable<User | null>(observer => {
-      onAuthStateChanged(auth, (user) => {
-        observer.next(user);
-        observer.complete();
-      });
-    });
+    return this.userSubject.asObservable();
   }
 }
