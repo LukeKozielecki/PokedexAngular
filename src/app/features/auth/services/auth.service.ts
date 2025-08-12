@@ -8,7 +8,7 @@ import {
   onAuthStateChanged,
   User
 } from 'firebase/auth';
-import {BehaviorSubject, from, Observable} from 'rxjs';
+import {BehaviorSubject, from, map, Observable} from 'rxjs';
 import {app} from '../../../firebaseConfig';
 
 const auth = getAuth(app);
@@ -38,16 +38,9 @@ export class AuthService {
   }
 
   isLoggedIn(): Observable<boolean> {
-    return new Observable<boolean>(observer => {
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          observer.next(true);
-        } else {
-          observer.next(false);
-        }
-        observer.complete();
-      });
-    });
+    return this.userSubject.asObservable().pipe(
+      map(user => !!user)
+    );
   }
 
   getCurrentUser(): Observable<User | null> {
