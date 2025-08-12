@@ -1,18 +1,22 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {debounceTime, distinctUntilChanged, Subject, Subscription, tap} from 'rxjs';
+import {debounceTime, distinctUntilChanged, Observable, Subject, Subscription, tap} from 'rxjs';
+import {AuthService} from '../../../../../../auth/services/auth.service';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-search-form',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatIconModule],
   templateUrl: './search-form.html',
   styleUrl: './search-form.scss'
 })
 export class SearchFormComponent implements OnInit, OnDestroy {
   searchTerm: string = '';
   selectedType: string = '';
+  isFavoritesOnly: boolean = false;
+  isLoggedIn$!: Observable<boolean>;
   pokemonTypes = [
     'normal',
     'electric',
@@ -34,12 +38,15 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     'flying'
   ];
 
-  @Output() searchSubmitted = new EventEmitter<{ term: string; types: string[] }>();
+  @Output() searchSubmitted = new EventEmitter<{ term: string; types: string[]; favoritesOnly: boolean }>();
 
   private searchTerms = new Subject<string>();
   private subscription!: Subscription;
 
+  constructor(private authService: AuthService) {}
+
   ngOnInit(): void {
+    this.isLoggedIn$ = this.authService.isLoggedIn();
     this.subscription = this.searchTerms.pipe(
       debounceTime(300),
       distinctUntilChanged(),
@@ -61,11 +68,17 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     this.emitSearchPayload();
   }
 
+  onToggleFavorites(): void {
+    this.isFavoritesOnly = !this.isFavoritesOnly;
+    this.emitSearchPayload();
+  }
+
   private emitSearchPayload(): void {
     const typesToFilter = this.selectedType ? [this.selectedType] : [];
     this.searchSubmitted.emit({
       term: this.searchTerm.trim(),
-      types: typesToFilter
+      types: typesToFilter,
+      favoritesOnly: this.isFavoritesOnly
     });
   }
 }

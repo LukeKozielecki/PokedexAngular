@@ -54,3 +54,26 @@ $spacing-x-small: 0.25rem;
     transform: scale(0.95);
   }
 }
+
+.favorite-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  mat-icon {
+    font-size: 30px;
+    height: 30px;
+    width: 30px;
+    color: theme.$primary-color-dark;
+  }
+
+  &.is-favorite mat-icon {
+    color: red;
+  }
+
+  &.disabled-button {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}

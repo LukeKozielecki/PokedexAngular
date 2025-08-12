@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import {Observable, BehaviorSubject, finalize, tap, filter} from 'rxjs';
+import {Observable, BehaviorSubject, finalize, tap, filter, map} from 'rxjs';
 import { POKEMON_REPOSITORY, PokemonRepository } from '../../domain/model/PokemonRepository';
 import { Pokemon } from '../../domain/model/Pokemon';
 import { shareReplay, take } from 'rxjs/operators';
@@ -52,6 +52,19 @@ export class PokemonDataService {
     return cached$;
   }
 
+  /**
+   * Returns a list of Pokémon from the cache based on their IDs.
+   * Fetches the full list first if it's not already cached.
+   * @param ids An array of Pokémon IDs to fetch.
+   * @returns An Observable of an array of Pokémon matching the provided IDs.
+   */
+  public getPokemonByIds(ids: number[]): Observable<Pokemon[]> {
+    return this.getAllPokemon().pipe(
+      map(allPokemon => this.filterPokemonByIds(allPokemon, ids))
+    );
+  }
+
+
   // === Internal Details ===
   /**
    * Calls the repository, pushes the result into cache,
@@ -69,5 +82,16 @@ export class PokemonDataService {
     }
 
     return this.loadingInProgress$;
+  }
+
+  /**
+   * Helper function to filter a list of Pokémon by a given array of IDs.
+   * @param pokemonList The list of all Pokémon.
+   * @param ids An array of Pokémon IDs.
+   * @returns A new array containing only the Pokémon with matching IDs.
+   */
+  private filterPokemonByIds(pokemonList: Pokemon[], ids: number[]): Pokemon[] {
+    const idSet = new Set(ids);
+    return pokemonList.filter(pokemon => idSet.has(pokemon.id));
   }
 }

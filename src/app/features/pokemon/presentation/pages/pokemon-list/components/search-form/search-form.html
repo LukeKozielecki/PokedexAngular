@@ -16,4 +16,17 @@
       <option [value]="type">{{ type | titlecase }}</option>
     }
   </select>
+  @if (isLoggedIn$ | async) {
+    <button
+      class="favorite-button"
+      (click)="onToggleFavorites()"
+      [class.is-favorite-active]="isFavoritesOnly"
+    >
+      @if (isFavoritesOnly) {
+        <mat-icon>favorite</mat-icon>
+      } @else {
+        <mat-icon>favorite_border</mat-icon>
+      }
+    </button>
+  }
 </div>
