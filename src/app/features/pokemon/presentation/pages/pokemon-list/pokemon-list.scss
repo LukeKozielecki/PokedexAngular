@@ -109,6 +109,36 @@ $badge-size-grown-multiplier: 1.25;
   }
 }
 
+.navigate-to-login-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: $spacing-unit;
+}
+
+.navigate-to-login-button {
+  padding: 0.5rem 1rem;
+  background-color: theme.$secondary-color;
+  color: #fff;
+  border: 1px solid theme.$secondary-color;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+  &:hover {
+    background-color: darken(theme.$secondary-color, 5%);
+  }
+
+  &:active {
+    background-color: darken(theme.$secondary-color, 10%);
+    transform: scale(0.95);
+  }
+}
+
 .pokemon-image {
   width: 6rem;
   height: 6rem;

@@ -1,7 +1,9 @@
 @if (pokemonList$ | async; as pokemon) {
   <div class="pokemon-list-container">
+  <div class="navigate-to-login-container">
+    <button (click)="navigateToLogin()" class="navigate-to-login-button">Go to Login</button>
+  </div>
   <app-search-form (searchSubmitted)="onSearchSubmitted($event)"></app-search-form>
-
     <div class="pokemon-grid">
       @for (pokemon of pokemon; track pokemon.id) {
         <div (click)="onPokemonCardClick(pokemon.id)"
