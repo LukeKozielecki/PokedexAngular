@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/authService';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
@@ -12,12 +12,20 @@ import {Router} from '@angular/router';
   templateUrl: './login-form.html',
   styleUrl: './login-form.scss'
 })
-export class LoginForm {
+export class LoginForm implements OnInit{
   email = '';
   password = '';
   isLoginMode = true;
 
   constructor(private authService: AuthService, private router: Router) {}
+
+  ngOnInit() {
+    this.authService.isLoggedIn().subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this.router.navigate(['/profile']);
+      }
+    });
+  }
 
   onLogin() {
     this.authService.loginUser(this.email, this.password).subscribe({

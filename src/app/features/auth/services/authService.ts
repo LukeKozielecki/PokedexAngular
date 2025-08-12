@@ -4,7 +4,9 @@ import {
   signOut,
   UserCredential,
   getAuth,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  User
 } from 'firebase/auth';
 import { from, Observable } from 'rxjs';
 import {app} from '../../../firebaseConfig';
@@ -27,5 +29,27 @@ export class AuthService {
 
   registerUser(email: string, password: string) {
     return from(createUserWithEmailAndPassword(auth, email, password));
+  }
+
+  isLoggedIn(): Observable<boolean> {
+    return new Observable<boolean>(observer => {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          observer.next(true);
+        } else {
+          observer.next(false);
+        }
+        observer.complete();
+      });
+    });
+  }
+
+  getCurrentUser(): Observable<User | null> {
+    return new Observable<User | null>(observer => {
+      onAuthStateChanged(auth, (user) => {
+        observer.next(user);
+        observer.complete();
+      });
+    });
   }
 }
