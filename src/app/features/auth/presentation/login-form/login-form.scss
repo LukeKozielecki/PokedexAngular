@@ -1,0 +1,62 @@
+@use '../../../../shared/constants/theme' as theme;
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: theme.$neutral-color;
+
+  h2 {
+    margin-bottom: 20px;
+    color: theme.$primary-color-dark;
+  }
+
+  form {
+    padding: 30px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: theme.$primary-color-dark;
+      font-weight: bold;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid theme.$secondary-color-dark;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: theme.$primary-color;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: theme.$primary-color-dark;
+    }
+  }
+}
