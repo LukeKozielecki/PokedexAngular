@@ -3,8 +3,6 @@ import {AuthService} from '../../services/auth.service';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 
-//todo: - hook logout ot ui
-//  - communicate to the user what is going on, as of now none communication. password needs to be 6+ chars long (stock firebase rule)
 @Component({
   selector: 'app-login-form',
   standalone: true,
@@ -16,6 +14,7 @@ export class LoginForm implements OnInit{
   email = '';
   password = '';
   isLoginMode = true;
+  errorMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -32,8 +31,10 @@ export class LoginForm implements OnInit{
       next: (userCredential) => {
         console.log('Logged in successfully:', userCredential.user);
         this.router.navigate(['/pokemon']);
+        this.errorMessage = '';
       },
       error: (error) => {
+        this.errorMessage = error.message;
         console.error('Login failed:', error.message);
       },
     });
@@ -44,8 +45,10 @@ export class LoginForm implements OnInit{
       next: (userCredential) => {
         console.log('Registered successfully:', userCredential.user);
         this.router.navigate(['/pokemon']);
+        this.errorMessage = '';
       },
       error: (error) => {
+        this.errorMessage = error.message;
         console.error('Registration failed:', error.message);
       },
     });
