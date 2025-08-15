@@ -83,4 +83,9 @@ $header-box-shadow-scrolled: rgba(0, 0, 0, 0.2);
   font-weight: bold;
   font-family: 'Pokemon Font Family', sans-serif;
   letter-spacing: 0.15em;
+  max-width: 240px; //max width is here to prevent element glitching under load in icon
+
+  @media (min-width: 768px) {
+    max-width: unset;
+  }
 }
