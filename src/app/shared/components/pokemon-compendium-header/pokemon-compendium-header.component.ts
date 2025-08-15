@@ -1,11 +1,15 @@
 import {Component, HostListener, OnDestroy, OnInit, signal} from '@angular/core';
 import {NgOptimizedImage} from '@angular/common';
 import {ScrollToTopService} from '../../services/scroll-to-top.service';
+import {Router} from '@angular/router';
+import {MatIconModule} from '@angular/material/icon';
+import {AuthService} from '../../../features/auth/services/auth.service';
 
 @Component({
   selector: 'app-pokemon-compendium-header',
   imports: [
-    NgOptimizedImage
+    NgOptimizedImage,
+    MatIconModule
   ],
   templateUrl: './pokemon-compendium-header.html',
   styleUrl: './pokemon-compendium-header.scss',
@@ -42,7 +46,11 @@ export class PokemonCompendiumHeaderComponent implements OnInit, OnDestroy {
    */
   private cooldownTimeout: number | undefined;
 
-  constructor(private scrollService: ScrollToTopService) {}
+  constructor(
+    private scrollService: ScrollToTopService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.onScrollRequest();
@@ -52,6 +60,16 @@ export class PokemonCompendiumHeaderComponent implements OnInit, OnDestroy {
     if (this.cooldownTimeout) {
       clearTimeout(this.cooldownTimeout);
     }
+  }
+
+  public checkDestinationAndNavigate(): void {
+    this.authService.isLoggedIn().subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this.router.navigate(['/profile']);
+      } else {
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   @HostListener('window:scroll', [])

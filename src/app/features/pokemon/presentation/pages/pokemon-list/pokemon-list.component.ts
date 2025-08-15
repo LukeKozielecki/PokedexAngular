@@ -135,8 +135,4 @@ export class PokemonListComponent implements OnInit, OnDestroy {
         this.searchPokemonUseCase.setOffset(offset + limit)
       );
   }
-
-  public navigateToLogin(): void {
-    this.router.navigate(['/login']);
-  }
 }
