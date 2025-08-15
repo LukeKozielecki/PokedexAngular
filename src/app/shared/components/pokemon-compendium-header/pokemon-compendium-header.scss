@@ -46,6 +46,33 @@ $header-box-shadow-scrolled: rgba(0, 0, 0, 0.2);
 .login-icon-button {
   position: absolute;
   right: 1rem;
+  background-color: theme.$secondary-color;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: darken(theme.$secondary-color, 5%);
+    transform: scale(1.05);
+  }
+
+  &:active {
+    background-color: darken(theme.$secondary-color, 10%);
+    transform: scale(0.95);
+  }
+
+  mat-icon {
+    color: #ffffff;
+    font-size: 24px;
+    height: 24px;
+    width: 24px;
+  }
 }
 
 .compendium-logo {
