@@ -1,3 +1,7 @@
+@use '../../../../../../../shared/constants/theme' as theme;
+@use '../../../../../../../shared/constants/pokemon-types-mixins' as mixins;
+@include mixins.type-pill-colors;
+
 $breakpoint-sm: 350px;
 $breakpoint-md: 550px;
 $breakpoint-lg: 700px;
@@ -5,9 +9,6 @@ $font-weight-medium: 500;
 $font-weight-bold: 700;
 $pokemon-image-size: 5rem;
 $color-card-active: #f1f1f1;
-
-@use '../../../../../../../shared/constants/pokemon-types-mixins' as mixins;
-@include mixins.type-pill-colors;
 
 .pokemon-container {
   display: flex;
@@ -48,6 +49,16 @@ $color-card-active: #f1f1f1;
         box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.1);
         //background-color: darken(inherit, 20%);
       }
+
+      &.is-current {
+        border: 2px solid theme.$primary-color;
+
+        &:hover,
+        &:active {
+          transform: none;
+          box-shadow: none;
+        }
+      }
     }
 
     .pokemon-image {
@@ -60,6 +71,20 @@ $color-card-active: #f1f1f1;
       font-weight: $font-weight-medium;
       text-transform: capitalize;
       text-align: center;
+    }
+  }
+
+  &.is-current {
+    cursor: default;
+
+    .pokemon-image-wrapper {
+      border: 2px solid theme.$primary-color;
+
+      &:hover,
+      &:active {
+        transform: none;
+        box-shadow: none;
+      }
     }
   }
 

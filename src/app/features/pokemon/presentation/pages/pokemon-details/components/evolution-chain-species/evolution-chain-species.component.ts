@@ -17,6 +17,7 @@ import {PokemonDetails} from '../../../../../domain/model/PokemonDetails';
 export class EvolutionChainSpeciesComponent implements OnChanges {
   @Input({required: true}) species!: EvolutionSpecies;
   @Input() pokemonDetails!: PokemonDetails
+  @Input() isCurrent = false;
   pokemon$!: Observable<Pokemon | undefined>;
 
   constructor(
