@@ -167,6 +167,7 @@ $summary-card-container-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   flex-wrap: wrap;
   gap: $spacing-medium;
   justify-content: center;
+  margin-top: $spacing-medium;
 
   .pokemon-item {
     display: flex;
@@ -174,6 +175,27 @@ $summary-card-container-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     align-items: center;
     text-align: center;
     width: 80px;
+    cursor: pointer;
+    margin-left: $spacing-small;
+    margin-right: $spacing-small;
+
+    .pokemon-item-image-wrapper {
+      display: inline-block;
+      padding: 8px;
+      border: 2px solid #ccc;
+      border-radius: 50%;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      }
+
+      &:active {
+        transform: scale(0.95);
+        box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.1);
+      }
+    }
 
     img {
       width: 100%;

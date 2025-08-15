@@ -68,7 +68,9 @@
             <div class="similar-pokemon-list">
               @for (equalTypePokemon of equalTypePokemon; track equalTypePokemon.id) {
                 <div class="pokemon-item" (click)="onPokemonCardClick(equalTypePokemon.id)">
-                  <img [src]="equalTypePokemon.imageUrl" [alt]="equalTypePokemon.name" />
+                  <div class="pokemon-item-image-wrapper">
+                    <img [src]="equalTypePokemon.imageUrl" [alt]="equalTypePokemon.name" />
+                  </div>
                   <p>{{ equalTypePokemon.name }}</p>
                 </div>
               }
