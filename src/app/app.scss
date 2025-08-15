@@ -1,7 +1,17 @@
 @use './shared/constants/theme' as theme;
 
+@font-face {
+  font-family: 'Pokemon Font Family';
+  src: url('/Pokemon-Solid-Font.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 .content-wrapper {
   min-height: calc(100vh - #{theme.$scaffold-size});
   background-image: url('../../public/poke-background-dark.png');
   background-repeat: repeat;
+  font-family: 'Pokemon Font Family', sans-serif;
+  letter-spacing: 0.2em;
 }

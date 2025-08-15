@@ -58,8 +58,8 @@ $header-box-shadow-scrolled: rgba(0, 0, 0, 0.2);
 .compendium-title {
   font-size: 1.875rem;
   font-weight: bold;
-  margin-bottom: 0;
-  transition: font-size $header-transition-speed $header-transition-easing;
+  font-family: 'Pokemon Font Family', sans-serif;
+  letter-spacing: 0.15em;
 }
 
 .navigate-to-login-button {
