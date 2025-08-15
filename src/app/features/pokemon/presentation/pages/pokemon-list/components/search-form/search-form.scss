@@ -10,30 +10,42 @@ $spacing-large: 1.5rem;
 $spacing-medium: 1rem;
 $spacing-small: 0.5rem;
 $spacing-x-small: 0.25rem;
+$minimum-height:75px;
+$min-width: 350px;
 
 .search-section {
   display: flex;
-  justify-content: center;
-  align-items: stretch;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: $spacing-large;
   gap: $spacing-small;
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+  }
 }
 
 .search-input {
   flex-grow: 1;
-  max-width: 350px;
+  max-width: $min-width;
   border: 1px solid theme.$secondary-color;
   border-radius: $spacing-x-small;
   margin-right: $spacing-small;
   font-size: $font-size-text-large;
   transition: all 0.2s ease-in-out;
-  padding-left: $spacing-medium;
-  padding-right: $spacing-medium;
+  padding: $spacing-small $spacing-medium;
+  min-height: $minimum-height;
 
   &:focus {
     outline: none;
     border-color: theme.$primary-color-dark;
     box-shadow: 0 0 0 2px theme.$primary-color;
+  }
+
+  @media (min-width: 640px) {
+    min-height:unset;
   }
 }
 
@@ -49,6 +61,8 @@ $spacing-x-small: 0.25rem;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   font-weight: $font-weight-bold;
+  min-height: $minimum-height;
+  min-width: $min-width;
 
   &:hover {
     background-color: darken(theme.$secondary-color, 5%);
@@ -57,6 +71,11 @@ $spacing-x-small: 0.25rem;
   &:active {
     background-color: darken(theme.$secondary-color, 10%);
     transform: scale(0.95);
+  }
+
+  @media (min-width: 640px) {
+    min-height:unset;
+    min-width:unset;
   }
 }
 
