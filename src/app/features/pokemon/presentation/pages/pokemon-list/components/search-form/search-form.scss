@@ -20,6 +20,8 @@ $spacing-x-small: 0.25rem;
 }
 
 .search-input {
+  flex-grow: 1;
+  max-width: 350px;
   border: 1px solid theme.$secondary-color;
   border-radius: $spacing-x-small;
   margin-right: $spacing-small;
