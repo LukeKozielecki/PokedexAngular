@@ -1,9 +1,9 @@
 <div class="login-container">
   <form (ngSubmit)="isLoginMode ? onLogin() : onRegister()">
     @if (isLoginMode) {
-      <h2>Login</h2>
+      <h2 id="form-title-login">Login</h2>
     } @else {
-      <h2>Register</h2>
+      <h2 id="form-title-register">Register</h2>
     }
 
     <div class="form-group">
@@ -21,9 +21,9 @@
     }
 
     @if (isLoginMode) {
-      <button type="submit">Login</button>
+      <button id="submit-button-login" type="submit">Login</button>
     } @else {
-      <button type="submit">Register</button>
+      <button id="submit-button-register" type="submit">Register</button>
     }
 
     <button class="toggle-mode-button">
