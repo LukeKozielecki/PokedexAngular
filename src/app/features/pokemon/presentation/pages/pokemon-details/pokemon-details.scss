@@ -217,3 +217,7 @@ h2 {
   color: $primary-text-color;
   margin-bottom: $spacing-small;
 }
+
+.pokemon-of-similar-type-name{
+  text-transform: capitalize;
+}
