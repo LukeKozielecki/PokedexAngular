@@ -25,6 +25,7 @@
     } @else {
       <button id="submit-button-register" type="submit">Register</button>
     }
+    <button routerLink="/pokemon" class="navigate-to-home"><mat-icon>arrow_back</mat-icon></button>
 
     <button class="toggle-mode-button">
       <a (click)="toggleMode()">{{ isLoginMode ? 'Need to register?' : 'Already have an account?' }}</a>

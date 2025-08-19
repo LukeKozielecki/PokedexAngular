@@ -1,6 +1,13 @@
 @use '../../../../shared/constants/theme' as theme;
 
+$font-weight-semibold: 600;
+$font-size-text-base: 1rem;
+$card-border-radius: 0.5rem;
+$spacing-medium: 1rem;
+$spacing-small: 0.5rem;
+
 .profile-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,5 +41,27 @@
     &:hover {
       background-color: theme.$primary-color-dark;
     }
+  }
+}
+
+.navigate-to-home {
+  position: absolute;
+  top: $spacing-medium;
+  left: $spacing-medium;
+  background-color: theme.$primary-color;
+  color: white;
+  border: none;
+  border-radius: $card-border-radius;
+  padding: $spacing-small $spacing-medium;
+  cursor: pointer;
+  font-size: $font-size-text-base;
+  font-weight: $font-weight-semibold;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: darken(theme.$primary-color, 10%);
   }
 }

@@ -1,12 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {FormsModule} from '@angular/forms';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [FormsModule],
+  imports: [
+    FormsModule,
+    MatIcon,
+    RouterLink
+  ],
   templateUrl: './login-form.html',
   styleUrl: './login-form.scss'
 })

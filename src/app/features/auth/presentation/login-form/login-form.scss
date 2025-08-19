@@ -1,6 +1,13 @@
 @use '../../../../shared/constants/theme' as theme;
 
+$font-weight-semibold: 600;
+$font-size-text-base: 1rem;
+$card-border-radius: 0.5rem;
+$spacing-medium: 1rem;
+$spacing-small: 0.5rem;
+
 .login-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -81,5 +88,26 @@
     margin-bottom: 20px;
     border-radius: 4px;
     text-align: center;
+  }
+}
+
+.navigate-to-home {
+  background-color: theme.$primary-color;
+  color: white;
+  border: none;
+  border-radius: $card-border-radius;
+  padding: $spacing-small $spacing-medium;
+  margin-top: $spacing-small;
+  cursor: pointer;
+  font-size: $font-size-text-base;
+  font-weight: $font-weight-semibold;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+
+  &:hover {
+    background-color: darken(theme.$primary-color, 10%);
   }
 }
