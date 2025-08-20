@@ -6,7 +6,8 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
-  User
+  User,
+  updatePassword
 } from 'firebase/auth';
 import {BehaviorSubject, from, map, Observable} from 'rxjs';
 import {app} from '../../../firebaseConfig';
@@ -45,5 +46,14 @@ export class AuthService {
 
   getCurrentUser(): Observable<User | null> {
     return this.userSubject.asObservable();
+  }
+
+  updatePassword(newPassword: string): Observable<void> {
+    const user = this.userSubject.getValue();
+    if (user) {
+      return from(updatePassword(user, newPassword));
+    } else {
+      return from(Promise.reject('No user is currently logged in.'));
+    }
   }
 }

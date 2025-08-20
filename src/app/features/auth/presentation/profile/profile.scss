@@ -23,7 +23,7 @@ $spacing-small: 0.5rem;
   }
 
   p {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     color: theme.$secondary-color-dark;
     font-size: 1.1rem;
   }
@@ -31,6 +31,7 @@ $spacing-small: 0.5rem;
   button {
     padding: 12px 24px;
     background-color: theme.$primary-color;
+    margin-bottom: 20px;
     color: white;
     border: none;
     border-radius: 4px;
@@ -64,4 +65,31 @@ $spacing-small: 0.5rem;
   &:hover {
     background-color: darken(theme.$primary-color, 10%);
   }
+}
+
+.update-password-form{
+  outline: #0a3069;
+  outline-style: dashed;
+  padding: 20px 20px 0 20px;
+  margin: 20px;
+
+  .update-password-button {
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+
+  .update-password-button:disabled {
+    background-color: darken(theme.$primary-color-dark, 10%);
+    color: theme.$neutral-color;
+    cursor: not-allowed;
+  }
+
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.error-message {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

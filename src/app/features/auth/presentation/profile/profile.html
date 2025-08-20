@@ -1,6 +1,59 @@
 <div class="profile-container">
-  <button routerLink="/pokemon" class="navigate-to-home"><mat-icon>arrow_back</mat-icon></button>
+  <button routerLink="/pokemon" class="navigate-to-home">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
   <h2 id="welcome-email-id">Welcome, {{ userEmail }}!</h2>
   <p>You are logged in</p>
+  @if (!showUpdatePassword) {
+    <button (click)="onToggleUpdatePassword()" class="toggle-password-form">
+      Change Password
+    </button>
+  }
+  @if (showUpdatePassword) {
+    <div class="update-password-form">
+      <button (click)="onToggleUpdatePassword()" class="toggle-password-form">
+        Abort
+      </button>
+      <form [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()" class="password-form">
+        <div class="form-group">
+          <label for="newPassword">New Password</label>
+          <input type="password" id="newPassword" formControlName="newPassword">
+          @if (passwordForm.get('newPassword')?.invalid && (passwordForm.get('newPassword')?.touched)) {
+            <div class="error-message">
+              @if (passwordForm.get('newPassword')?.errors?.['required']) {
+                <div>
+                  New password is required.
+                </div>
+              } @if (passwordForm.get('newPassword')?.errors?.['minlength']) {
+              <div>
+                New password must be at least 6 characters long.
+              </div>
+            }
+            </div>
+          }
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" formControlName="confirmPassword">
+          @if (passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched) {
+            <div class="error-message">
+              @if (passwordForm.get('confirmPassword')?.errors?.['required']) {
+                <div>
+                  This field needs to match the field above.
+                </div>
+              }
+            </div>
+          }
+        </div>
+        @if (passwordForm.errors?.['passwordsNotMatching'] && passwordForm.get('confirmPassword')?.touched) {
+          <div class="error-message">
+            Passwords do not match.
+          </div>
+        }
+        <button type="submit" [disabled]="!passwordForm.valid" class="update-password-button">Update Password</button>
+      </form>
+    </div>
+  }
+
   <button (click)="onLogout()" id="profile-logout-button">Logout</button>
 </div>
