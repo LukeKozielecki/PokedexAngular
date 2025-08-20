@@ -27,8 +27,8 @@
     }
     <button routerLink="/pokemon" class="navigate-to-home"><mat-icon>arrow_back</mat-icon></button>
 
-    <button class="toggle-mode-button">
-      <a (click)="toggleMode()">{{ isLoginMode ? 'Need to register?' : 'Already have an account?' }}</a>
+    <button class="toggle-mode-button" (click)="toggleMode(); $event.preventDefault()">
+      <a>{{ isLoginMode ? 'Need to register?' : 'Already have an account?' }}</a>
     </button>
   </form>
 </div>
