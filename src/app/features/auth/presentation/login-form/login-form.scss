@@ -63,6 +63,7 @@ $spacing-small: 0.5rem;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-bottom: 10px;
 
     &:hover {
       background-color: theme.$primary-color-dark;
@@ -81,6 +82,16 @@ $spacing-small: 0.5rem;
   }
 
   .error-message {
+    color: theme.$primary-color-dark;
+    background-color: #fceaeb;
+    border: 1px solid theme.$primary-color-dark;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  .success-message {
     color: theme.$primary-color-dark;
     background-color: #fceaeb;
     border: 1px solid theme.$primary-color-dark;

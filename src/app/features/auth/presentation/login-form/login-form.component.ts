@@ -20,6 +20,7 @@ export class LoginForm {
   password = '';
   isLoginMode = true;
   errorMessage = '';
+  successMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -54,5 +55,24 @@ export class LoginForm {
 
   toggleMode() {
     this.isLoginMode = !this.isLoginMode;
+  }
+
+  onPasswordReset(event: Event) {
+    event.preventDefault();
+    if (this.email) {
+      this.authService.resetPassword(this.email).subscribe({
+        next: () => {
+          this.successMessage = 'A password reset link has been sent to your email address. Please do check Spam';
+          this.errorMessage = '';
+        },
+        error: (error) => {
+          this.errorMessage = error.message;
+          this.successMessage = '';
+        },
+      });
+    } else {
+      this.errorMessage = 'Please enter your email address to reset your password.';
+      this.successMessage = '';
+    }
   }
 }

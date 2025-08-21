@@ -7,7 +7,8 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   User,
-  updatePassword
+  updatePassword,
+  sendPasswordResetEmail
 } from 'firebase/auth';
 import {BehaviorSubject, from, map, Observable} from 'rxjs';
 import {app} from '../../../firebaseConfig';
@@ -55,5 +56,9 @@ export class AuthService {
     } else {
       return from(Promise.reject('No user is currently logged in.'));
     }
+  }
+
+  resetPassword(email: string): Observable<void> {
+    return from(sendPasswordResetEmail(auth, email));
   }
 }

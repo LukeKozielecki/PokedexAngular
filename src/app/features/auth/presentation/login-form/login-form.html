@@ -19,9 +19,15 @@
     @if (errorMessage) {
       <div class="error-message">{{ errorMessage }}</div>
     }
+    @if (successMessage) {
+      <div class="success-message">{{ successMessage }}</div>
+    }
 
     @if (isLoginMode) {
       <button id="submit-button-login" type="submit">Login</button>
+      <button class="reset-password-link">
+        <a href="#" (click)="onPasswordReset($event)">Forgot password?</a>
+      </button>
     } @else {
       <button id="submit-button-register" type="submit">Register</button>
     }
