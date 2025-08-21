@@ -57,6 +57,28 @@ $summary-card-container-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 }
 
+.header-and-stats-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-large;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    gap: $spacing-large;
+  }
+}
+
+.header-details-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-large;
+
+  @media (min-width: 1024px) {
+    flex: 1;
+  }
+}
+
+
 .header-buttons {
   display: flex;
   justify-content: space-between;
@@ -122,6 +144,14 @@ $summary-card-container-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     li {
       color: $primary-text-color;
     }
+  }
+
+  @media (min-width: 1024px) {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 0;
   }
 }
 
