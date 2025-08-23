@@ -4,6 +4,7 @@ import { routes } from './app.routes';
 import {PokeApiPokemonDataSource} from './features/pokemon/infrastructure/data-sources/PokeApiPokemonDataSource';
 import {provideHttpClient} from '@angular/common/http';
 import {POKEMON_REPOSITORY} from './features/pokemon/domain/model/PokemonRepository';
+import {POKEMON_DETAILS_REPOSITORY} from './features/pokemon/domain/model/PokemonDetailsRepository';
 
   export const appConfig: ApplicationConfig = {
     providers: [
@@ -12,5 +13,6 @@ import {POKEMON_REPOSITORY} from './features/pokemon/domain/model/PokemonReposit
       provideRouter(routes),
       provideHttpClient(),
       { provide: POKEMON_REPOSITORY, useClass: PokeApiPokemonDataSource },
+      { provide: POKEMON_DETAILS_REPOSITORY, useClass: PokeApiPokemonDataSource },
     ]
   };

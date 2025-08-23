@@ -18,6 +18,7 @@ import {ScrollToTopService} from '../../../../../shared/services/scroll-to-top.s
 import {MatIconModule} from '@angular/material/icon'
 import {AuthService} from '../../../../auth/services/auth.service';
 import {PokemonFavoriteService} from '../../../../auth/services/pokemon-favorite.service';
+import {PokemonDetailsDataService} from '../../../infrastructure/services/PokemonDetailsDataService';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -54,7 +55,8 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
     private router: Router,
     private scrollService: ScrollToTopService,
     private authService: AuthService,
-    private favoriteService: PokemonFavoriteService
+    private favoriteService: PokemonFavoriteService,
+    private pokemonDetailsDataService: PokemonDetailsDataService
   ) {}
 
   ngOnInit(): void {
@@ -92,7 +94,7 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
       tap(() => this.isLoading = true),
       switchMap(id => {
         return forkJoin({
-          details: this.pokemonDataSource.getPokemonDetailsById(id),
+          details: this.pokemonDetailsDataService.getPokemonDetailsById(id),
           species: this.pokemonDataSource.getPokemonSpeciesById(id)
         }).pipe(
           switchMap(({ details, species }) => {
