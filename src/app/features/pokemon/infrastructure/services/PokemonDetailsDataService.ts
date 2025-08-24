@@ -4,6 +4,15 @@ import {finalize, Observable, of, tap} from 'rxjs';
 import {PokemonDetails} from '../../domain/model/PokemonDetails';
 import {shareReplay} from 'rxjs/operators';
 
+/**
+ * A service for managing and providing Pokémon details.
+ *
+ * It connects to the Pokémon API and provides a local cache for single-session data persistence.
+ * This allows for temporary changes to Pokémon details to be maintained during a user's session.
+ *
+ * @remarks The Pokémon API does not support POST requests, so a local cache is used for temporary,
+ * single-session persistence of user-made changes.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -54,5 +63,14 @@ export class PokemonDetailsDataService {
     this.loadingInProgress.set(id, request$);
 
     return request$;
+  }
+
+  /**
+   * Updates a PokemonDetails object in the in-memory cache.
+   * @param pokemon The PokemonDetails object to update.
+   */
+  public updatePokemonDetails(pokemon: PokemonDetails): void {
+    this.pokemonDetailsCache.set(pokemon.id, pokemon);
+    console.log('Pokemon details updated:', pokemon);
   }
 }

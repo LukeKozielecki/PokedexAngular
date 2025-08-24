@@ -52,3 +52,12 @@ $spacing-small: 0.5rem;
   width: 30px;
   text-align: left;
 }
+
+.editable-input {
+  max-width: 50px;
+  outline: 2px solid theme.$primary-color;
+  border-radius: 4px;
+  margin-top: $spacing-small;
+  margin-bottom: $spacing-small;
+}
+

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {BehaviorSubject, debounceTime, forkJoin, map, Observable, of, Subject, switchMap, takeUntil, tap} from 'rxjs';
 import {PokeApiPokemonDataSource} from '../../../infrastructure/data-sources/PokeApiPokemonDataSource';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
@@ -39,6 +39,7 @@ import {PokemonDetailsDataService} from '../../../infrastructure/services/Pokemo
 export class PokemonDetailsComponent implements OnInit, OnDestroy{
   private destroy$ = new Subject<void>();
   private isFavoriteSubject = new BehaviorSubject<boolean>(false);
+  private localPokemonDetails!: PokemonDetails;
 
   pokemonDetails$!: Observable<PokemonDetails>;
   pokemonEvolution$!: Observable<EvolutionChain>;
@@ -47,6 +48,9 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
   isFavorite$ = this.isFavoriteSubject.asObservable();
   currentUserUid: string | null = null;
   isLoading = true;
+  isEditing = false
+
+  @ViewChild(StatsBreakdownComponent) statsBreakdownComponent!: StatsBreakdownComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -78,8 +82,10 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
         takeUntil(this.destroy$)
       ).subscribe(isFav => this.isFavoriteSubject.next(isFav));
     });
+    this.fetchPokemonDetails()
+  }
 
-
+  private fetchPokemonDetails(): void {
     const pokemonId$ = this.route.paramMap.pipe(
       map(params => {
         const id = params.get('id');
@@ -115,6 +121,7 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
       takeUntil(this.destroy$)
     ).subscribe({
       next: ({ pokemonDetails, pokemonEvolution, equalTypePokemonList }) => {
+        this.localPokemonDetails = pokemonDetails;
         this.pokemonDetails$ = of(pokemonDetails);
         this.pokemonEvolution$ = of(pokemonEvolution);
         this.equalTypePokemonList$ = of(equalTypePokemonList);
@@ -160,5 +167,32 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
         this.isFavoriteSubject.next(currentStatus);
       }
     });
+  }
+
+  toggleEditMode(): void {
+    this.isEditing = !this.isEditing;
+  }
+
+  onSaveChanges(): void {
+    if (this.statsBreakdownComponent) {
+      const updatedStats = this.statsBreakdownComponent.getUpdatedStats();
+      this.localPokemonDetails = {
+        ...this.localPokemonDetails,
+        stats: updatedStats
+      };
+    }
+
+    this.pokemonDetailsDataService.updatePokemonDetails(this.localPokemonDetails);
+    this.isEditing = false;
+    this.fetchPokemonDetails()
+  }
+
+  onPokemonDetailChange<K extends keyof PokemonDetails>(property: K, value: PokemonDetails[K]): void {
+    if (this.localPokemonDetails) {
+      this.localPokemonDetails = {
+        ...this.localPokemonDetails,
+        [property]: value
+      };
+    }
   }
 }
