@@ -1,0 +1,17 @@
+{
+  "kind": "identitytoolkit#GetAccountInfoResponse",
+  "users": [{
+    "localId": "asddasdasdas",
+    "email": "some-email@provider.example",
+    "emailVerified": true,
+    "displayName": "",
+    "providerUserInfo": [{
+      "providerId": "firebase",
+      "email": "some-email@provider.example",
+      "federatedId": "some-email@provider.example"
+    }],
+    "photoUrl": "https://www.example.com/some-photo.jpg",
+    "lastLoginAt": "1111011500111",
+    "createdAt": "1111011500111"
+  }]
+}

@@ -1,0 +1,11 @@
+{
+  "kind": "identitytoolkit#VerifyPasswordResponse",
+  "email": "some-email@provider.example",
+  "idToken": "sometoken1234567",
+  "refreshToken": "asdasdsad",
+  "expiresIn": "3600",
+  "localId": "asddasdasdas",
+  "emailVerified": true,
+  "displayName": null,
+  "photoUrl": null
+}

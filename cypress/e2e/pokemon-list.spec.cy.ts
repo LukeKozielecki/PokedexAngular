@@ -1,61 +1,119 @@
-import {
-  FIREBASE_SUCCESSFUL_API_RESPONSE_MOCK,
-  FIREBASE_SUCCESSFUL_LOGIN_MOCK, FIREBASE_USER_LOOKUP_API_RESPONSE_MOCK,
-  MOCK_POKEMON_DETAILS,
-  MOCK_POKEMON_LIST
-} from '../support/mocks';
 import {NAVIGATION_DELAY} from '../../src/app/shared/constants/app.constants';
 import {of} from 'rxjs';
 import {AuthService} from '../../src/app/features/auth/services/auth.service';
 
+interface cpMockPokemonDetailsFixture {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: cpMockPokemonDetailsInterface[];
+}
+interface cpMockPokemonListObject {
+  name: string;
+  url: string;
+}
+interface cpMockPokemonDetailsInterface {
+  id: number;
+  name: string;
+  base_experience: number;
+  abilities: cpMockAbilityObject[];
+  stats: cpMockStatObject[];
+  sprites: cpMockSpriteObject;
+  types: cpMockTypeObject[];
+  height: number;
+  weight: number;
+  species: {
+    name: string;
+    url: string;
+  };
+}
+interface cpMockAbilityObject {
+  ability: {
+    name: string;
+    url: string;
+  };
+  is_hidden: boolean;
+  slot: number;
+}
+interface cpMockStatObject {
+  base_stat: number;
+  effort: number;
+  stat: {
+    name: string;
+    url: string;
+  };
+}
+interface cpMockSpriteObject {
+  front_default: string;
+  other: {
+    'official-artwork': {
+      front_default: string;
+    };
+  };
+}
+interface cpMockTypeObject {
+  slot: number;
+  type: {
+    name: string;
+    url: string;
+  };
+}
+
 describe('pokemon-list-component', () => {
+
+  const POKEMON_LIST_JSON = 'pokemon-list.json'
+  const POKEMON_DETAILS_JSON = 'pokemon-details.json'
+
   beforeEach(() => {
-    // Intercept the GET request to the Pokémon API endpoint
     cy.intercept('GET', 'https://pokeapi.co/api/v2/pokemon?offset=0&limit=6000', {
       statusCode: 200,
-      body: MOCK_POKEMON_LIST,
+      fixture: POKEMON_LIST_JSON,
     }).as('getPokemonList');
 
-    MOCK_POKEMON_DETAILS.results.forEach((pokemon, index) => {
-      const alias = `getPokemonDetails${pokemon.name}`;
-      const urlToIntercept = MOCK_POKEMON_LIST
-        .results[index]
-        .url
-        .slice(0, -1); // this slice removes the slash at the end of "url": "https://pokeapi.co/api/v2/pokemon/1/"
-      cy.intercept('GET', urlToIntercept, {
-        statusCode: 200,
-        body: pokemon,
-      }).as(alias);
+    cy.fixture(POKEMON_LIST_JSON).then((pokemonList) => {
+      cy.fixture(POKEMON_DETAILS_JSON).then((pokemonDetails) => {
+        pokemonDetails.results.forEach((pokemon: cpMockPokemonDetailsInterface, index: number) => {
+          const alias = `getPokemonDetails${pokemon.name}`;
+          const urlToIntercept = pokemonList.results[index].url.slice(0, -1);
+          cy.intercept('GET', urlToIntercept, {
+            statusCode: 200,
+            body: pokemon,
+          }).as(alias);
+        });
+      });
+
+      const lastPokemonName = pokemonList.results[pokemonList.results.length - 1].name;
+
+      cy.visit('http://localhost:4200/');
+
+      cy.wait('@getPokemonList');
+      cy.wait(`@getPokemonDetails${lastPokemonName}`);
     });
-
-    const lastPokemonName = MOCK_POKEMON_LIST.results[MOCK_POKEMON_LIST.results.length - 1].name;
-
-    cy.visit('http://localhost:4200/');
-
-    cy.wait('@getPokemonList');
-    cy.wait(`@getPokemonDetails${lastPokemonName}`);
   });
 
   it('should display the mocked list of Pokémon', () => {
-    MOCK_POKEMON_LIST.results.forEach(pokemon => {
-      const caseInsensitiveName = new RegExp(pokemon.name, 'i');
-
-      cy.contains(caseInsensitiveName).should('be.visible');
+    cy.fixture(POKEMON_LIST_JSON).then((pokemonList: any) => {
+      pokemonList.results.forEach((pokemon: any) => {
+        const caseInsensitiveName = new RegExp(pokemon.name, 'i');
+        cy.contains(caseInsensitiveName).should('be.visible');
+      });
     });
   });
 
   it('should search for "charmander mocked" and display only that Pokémon', () => {
-    const searchTerm = "charmander mocked"
+    const searchTerm = "charmander mocked";
     cy.get('#pokemon-search-input-form').click().type(searchTerm);
 
-    cy.contains(searchTerm, { matchCase: false }).should('be.visible');
+    cy.fixture(POKEMON_LIST_JSON).then((pokemonList) => {
+      cy.contains(searchTerm, { matchCase: false }).should('be.visible');
 
-    const otherPokemon = MOCK_POKEMON_LIST.results.filter(
-      (pokemon) => pokemon.name !== searchTerm
-    );
+      const otherPokemon: { name: string, url: string }[] = pokemonList.results.filter(
+        (pokemon: { name: string, url: string }) => pokemon.name !== searchTerm
+      );
 
-    otherPokemon.forEach((pokemon) => {
-      cy.contains(pokemon.name, { matchCase: false }).should('not.exist');
+      otherPokemon.forEach((pokemon) => {
+        cy.contains(pokemon.name, { matchCase: false }).should('not.exist');
+      });
     });
   });
 
@@ -64,10 +122,12 @@ describe('pokemon-list-component', () => {
 
     cy.contains('No Pokémon Matched Your Search!', { matchCase: false }).should('be.visible');
 
-    const otherPokemon = MOCK_POKEMON_LIST.results
+    cy.fixture(POKEMON_LIST_JSON).then((pokemonList) => {
+      const otherPokemon = pokemonList.results;
 
-    otherPokemon.forEach((pokemon) => {
-      cy.contains(pokemon.name, { matchCase: false }).should('not.exist');
+      otherPokemon.forEach((pokemon : cpMockPokemonListObject) => {
+        cy.contains(pokemon.name, { matchCase: false }).should('not.exist');
+      });
     });
   });
 
@@ -75,20 +135,22 @@ describe('pokemon-list-component', () => {
   it('should filter only fire pokemon when selecting type "fire"', () => {
     cy.get('#pokemon-type-selector').select('Fire');
 
-    const firePokemon = MOCK_POKEMON_DETAILS.results.filter(
-      (pokemon: any) => pokemon.types.some((type: any) => type.type.name === 'fire')
-    );
+    cy.fixture(POKEMON_DETAILS_JSON).then((pokemonDetails: cpMockPokemonDetailsFixture) => {
+      const firePokemon = pokemonDetails.results.filter(
+        (pokemon) => pokemon.types.some((type) => type.type.name === 'fire')
+      );
 
-    firePokemon.forEach((pokemon) => {
-      cy.contains(pokemon.name, { matchCase: false }).should('be.visible');
-    });
+      firePokemon.forEach((pokemon: cpMockPokemonDetailsInterface) => {
+        cy.contains(pokemon.name, { matchCase: false }).should('be.visible');
+      });
 
-    const otherPokemon = MOCK_POKEMON_DETAILS.results.filter(
-      (pokemon: any) => !pokemon.types.some((type: any) => type.type.name === 'fire')
-    );
+      const otherPokemon = pokemonDetails.results.filter(
+        (pokemon) => !pokemon.types.some((type) => type.type.name === 'fire')
+      );
 
-    otherPokemon.forEach((pokemon) => {
-      cy.contains(pokemon.name, { matchCase: false }).should('not.exist');
+      otherPokemon.forEach((pokemon: cpMockPokemonDetailsInterface) => {
+        cy.contains(pokemon.name, { matchCase: false }).should('not.exist');
+      });
     });
   });
 
@@ -96,24 +158,26 @@ describe('pokemon-list-component', () => {
     cy.get('#pokemon-search-input-form').type('mocked');
     cy.get('#pokemon-type-selector').select('water');
 
-    const visiblePokemon = MOCK_POKEMON_DETAILS.results.filter(
-      (pokemon: any) =>
-        pokemon.name.includes('mocked') &&
-        pokemon.types.some((type: any) => type.type.name === 'water')
-    );
+    cy.fixture(POKEMON_DETAILS_JSON).then((pokemonDetails: cpMockPokemonDetailsFixture) => {
+      const visiblePokemon = pokemonDetails.results.filter(
+        (pokemon) =>
+          pokemon.name.includes('mocked') &&
+          pokemon.types.some((type) => type.type.name === 'water')
+      );
 
-    visiblePokemon.forEach((pokemon) => {
-      cy.contains(`${pokemon.name}`, { matchCase: false }).should('be.visible');
-    });
+      visiblePokemon.forEach((pokemon: cpMockPokemonDetailsInterface) => {
+        cy.contains(pokemon.name, { matchCase: false }).should('be.visible');
+      });
 
-    const notVisiblePokemon = MOCK_POKEMON_DETAILS.results.filter(
-      (pokemon: any) =>
-        !pokemon.name.includes('mocked') ||
-        !pokemon.types.some((type: any) => type.type.name === 'water')
-    );
+      const notVisiblePokemon = pokemonDetails.results.filter(
+        (pokemon) =>
+          !pokemon.name.includes('mocked') ||
+          !pokemon.types.some((type) => type.type.name === 'water')
+      );
 
-    notVisiblePokemon.forEach((pokemon) => {
-      cy.contains(`${pokemon.name}`, { matchCase: false }).should('not.exist');
+      notVisiblePokemon.forEach((pokemon) => {
+        cy.contains(pokemon.name, { matchCase: false }).should('not.exist');
+      });
     });
   });
 
@@ -124,12 +188,14 @@ describe('pokemon-list-component', () => {
   });
 
   it('should display pokemon id on hover on card', () => {
-    const firstPokemon = MOCK_POKEMON_DETAILS.results[0];
-    const pokemonName = firstPokemon.name;
-    const pokemonId = firstPokemon.id;
+    cy.fixture(POKEMON_DETAILS_JSON).then((pokemonDetails) => {
+      const firstPokemon = pokemonDetails.results[0];
+      const pokemonName = firstPokemon.name;
+      const pokemonId = firstPokemon.id;
 
-    cy.contains(pokemonName, { matchCase: false }).trigger('mouseover');
-    cy.contains(`#${pokemonId}`).should('be.visible');
+      cy.contains(pokemonName, { matchCase: false }).trigger('mouseover');
+      cy.contains(`#${pokemonId}`).should('be.visible');
+    });
   });
 
   it('should display the full list when search term is cleared', () => {
@@ -141,25 +207,29 @@ describe('pokemon-list-component', () => {
 
     cy.get('#pokemon-search-input-form').clear();
 
-    MOCK_POKEMON_LIST.results.forEach((pokemon) => {
-      cy.contains(pokemon.name, { matchCase: false }).should('be.visible');
+    cy.fixture(POKEMON_LIST_JSON).then((pokemonList) => {
+      pokemonList.results.forEach((pokemon: cpMockPokemonListObject) => {
+        cy.contains(pokemon.name, { matchCase: false }).should('be.visible');
+      });
     });
   });
 
-  it.only('should mock a successful login and navigate to the pokemon list page', () => {
+  it('should mock a successful login and navigate to the pokemon list page', () => {
     const mockAuthService = new AuthService();
     const favouritesButtonId = '#pokemon-favourites-toggle'
     cy.intercept('POST', 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*', {
       statusCode: 200,
-      body: FIREBASE_SUCCESSFUL_API_RESPONSE_MOCK,
+      fixture: 'firebase-successful-login-response.json',
     }).as('loginRequest');
 
     cy.intercept('POST', 'https://identitytoolkit.googleapis.com/v1/accounts:lookup?*', {
       statusCode: 200,
-      body: FIREBASE_USER_LOOKUP_API_RESPONSE_MOCK,
+      fixture: 'firebase-successful-user-lookup-response.json',
     }).as('lookupRequest');
 
-    cy.stub(mockAuthService, 'loginUser').returns(of(FIREBASE_SUCCESSFUL_LOGIN_MOCK));
+    cy.fixture('firebase-successful-user-data-response.json').then((userData) => {
+      cy.stub(mockAuthService, 'loginUser').returns(of(userData));
+    });
 
     cy.get(favouritesButtonId).should('not.exist')
 
