@@ -35,3 +35,37 @@
 //     }
 //   }
 // }
+
+import {AuthService} from '../../src/app/features/auth/services/auth.service';
+import {of} from 'rxjs';
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      login(): Chainable<any>;
+    }
+  }
+}
+
+Cypress.Commands.add('login', () => {
+  const mockAuthService = new AuthService();
+  cy.intercept('POST', 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*', {
+    statusCode: 200,
+    fixture: 'firebase-successful-login-response.json',
+  }).as('loginRequest');
+
+  cy.intercept('POST', 'https://identitytoolkit.googleapis.com/v1/accounts:lookup?*', {
+    statusCode: 200,
+    fixture: 'firebase-successful-user-lookup-response.json',
+  }).as('lookupRequest');
+
+  cy.fixture('firebase-successful-user-data-response.json').then((userData) => {
+    cy.stub(mockAuthService, 'loginUser').returns(of(userData));
+  });
+
+  cy.visit('http://localhost:4200/login');
+
+  cy.get('#email').type('some-email@provider.example');
+  cy.get('#password').type('correctPassword123');
+  cy.get('button[type="submit"]').click();
+});

@@ -3,8 +3,7 @@ import {
   cpMockEvolutionChainWrapper,
   cpMockPokemonDetailsInterface
 } from '../support/backend-response-testing.interface';
-import {AuthService} from '../../src/app/features/auth/services/auth.service';
-import {of} from 'rxjs';
+import '../support/commands';
 
 describe('pokemon-details-component', () => {
   const POKEMON_LIST_JSON = 'pokemon-list.json'
@@ -59,40 +58,18 @@ describe('pokemon-details-component', () => {
     cy.get('.pokemon-image-wrapper.is-current').should('exist');
   });
 
-  it.only('should disable favorites button for initial unauthenticated user test state', () => {
+  it('should disable favorites button for initial unauthenticated user test state', () => {
     cy.get('[data-cy="favorite-button"]')
       .should('be.disabled')
       .and('have.class', 'disabled-button');
   });
 
-  it.only("should", () => {
-    const mockAuthService = new AuthService();
-    cy.intercept('POST', 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*', {
-      statusCode: 200,
-      fixture: 'firebase-successful-login-response.json',
-    }).as('loginRequest');
-
-    cy.intercept('POST', 'https://identitytoolkit.googleapis.com/v1/accounts:lookup?*', {
-      statusCode: 200,
-      fixture: 'firebase-successful-user-lookup-response.json',
-    }).as('lookupRequest');
-
-    cy.fixture('firebase-successful-user-data-response.json').then((userData) => {
-      cy.stub(mockAuthService, 'loginUser').returns(of(userData));
-    });
-
-    cy.visit('http://localhost:4200/login');
-
-    cy.get('#email').type('some-email@provider.example');
-    cy.get('#password').type('correctPassword123');
-    cy.get('button[type="submit"]').click();
-    cy.url().should('include', '/pokemon');
+  it.only("should enable favorites button for authenticated user", () => {
+    cy.login();
 
     cy.visit('http://localhost:4200/pokemon-details/2');
-
     cy.get('[data-cy="favorite-button"]')
       .should('not.be.disabled');
-
   });
 
   describe('navigation-tests', () => {
