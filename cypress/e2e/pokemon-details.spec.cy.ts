@@ -3,6 +3,8 @@ import {
   cpMockEvolutionChainWrapper,
   cpMockPokemonDetailsInterface
 } from '../support/backend-response-testing.interface';
+import {AuthService} from '../../src/app/features/auth/services/auth.service';
+import {of} from 'rxjs';
 
 describe('pokemon-details-component', () => {
   const POKEMON_LIST_JSON = 'pokemon-list.json'
@@ -46,26 +48,78 @@ describe('pokemon-details-component', () => {
 
   });
 
-  it('should display a mocked pokemon details', () => {
+  it('should render the evolution chain indicator and evolved species', () => {
+    cy.get('.evolution-indicator').should('exist').and('contain.text', '>');
+    cy.get('.evolved-species-list').should('exist');
+    cy.get('app-evolution-chain-species').should('have.length.at.least', 1);
+  });
+
+  it('should apply the "is-current" class to the current pokemon container', () => {
+    cy.get('.pokemon-container.is-current').should('exist');
+    cy.get('.pokemon-image-wrapper.is-current').should('exist');
+  });
+
+  it.only('should disable favorites button for initial unauthenticated user test state', () => {
+    cy.get('[data-cy="favorite-button"]')
+      .should('be.disabled')
+      .and('have.class', 'disabled-button');
+  });
+
+  it.only("should", () => {
+    const mockAuthService = new AuthService();
+    cy.intercept('POST', 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?*', {
+      statusCode: 200,
+      fixture: 'firebase-successful-login-response.json',
+    }).as('loginRequest');
+
+    cy.intercept('POST', 'https://identitytoolkit.googleapis.com/v1/accounts:lookup?*', {
+      statusCode: 200,
+      fixture: 'firebase-successful-user-lookup-response.json',
+    }).as('lookupRequest');
+
+    cy.fixture('firebase-successful-user-data-response.json').then((userData) => {
+      cy.stub(mockAuthService, 'loginUser').returns(of(userData));
+    });
+
+    cy.visit('http://localhost:4200/login');
+
+    cy.get('#email').type('some-email@provider.example');
+    cy.get('#password').type('correctPassword123');
+    cy.get('button[type="submit"]').click();
+    cy.url().should('include', '/pokemon');
+
+    cy.visit('http://localhost:4200/pokemon-details/2');
+
+    cy.get('[data-cy="favorite-button"]')
+      .should('not.be.disabled');
 
   });
 
-  it('should navigate back to the pokemon list page', () => {
-    cy.get('#details-page-navigate-back-button').click();
-    cy.url().should('eq', 'http://localhost:4200/pokemon');
-  });
+  describe('navigation-tests', () => {
+    it('should not navigate when clicking the current pokemon container', () => {
+      cy.url().then((initialUrl) => {
+        cy.get('.pokemon-container.is-current').click();
+        cy.url().should('eq', initialUrl);
+      });
+    });
 
-  it('should navigate via evolution to 1st pokemon and correctly update data', () => {
-    cy.get('.pokemon-details').first().click();
-    cy.url().should('eq', 'http://localhost:4200/pokemon-details/1');
-    cy.get('.pokemon-name').should('contain.text', 'bulbasaur');
-  });
+    it('should navigate back to the pokemon list page', () => {
+      cy.get('#details-page-navigate-back-button').click();
+      cy.url().should('eq', 'http://localhost:4200/pokemon');
+    });
 
-  it('should navigate via evolution to 3rd pokemon and correctly update data', () => {
-    cy.get('.pokemon-details').last().click();
-    cy.url().should('eq', 'http://localhost:4200/pokemon-details/3');
-    cy.get('.pokemon-name').should('contain.text', 'venusaur');
-  });
+    it('should navigate via evolution to 1st pokemon and correctly update data', () => {
+      cy.get('.pokemon-details').first().click();
+      cy.url().should('eq', 'http://localhost:4200/pokemon-details/1');
+      cy.get('.pokemon-name').should('contain.text', 'bulbasaur');
+    });
+
+    it('should navigate via evolution to 3rd pokemon and correctly update data', () => {
+      cy.get('.pokemon-details').last().click();
+      cy.url().should('eq', 'http://localhost:4200/pokemon-details/3');
+      cy.get('.pokemon-name').should('contain.text', 'venusaur');
+    });
+  })
 
   describe('input-details-tests', () => {
     beforeEach(() => {

@@ -24,6 +24,7 @@
                 class="favorite-button"
                 (click)="onToggleFavorite(pokemon)"
                 [class.is-favorite]="isFavorite$ | async"
+                data-cy="favorite-button"
               >
                 @if (isFavorite$ | async) {
                   <mat-icon>favorite</mat-icon>
@@ -32,7 +33,11 @@
                 }
               </button>
             } @else {
-              <button class="favorite-button disabled-button" disabled>
+              <button
+                class="favorite-button disabled-button"
+                data-cy="favorite-button"
+                disabled
+              >
                 <mat-icon>favorite_border</mat-icon>
               </button>
             }
