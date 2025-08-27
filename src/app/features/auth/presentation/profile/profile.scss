@@ -72,6 +72,7 @@ $spacing-small: 0.5rem;
   outline-style: dashed;
   padding: 20px 20px 0 20px;
   margin: 20px;
+  min-width: 600px;
 
   .update-password-button {
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
@@ -92,4 +93,15 @@ $spacing-small: 0.5rem;
 .error-message {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+label {
+  padding-right: 10px;
+}
+
+input {
+  outline: 2px solid theme.$primary-color;
+  border-radius: 4px;
+  padding-left: 10px;
+  font-family: sans-serif;
 }
