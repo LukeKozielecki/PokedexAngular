@@ -11,11 +11,12 @@ import {mapEvolutionChainDtoToEvolutionChain} from '../mappers/EvolutionChainMap
 import {PokemonDetails} from '../../domain/model/PokemonDetails';
 import {PokemonSpeciesDto} from '../dtos/PokemonSpeciesDto';
 import {POKEMON_API_BASE_URL} from '../../../../shared/constants/app.constants';
+import {PokemonDetailsRepository} from '../../domain/model/PokemonDetailsRepository';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PokeApiPokemonDataSource implements PokemonRepository {
+export class PokeApiPokemonDataSource implements PokemonRepository, PokemonDetailsRepository {
 
   constructor(private http: HttpClient) {}
 

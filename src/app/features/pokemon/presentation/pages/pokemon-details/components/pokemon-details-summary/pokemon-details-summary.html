@@ -13,15 +13,57 @@
     </div>
     <div class="summary-item">
       <h3>Height</h3>
-      <p>{{ height }}</p>
+      @if (isEditing) {
+        <input
+          type="number"
+          class="editable-input"
+          [value]="height"
+          (blur)="onHeightChange($event)"
+          data-cy="input-field-height"
+        />
+      } @else {
+        <p
+          data-cy="details-height-value"
+        >
+          {{ height }}
+        </p>
+      }
     </div>
     <div class="summary-item">
       <h3>Weight</h3>
-      <p>{{ weight }}</p>
+      @if (isEditing) {
+        <input
+          type="number"
+          class="editable-input"
+          [value]="weight"
+          (blur)="onWeightChange($event)"
+          data-cy="input-field-weight"
+        />
+      } @else {
+        <p
+          data-cy="details-weight-value"
+        >
+          {{ weight }}
+        </p>
+      }
     </div>
     <div class="summary-item">
       <h3>Base Experience</h3>
-      <p>{{ baseExperience }}</p>
+      @if (isEditing) {
+        <input
+          type="number"
+          class="editable-input"
+          [value]="baseExperience"
+          (blur)="onBaseExperienceChange($event)"
+          data-cy="input-field-base-experience"
+        />
+      } @else {
+        <p
+          data-cy="details-base-experience-value"
+        >
+          {{ baseExperience }}
+        </p>
+      }
     </div>
     <div class="summary-item">
       <h3 class="section-title">Abilities</h3>

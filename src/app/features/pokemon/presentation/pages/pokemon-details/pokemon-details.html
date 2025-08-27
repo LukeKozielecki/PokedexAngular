@@ -3,25 +3,45 @@
     <div class="pokemon-details-wrapper">
       <div class="pokemon-details-card">
         <div class="header-buttons">
-          <button routerLink="/pokemon" class="navigate-to-home"><mat-icon>arrow_back</mat-icon></button>
-
-          @if (isLoggedIn$ | async) {
+          <button
+            routerLink="/pokemon"
+            class="navigate-to-home"
+            id="details-page-navigate-back-button"
+          >
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <div>
             <button
-              class="favorite-button"
-              (click)="onToggleFavorite(pokemon)"
-              [class.is-favorite]="isFavorite$ | async"
+              class="edit-button"
+              (click)="isEditing ? onSaveChanges() : toggleEditMode()"
+              aria-label="Toggle edit mode"
+              data-cy="toggle-edit-mode-button"
             >
-              @if (isFavorite$ | async) {
-                <mat-icon>favorite</mat-icon>
-              } @else {
+              <mat-icon>{{ isEditing ? 'save' : 'create' }}</mat-icon>
+            </button>
+            @if (isLoggedIn$ | async) {
+              <button
+                class="favorite-button"
+                (click)="onToggleFavorite(pokemon)"
+                [class.is-favorite]="isFavorite$ | async"
+                data-cy="favorite-button"
+              >
+                @if (isFavorite$ | async) {
+                  <mat-icon>favorite</mat-icon>
+                } @else {
+                  <mat-icon>favorite_border</mat-icon>
+                }
+              </button>
+            } @else {
+              <button
+                class="favorite-button disabled-button"
+                data-cy="favorite-button"
+                disabled
+              >
                 <mat-icon>favorite_border</mat-icon>
-              }
-            </button>
-          } @else {
-            <button class="favorite-button disabled-button" disabled>
-              <mat-icon>favorite_border</mat-icon>
-            </button>
-          }
+              </button>
+            }
+          </div>
         </div>
 
         <div class="header-and-stats-wrapper">
@@ -42,13 +62,21 @@
                 [weight]="pokemon.weight"
                 [baseExperience]="pokemon.base_experience"
                 [abilities]="pokemon.abilities"
+                [isEditing]="isEditing"
+                (heightChange)="onPokemonDetailChange('height', $event)"
+                (weightChange)="onPokemonDetailChange('weight', $event)"
+                (baseExperienceChange)="onPokemonDetailChange('base_experience', $event)"
               ></app-pokemon-details-summary>
             </div>
           </div>
 
           <div class="details-section">
             <h2>Stats</h2>
-            <app-stats-breakdown [stats]="pokemon.stats"></app-stats-breakdown>
+            <app-stats-breakdown
+              [stats]="pokemon.stats"
+              [isEditing]="isEditing"
+              (statsChange)="onPokemonDetailChange('stats', $event)"
+            />
           </div>
         </div>
 

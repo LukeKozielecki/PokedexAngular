@@ -59,7 +59,7 @@ $secondary-text-color: #4b5563;
   p {
     font-size: 0.9rem;
     color: $secondary-text-color;
-    margin: 0;
+    margin-top: $spacing-large;
   }
 }
 
@@ -78,11 +78,19 @@ $secondary-text-color: #4b5563;
 
 .type-pill {
   display: inline-block;
-  margin: 0.125rem;
+  margin: $spacing-large 0.125rem 0.125rem;
   padding: 0.25rem 0.5rem;
   font-size: 0.75rem;
   font-weight: $font-weight-medium;
   text-transform: capitalize;
   border-radius: 999px;
   transition: background-color 0.2s ease;
+}
+
+.editable-input {
+  max-width: 50px;
+  outline: 2px solid theme.$primary-color;
+  margin-top: $spacing-large;
+  border-radius: 4px;
+  text-align: center;
 }

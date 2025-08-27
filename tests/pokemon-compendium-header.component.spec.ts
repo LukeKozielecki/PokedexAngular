@@ -29,8 +29,8 @@ test.describe('Pokemon Compendium Header', () => {
   test('should navigate to the profile page when the login button is clicked and user is logged in', async ({ page }) => {
     // Perform Login
     await page.goto('http://localhost:4200/login');
-    await page.getByLabel('Email').fill('mock.user@example.com');
-    await page.getByLabel('Password').fill('password123');
+    await page.getByLabel('Email').fill('mock.user2@example.com');
+    await page.getByLabel('Password').fill('12341234');
     await page.getByRole('button', { name: 'Login' }).click();
 
     // Wait for the login to complete and the app to navigate to the profile page

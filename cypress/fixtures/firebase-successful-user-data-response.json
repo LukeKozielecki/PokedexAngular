@@ -1,0 +1,24 @@
+{
+  "user": {
+    "uid": "0ntOMSV1qTbihLFhTXFW7qTTHKY2",
+    "email": "some-email@provider.example",
+    "emailVerified": true,
+    "isAnonymous": false,
+    "providerData": [
+      {
+        "providerId": "firebase",
+        "uid": "asddasdasdas",
+        "displayName": null,
+        "email": "some-email@provider.example",
+        "phoneNumber": null,
+        "photoURL": null
+      }
+    ],
+    "metadata": {
+      "creationTime": "Mon, 01 Jan 2025 00:00:00 GMT",
+      "lastSignInTime": "Mon, 01 Jan 2025 00:00:00 GMT"
+    }
+  },
+  "providerId": "firebase",
+  "operationType": "signIn"
+}

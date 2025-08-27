@@ -1,18 +1,31 @@
 <div>
   <ul class="section-list">
-    @for (stat of stats; track stat.name) {
+    @for (stat of localStats; track stat.name) {
       <li>
         <span class="stat-name">{{ stat.name | titlecase }}</span>
-        <div class="stat-bar-container">
-          @for (i of [].constructor(numberOfStatSlices); track $index) {
-            @if ($index < (stat.baseStat / maxStatValue) * numberOfStatSlices) {
-              <div class="stat-slice filled"></div>
-            } @else {
-              <div class="stat-slice"></div>
+        @if (isEditing) {
+          <input
+            type="number"
+            class="editable-input"
+            [value]="stat.baseStat"
+            (change)="onStatChange($event, stat.name)"
+            [attr.data-cy]="'input-field-' + stat.name"
+          />
+        } @else {
+          <div class="stat-bar-container">
+            @for (i of [].constructor(numberOfStatSlices); track $index) {
+              @if ($index < (stat.baseStat / maxStatValue) * numberOfStatSlices) {
+                <div class="stat-slice filled"></div>
+              } @else {
+                <div class="stat-slice"></div>
+              }
             }
-          }
-        </div>
-        <span class="stat-value">{{ stat.baseStat }}</span>
+          </div>
+          <span
+            class="stat-value"
+            [attr.data-cy]="'stats-' + stat.name + '-value'"
+          >{{ stat.baseStat }}</span>
+        }
       </li>
     }
   </ul>

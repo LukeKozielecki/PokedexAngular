@@ -117,13 +117,28 @@ $summary-card-container-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     &.is-favorite mat-icon {
-      color: red;
+      color: theme.$primary-color-dark;
     }
 
     &.disabled-button {
       cursor: not-allowed;
       opacity: 0.5;
     }
+  }
+
+  .edit-button {
+    background-color: transparent;
+    color: theme.$primary-color-dark;
+    border-radius: $card-border-radius;
+    margin-right: $spacing-small;
+
+    mat-icon {
+      font-size: 30px;
+      height: 30px;
+      width: 30px;
+      color: theme.$primary-color-dark;
+    }
+
   }
 
 }

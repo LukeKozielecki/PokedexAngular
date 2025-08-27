@@ -40,8 +40,8 @@ test.describe('Pokemon List Page', () => {
     const setupFavouritePokemon = async (page:Page) => {
       // Login flow to ensure the user is authenticated
       await page.goto('http://localhost:4200/login');
-      await page.getByLabel('Email').fill('mock.user@example.com');
-      await page.getByLabel('Password').fill('password123');
+      await page.getByLabel('Email').fill('mock.user2@example.com');
+      await page.getByLabel('Password').fill('12341234');
       await page.getByRole('button', { name: 'Login' }).click();
       await page.waitForURL('**/pokemon');
 
