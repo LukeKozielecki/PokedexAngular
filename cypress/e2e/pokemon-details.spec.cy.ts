@@ -47,30 +47,33 @@ describe('pokemon-details-component', () => {
 
   });
 
-  it('should render the evolution chain indicator and evolved species', () => {
-    cy.get('.evolution-indicator').should('exist').and('contain.text', '>');
-    cy.get('.evolved-species-list').should('exist');
-    cy.get('app-evolution-chain-species').should('have.length.at.least', 1);
-  });
+  describe('pokemon-details-page-rendering-tests', () => {
+    it('should render the evolution chain indicator and evolved species', () => {
+      cy.get('.evolution-indicator').should('exist').and('contain.text', '>');
+      cy.get('.evolved-species-list').should('exist');
+      cy.get('app-evolution-chain-species').should('have.length.at.least', 1);
+    });
 
-  it('should apply the "is-current" class to the current pokemon container', () => {
-    cy.get('.pokemon-container.is-current').should('exist');
-    cy.get('.pokemon-image-wrapper.is-current').should('exist');
-  });
+    it('should apply the "is-current" class to the current pokemon container', () => {
+      cy.get('.pokemon-container.is-current').should('exist');
+      cy.get('.pokemon-image-wrapper.is-current').should('exist');
+    });
 
-  it('should disable favorites button for initial unauthenticated user test state', () => {
-    cy.get('[data-cy="favorite-button"]')
-      .should('be.disabled')
-      .and('have.class', 'disabled-button');
-  });
+    it('should disable favorites button for initial unauthenticated user test state', () => {
+      cy.get('[data-cy="favorite-button"]')
+        .should('be.disabled')
+        .and('have.class', 'disabled-button');
+    });
 
-  it.only("should enable favorites button for authenticated user", () => {
-    cy.login();
+    it("should enable favorites button for authenticated user", () => {
+      cy.login();
+      cy.url().should('include', '/pokemon');
 
-    cy.visit('http://localhost:4200/pokemon-details/2');
-    cy.get('[data-cy="favorite-button"]')
-      .should('not.be.disabled');
-  });
+      cy.visit('http://localhost:4200/pokemon-details/2');
+      cy.get('[data-cy="favorite-button"]')
+        .should('not.be.disabled');
+    });
+  })
 
   describe('navigation-tests', () => {
     it('should not navigate when clicking the current pokemon container', () => {
