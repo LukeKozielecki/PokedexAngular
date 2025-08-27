@@ -55,3 +55,37 @@ export interface cpMockTypeObject {
     url: string;
   };
 }
+
+export interface cpMockEvolutionChainResponse {
+  results: cpMockEvolutionChainWrapper[];
+}
+
+export interface cpMockEvolutionChainWrapper {
+  results?: cpMockEvolutionChainWrapper[];
+  baby_trigger_item: null;
+  chain: cpMockChain;
+  id: number;
+}
+
+export interface cpMockChain {
+  evolution_details: any[];
+  evolves_to: cpMockEvolvesTo[];
+  is_baby: boolean;
+  species: cpMockSpecies;
+}
+
+export interface cpMockEvolvesTo {
+  evolution_details: cpMockEvolutionDetail[];
+  evolves_to: cpMockEvolvesTo[];
+  is_baby: boolean;
+  species: cpMockSpecies;
+}
+
+export interface cpMockEvolutionDetail {
+  min_level: number;
+}
+
+export interface cpMockSpecies {
+  name: string;
+  url: string;
+}

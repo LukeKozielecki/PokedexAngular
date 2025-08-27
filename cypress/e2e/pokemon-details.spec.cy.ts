@@ -1,4 +1,8 @@
-import {cpMockPokemonDetailsInterface} from '../support/backend-response-testing.interface';
+import {
+  cpMockEvolutionChainResponse,
+  cpMockEvolutionChainWrapper,
+  cpMockPokemonDetailsInterface
+} from '../support/backend-response-testing.interface';
 
 describe('pokemon-details-component', () => {
   const POKEMON_LIST_JSON = 'pokemon-list.json'
@@ -24,8 +28,8 @@ describe('pokemon-details-component', () => {
       });
     });
 
-    cy.fixture('pokemon-evolution.json').then((data) => {
-      data.results.forEach((evolutionChain) => {
+    cy.fixture('pokemon-evolution.json').then((data: cpMockEvolutionChainResponse) => {
+      data.results.forEach((evolutionChain: cpMockEvolutionChainWrapper) => {
         cy.intercept('GET', `https://pokeapi.co/api/v2/evolution-chain/${evolutionChain.id}`, {
           statusCode: 200,
           body: evolutionChain,
