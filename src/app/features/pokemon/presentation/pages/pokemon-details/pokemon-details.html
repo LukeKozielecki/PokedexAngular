@@ -3,12 +3,19 @@
     <div class="pokemon-details-wrapper">
       <div class="pokemon-details-card">
         <div class="header-buttons">
-          <button routerLink="/pokemon" class="navigate-to-home"><mat-icon>arrow_back</mat-icon></button>
+          <button
+            routerLink="/pokemon"
+            class="navigate-to-home"
+            id="details-page-navigate-back-button"
+          >
+            <mat-icon>arrow_back</mat-icon>
+          </button>
           <div>
             <button
               class="edit-button"
               (click)="isEditing ? onSaveChanges() : toggleEditMode()"
               aria-label="Toggle edit mode"
+              data-cy="toggle-edit-mode-button"
             >
               <mat-icon>{{ isEditing ? 'save' : 'create' }}</mat-icon>
             </button>

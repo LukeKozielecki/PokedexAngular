@@ -5,7 +5,7 @@
   "results": [
     {
       "id": 1,
-      "name": "bulbasaur mocked",
+      "name": "bulbasaur",
       "base_experience": 64,
       "abilities": [
         {
@@ -108,7 +108,7 @@
     },
     {
       "id": 2,
-      "name": "ivysaur mocked",
+      "name": "ivysaur",
       "base_experience": 142,
       "abilities": [
         {
@@ -211,7 +211,7 @@
     },
     {
       "id": 3,
-      "name": "venusaur mocked",
+      "name": "venusaur",
       "base_experience": 236,
       "abilities": [
         {

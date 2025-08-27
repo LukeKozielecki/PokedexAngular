@@ -19,9 +19,14 @@
           class="editable-input"
           [value]="height"
           (blur)="onHeightChange($event)"
+          data-cy="input-field-height"
         />
       } @else {
-        <p>{{ height }}</p>
+        <p
+          data-cy="details-height-value"
+        >
+          {{ height }}
+        </p>
       }
     </div>
     <div class="summary-item">
@@ -32,9 +37,14 @@
           class="editable-input"
           [value]="weight"
           (blur)="onWeightChange($event)"
+          data-cy="input-field-weight"
         />
       } @else {
-        <p>{{ weight }}</p>
+        <p
+          data-cy="details-weight-value"
+        >
+          {{ weight }}
+        </p>
       }
     </div>
     <div class="summary-item">
@@ -45,9 +55,14 @@
           class="editable-input"
           [value]="baseExperience"
           (blur)="onBaseExperienceChange($event)"
+          data-cy="input-field-base-experience"
         />
       } @else {
-        <p>{{ baseExperience }}</p>
+        <p
+          data-cy="details-base-experience-value"
+        >
+          {{ baseExperience }}
+        </p>
       }
     </div>
     <div class="summary-item">

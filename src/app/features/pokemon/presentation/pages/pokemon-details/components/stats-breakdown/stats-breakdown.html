@@ -9,6 +9,7 @@
             class="editable-input"
             [value]="stat.baseStat"
             (change)="onStatChange($event, stat.name)"
+            [attr.data-cy]="'input-field-' + stat.name"
           />
         } @else {
           <div class="stat-bar-container">
@@ -20,7 +21,10 @@
               }
             }
           </div>
-          <span class="stat-value">{{ stat.baseStat }}</span>
+          <span
+            class="stat-value"
+            [attr.data-cy]="'stats-' + stat.name + '-value'"
+          >{{ stat.baseStat }}</span>
         }
       </li>
     }
