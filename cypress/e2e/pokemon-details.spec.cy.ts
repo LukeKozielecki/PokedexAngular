@@ -68,90 +68,61 @@ describe('pokemon-details-component', () => {
       cy.get('[data-cy="toggle-edit-mode-button"]').click()
     })
 
-    it('should change height', () => {
-      cy.get('[data-cy="input-field-height"]').clear()
-      cy.get('[data-cy="input-field-height"]').type('50')
-      cy.get('[data-cy="toggle-edit-mode-button"]').click()
-      cy.get('[data-cy="details-height-value"]').should('contain.text', '50')
-    })
+    const detailsToTest = [
+      { name: 'height', value: '50' },
+      { name: 'weight', value: '75' },
+      { name: 'base-experience', value: '150' },
+    ];
 
-    it('should change weight', () => {
-      cy.get('[data-cy="input-field-weight"]').clear();
-      cy.get('[data-cy="input-field-weight"]').type('75');
-      cy.get('[data-cy="toggle-edit-mode-button"]').click();
-      cy.get('[data-cy="details-weight-value"]').should('contain.text', '75');
-    });
-
-    it('should change base experience', () => {
-      cy.get('[data-cy="input-field-base-experience"]').clear();
-      cy.get('[data-cy="input-field-base-experience"]').type('150');
-      cy.get('[data-cy="toggle-edit-mode-button"]').click();
-      cy.get('[data-cy="details-base-experience-value"]').should('contain.text', '150');
+    detailsToTest.forEach((detail) => {
+      it(`should change ${detail.name}`, () => {
+        cy.get(`[data-cy="input-field-${detail.name}"]`).clear();
+        cy.get(`[data-cy="input-field-${detail.name}"]`).type(detail.value);
+        cy.get('[data-cy="toggle-edit-mode-button"]').click();
+        cy.get(`[data-cy="details-${detail.name}-value"]`).should('contain.text', detail.value);
+      });
     });
   });
 
-  describe.only('input-stats-tests', () => {
+  describe('input-stats-tests', () => {
     beforeEach(() => {
       cy.get('[data-cy="toggle-edit-mode-button"]').click()
     })
 
-    it('should change Hp', () => {
-      cy.get('[data-cy="input-field-hp"]').clear();
-      cy.get('[data-cy="input-field-hp"]').type('120');
-      cy.get('[data-cy="toggle-edit-mode-button"]').click();
-      cy.get('[data-cy="stats-hp-value"]').should('contain.text', '120');
+    const statsToTest = [
+      { name: 'hp', value: '120' },
+      { name: 'attack', value: '95' },
+      { name: 'defense', value: '85' },
+      { name: 'special-attack', value: '110' },
+      { name: 'special-defense', value: '90' },
+      { name: 'speed', value: '105' },
+    ];
+
+    statsToTest.forEach((stat) => {
+      it(`should change ${stat.name}`, () => {
+        cy.get(`[data-cy="input-field-${stat.name}"]`).clear();
+        cy.get(`[data-cy="input-field-${stat.name}"]`).type(stat.value);
+        cy.get('[data-cy="toggle-edit-mode-button"]').click();
+        cy.get(`[data-cy="stats-${stat.name}-value"]`).should('contain.text', stat.value);
+      });
     });
 
-    it('should change Attack', () => {
-      cy.get('[data-cy="input-field-attack"]').clear();
-      cy.get('[data-cy="input-field-attack"]').type('95');
-      cy.get('[data-cy="toggle-edit-mode-button"]').click();
-      cy.get('[data-cy="stats-attack-value"]').should('contain.text', '95');
-    });
+    it('should change a combination of stats', () => {
+      const combinedStats = [
+        { name: 'defense', value: '85' },
+        { name: 'special-attack', value: '110' },
+        { name: 'hp', value: '120' },
+      ];
 
-    it('should change Defense', () => {
-      cy.get('[data-cy="input-field-defense"]').clear();
-      cy.get('[data-cy="input-field-defense"]').type('85');
-      cy.get('[data-cy="toggle-edit-mode-button"]').click();
-      cy.get('[data-cy="stats-defense-value"]').should('contain.text', '85');
-    });
-
-    it('should change Special-attack', () => {
-      cy.get('[data-cy="input-field-special-attack"]').clear();
-      cy.get('[data-cy="input-field-special-attack"]').type('110');
-      cy.get('[data-cy="toggle-edit-mode-button"]').click();
-      cy.get('[data-cy="stats-special-attack-value"]').should('contain.text', '110');
-    });
-
-    it('should change Special-defense', () => {
-      cy.get('[data-cy="input-field-special-defense"]').clear();
-      cy.get('[data-cy="input-field-special-defense"]').type('90');
-      cy.get('[data-cy="toggle-edit-mode-button"]').click();
-      cy.get('[data-cy="stats-special-defense-value"]').should('contain.text', '90');
-    });
-
-    it('should change Speed', () => {
-      cy.get('[data-cy="input-field-speed"]').clear();
-      cy.get('[data-cy="input-field-speed"]').type('105');
-      cy.get('[data-cy="toggle-edit-mode-button"]').click();
-      cy.get('[data-cy="stats-speed-value"]').should('contain.text', '105');
-    });
-
-    it.only('should change a combination of stats', () => {
-
-      cy.get('[data-cy="input-field-defense"]').clear();
-      cy.get('[data-cy="input-field-defense"]').type('85');
-      cy.get('[data-cy="input-field-special-attack"]').clear();
-      cy.get('[data-cy="input-field-special-attack"]').type('110');
-      cy.get('[data-cy="input-field-hp"]').clear();
-      cy.get('[data-cy="input-field-hp"]').type('120');
+      combinedStats.forEach((stat) => {
+        cy.get(`[data-cy="input-field-${stat.name}"]`).clear().type(stat.value);
+      });
 
       cy.get('[data-cy="toggle-edit-mode-button"]').click();
 
-      cy.get('[data-cy="stats-defense-value"]').should('contain.text', '85');
-      cy.get('[data-cy="stats-special-attack-value"]').should('contain.text', '110');
-      cy.get('[data-cy="stats-hp-value"]').should('contain.text', '120');
+      combinedStats.forEach((stat) => {
+        cy.get(`[data-cy="stats-${stat.name}-value"]`).should('contain.text', stat.value);
+      });
     });
-
   });
 });
