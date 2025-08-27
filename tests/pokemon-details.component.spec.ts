@@ -37,8 +37,8 @@ test.describe('Pokemon Details Page', () => {
   test('should toggle the favorite button state on click for a logged-in user', async () => {
     const setupFavouritePokemon = async (page:Page) => {
       await page.goto('http://localhost:4200/login');
-      await page.getByLabel('Email').fill('mock.user@example.com');
-      await page.getByLabel('Password').fill('password123');
+      await page.getByLabel('Email').fill('mock.user2@example.com');
+      await page.getByLabel('Password').fill('12341234');
       await page.getByRole('button', { name: 'Login' }).click();
       await page.waitForURL('**/pokemon');
     };
@@ -95,8 +95,8 @@ test.describe('Pokemon Details Page', () => {
     await page.waitForURL(url => url.href !== initialUrl);
 
     const newUrl = page.url();
-    expect(newUrl).not.toEqual(initialUrl);
-    expect(newUrl).toMatch(/\/pokemon-details\/\d+$/);
+    await expect(newUrl).not.toEqual(initialUrl);
+    await expect(newUrl).toMatch(/\/pokemon-details\/\d+$/);
 
     await expect(page.locator('app-loading-screen')).not.toBeVisible();
     await expect(page.locator('.pokemon-details-wrapper')).toBeVisible();
