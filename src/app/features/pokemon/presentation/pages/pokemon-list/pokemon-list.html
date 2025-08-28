@@ -1,50 +1,54 @@
 @if (pokemonList$ | async; as pokemon) {
-  <div class="pokemon-list-container">
-  <app-search-form (searchSubmitted)="onSearchSubmitted($event)"></app-search-form>
-    <div class="pokemon-grid">
-      @for (pokemon of pokemon; track pokemon.id) {
-        <div (click)="onPokemonCardClick(pokemon.id)"
-             class="pokemon-card"
-        >
-          <div class="pokemon-card-inner" [ngClass]="'type-bg-' + pokemon.types[0].toLowerCase()">
-            <div class="pokemon-image-container">
-              <img [src]="pokemon.imageUrl" [alt]="pokemon.name" class="pokemon-image" width="96" height="96">
-              <div class="pokemon-id-hover-container"
-                   [ngClass]="{'long-id': pokemon.id.toString().length > 4}">
-                #{{ pokemon.id }}
+  @if(isLoading$ | async) {
+    <app-loading-screen></app-loading-screen>
+  } @else {
+    <div class="pokemon-list-container">
+      <app-search-form (searchSubmitted)="onSearchSubmitted($event)"></app-search-form>
+      <div class="pokemon-grid">
+        @for (pokemon of pokemon; track pokemon.id) {
+          <div (click)="onPokemonCardClick(pokemon.id)"
+               class="pokemon-card"
+          >
+            <div class="pokemon-card-inner" [ngClass]="'type-bg-' + pokemon.types[0].toLowerCase()">
+              <div class="pokemon-image-container">
+                <img [src]="pokemon.imageUrl" [alt]="pokemon.name" class="pokemon-image" width="96" height="96">
+                <div class="pokemon-id-hover-container"
+                     [ngClass]="{'long-id': pokemon.id.toString().length > 4}">
+                  #{{ pokemon.id }}
+                </div>
               </div>
-            </div>
-            <h3 class="pokemon-name">{{ pokemon.name | titlecase }}</h3>
-            <div class="pokemon-types-container">
-              @for (type of pokemon.types; track type){
-                <span
-                  class="type-pill"
-                  [ngClass]="'type-' + type.toLowerCase()"
-                >
+              <h3 class="pokemon-name">{{ pokemon.name | titlecase }}</h3>
+              <div class="pokemon-types-container">
+                @for (type of pokemon.types; track type){
+                  <span
+                    class="type-pill"
+                    [ngClass]="'type-' + type.toLowerCase()"
+                  >
                   {{ type }}
                 </span>
-              }
+                }
+              </div>
             </div>
           </div>
+        }
+      </div>
+
+      @if (pokemon.length === 0 && isInSearchState) {
+        <div class="search-failed">
+          <h3>No Pokémon Matched Your Search!</h3>
+          <p><strong>Please try different search term</strong></p>
+          <pre>{{ noPokemonArt }}</pre>
         </div>
       }
+
+      @if (pokemon.length === 0 && !isInSearchState) {
+        <div class="no-pokemon-found">No Pokemon found.</div>
+      }
+
+      <div class="lazy-loader"></div>
+
     </div>
-
-    @if (pokemon.length === 0 && isInSearchState) {
-      <div class="search-failed">
-        <h3>No Pokémon Matched Your Search!</h3>
-        <p><strong>Please try different search term</strong></p>
-        <pre>{{ noPokemonArt }}</pre>
-      </div>
-    }
-
-    @if (pokemon.length === 0 && !isInSearchState) {
-      <div class="no-pokemon-found">No Pokemon found.</div>
-    }
-
-    <div class="lazy-loader"></div>
-
-  </div>
+  }
 } @else {
   <app-loading-screen></app-loading-screen>
 }

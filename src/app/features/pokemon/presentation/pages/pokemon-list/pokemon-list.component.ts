@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Observable, Subject, withLatestFrom} from 'rxjs';
+import {BehaviorSubject, delay, Observable, of, Subject, tap, withLatestFrom} from 'rxjs';
 import {Pokemon} from '../../../domain/model/Pokemon';
 import {SearchFormComponent} from './components/search-form/search-form.component';
 import {SearchPokemonUseCase} from '../../../application/use-cases/SearchPokemonUseCase';
@@ -20,6 +20,7 @@ import {NO_POKEMON_ART} from '../../../../../shared/constants/sad-pikachu-ASCII'
 })
 export class PokemonListComponent implements OnInit, OnDestroy {
   pokemonList$!: Observable<Pokemon[]>;
+  isLoading$ = new BehaviorSubject(true)
   currentOffset$!: Observable<number>;
 
   private destroy$ = new Subject<void>();
@@ -39,7 +40,13 @@ export class PokemonListComponent implements OnInit, OnDestroy {
     this.searchPokemonUseCase.search("");
     this.searchPokemonUseCase.filterByTypes([]);
     this.searchPokemonUseCase.setFavoritesOnly(false);
-    this.pokemonList$ = this.searchPokemonUseCase.results$;
+    this.pokemonList$ = this.searchPokemonUseCase.results$.pipe(
+      tap(pokemonList => {
+        if (pokemonList.length != 0) {
+          this.isLoading$.next(false);
+        }
+      })
+    );
     this.currentOffset$ = this.searchPokemonUseCase.offset$;
     this.breakpointObserver.observe([
       Breakpoints.XSmall,
@@ -53,9 +60,9 @@ export class PokemonListComponent implements OnInit, OnDestroy {
       } else if (result.breakpoints[Breakpoints.Small]) {
         newLimit = 12;
       } else if (result.breakpoints[Breakpoints.Medium]) {
-        newLimit = 12;
+        newLimit = 20;
       } else if (result.breakpoints[Breakpoints.Large]) {
-        newLimit = 16;
+        newLimit = 26;
       } else {
         newLimit = 50;
       }
@@ -68,12 +75,17 @@ export class PokemonListComponent implements OnInit, OnDestroy {
       }
     });
 
-    setTimeout(() => {
-      this.sentinel = document.querySelector('.lazy-loader');
-      if (this.sentinel) {
-        this.observer.observe(this.sentinel);
-      }
-    }, 0)
+    this.isLoading$
+      .subscribe(isLoading => {
+        if (!isLoading) {
+          setTimeout(() => {
+            this.sentinel = document.querySelector('.lazy-loader');
+            if (this.sentinel) {
+              this.observer.observe(this.sentinel);
+            }
+          }, 0);
+        }
+      });
   }
 
   ngOnDestroy(): void {
