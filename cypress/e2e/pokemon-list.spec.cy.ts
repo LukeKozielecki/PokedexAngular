@@ -11,30 +11,7 @@ describe('pokemon-list-component', () => {
   const POKEMON_DETAILS_JSON = 'pokemon-details.json'
 
   beforeEach(() => {
-    cy.intercept('GET', 'https://pokeapi.co/api/v2/pokemon?offset=0&limit=6000', {
-      statusCode: 200,
-      fixture: POKEMON_LIST_JSON,
-    }).as('getPokemonList');
-
-    cy.fixture(POKEMON_LIST_JSON).then((pokemonList) => {
-      cy.fixture(POKEMON_DETAILS_JSON).then((pokemonDetails) => {
-        pokemonDetails.results.forEach((pokemon: cpMockPokemonDetailsInterface, index: number) => {
-          const alias = `getPokemonDetails${pokemon.name}`;
-          const urlToIntercept = pokemonList.results[index].url.slice(0, -1);
-          cy.intercept('GET', urlToIntercept, {
-            statusCode: 200,
-            body: pokemon,
-          }).as(alias);
-        });
-      });
-
-      const lastPokemonName = pokemonList.results[pokemonList.results.length - 1].name;
-
-      cy.visit('http://localhost:4200/');
-
-      cy.wait('@getPokemonList');
-      cy.wait(`@getPokemonDetails${lastPokemonName}`);
-    });
+    cy.setupMockPokemonList()
   });
 
   it('should display the mocked list of Pokémon', () => {
@@ -63,7 +40,7 @@ describe('pokemon-list-component', () => {
     cy.url().should('include', '/pokemon-details/1');
   });
 
-  it.only('should mock a successful login and navigate to the pokemon list page', () => {
+  it('should mock a successful login and navigate to the pokemon list page', () => {
     const favouritesButtonId = '#pokemon-favourites-toggle'
     cy.get(favouritesButtonId).should('not.exist')
 
