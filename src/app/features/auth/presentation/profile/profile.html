@@ -5,7 +5,7 @@
   <h2 id="welcome-email-id">Welcome, {{ userEmail }}!</h2>
   <p>You are logged in</p>
   @if (!showUpdatePassword) {
-    <button (click)="onToggleUpdatePassword()" class="toggle-password-form">
+    <button (click)="onToggleUpdatePassword()" class="toggle-password-form" data-cy="button-toggle-password-form">
       Change Password
     </button>
   }
@@ -17,15 +17,15 @@
       <form [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()" class="password-form">
         <div class="form-group">
           <label for="newPassword">New Password</label>
-          <input type="password" id="newPassword" formControlName="newPassword">
+          <input type="password" id="newPassword" formControlName="newPassword" data-cy="input-new-password-field">
           @if (passwordForm.get('newPassword')?.invalid && (passwordForm.get('newPassword')?.touched)) {
             <div class="error-message">
               @if (passwordForm.get('newPassword')?.errors?.['required']) {
-                <div>
+                <div data-cy="password-required-message">
                   New password is required.
                 </div>
               } @if (passwordForm.get('newPassword')?.errors?.['minlength']) {
-              <div>
+              <div data-cy="password-too-short-message">
                 New password must be at least 6 characters long.
               </div>
             }
@@ -34,7 +34,7 @@
         </div>
         <div class="form-group">
           <label for="confirmPassword">Confirm Password</label>
-          <input type="password" id="confirmPassword" formControlName="confirmPassword">
+          <input type="password" id="confirmPassword" formControlName="confirmPassword" data-cy="input-confirm-new-password-field">
           @if (passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched) {
             <div class="error-message">
               @if (passwordForm.get('confirmPassword')?.errors?.['required']) {
@@ -46,11 +46,16 @@
           }
         </div>
         @if (passwordForm.errors?.['passwordsNotMatching'] && passwordForm.get('confirmPassword')?.touched) {
-          <div class="error-message">
+          <div class="error-message" data-cy="password-do-not-match-message">
             Passwords do not match.
           </div>
         }
-        <button type="submit" [disabled]="!passwordForm.valid" class="update-password-button">Update Password</button>
+        <button
+          type="submit"
+          [disabled]="!passwordForm.valid"
+          class="update-password-button"
+          data-cy="update-password-button"
+        >Update Password</button>
       </form>
     </div>
   }
