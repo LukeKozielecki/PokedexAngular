@@ -46,6 +46,9 @@ describe('authentication-form-tests', () => {
   it('should correctly log in with valid credentials', () => {
     cy.setupMockPokemonList();
     cy.login();
+
+    cy.get('[data-cy="login-icon-button"]').click()
+    cy.get('[data-cy="logged-in-profile-container"]').should("exist")
   });
 
   it('should correctly show error message with invalid credentials', () => {

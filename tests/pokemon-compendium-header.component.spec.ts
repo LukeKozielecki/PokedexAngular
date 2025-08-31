@@ -19,6 +19,7 @@ test.describe('Pokemon Compendium Header', () => {
   });
 
   test('should navigate to the login page when the login button is clicked and user is not logged in', async ({ page }) => {
+
     const loginButton = page.locator('.login-icon-button');
     await loginButton.click();
 
@@ -37,6 +38,7 @@ test.describe('Pokemon Compendium Header', () => {
     await page.waitForURL('**/pokemon');
 
     // Click the header's button now that the app's state is "logged in"
+
     const profileButton = page.locator('.login-icon-button');
     await expect(profileButton).toBeVisible();
     await profileButton.click();
