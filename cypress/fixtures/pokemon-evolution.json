@@ -1,134 +1,31 @@
 {
-  "results": [
-    {
-      "baby_trigger_item": null,
-      "chain": {
-        "evolution_details": [],
+  "baby_trigger_item": null,
+  "chain": {
+    "evolution_details": [],
+    "evolves_to": [
+      {
         "evolves_to": [
           {
-            "evolution_details": [
-              {
-                "min_level": 16
-              }
-            ],
-            "evolves_to": [
-              {
-                "evolution_details": [
-                  {
-                    "min_level": 32
-                  }
-                ],
-                "evolves_to": [],
-                "is_baby": false,
-                "species": {
-                  "name": "venusaur",
-                  "url": "https://pokeapi.co/api/v2/pokemon-species/3/"
-                }
-              }
-            ],
+            "evolves_to": [],
             "is_baby": false,
             "species": {
-              "name": "ivysaur",
-              "url": "https://pokeapi.co/api/v2/pokemon-species/2/"
+              "name": "venusaur",
+              "url": "https://pokeapi.co/api/v2/pokemon-species/3/"
             }
           }
         ],
         "is_baby": false,
         "species": {
-          "name": "bulbasaur",
-          "url": "https://pokeapi.co/api/v2/pokemon-species/1/"
+          "name": "ivysaur",
+          "url": "https://pokeapi.co/api/v2/pokemon-species/2/"
         }
-      },
-      "id": 1
-    },
-    {
-      "results": [
-        {
-          "baby_trigger_item": null,
-          "chain": {
-            "evolution_details": [],
-            "evolves_to": [
-              {
-                "evolution_details": [
-                  {
-                    "min_level": 16
-                  }
-                ],
-                "evolves_to": [
-                  {
-                    "evolution_details": [
-                      {
-                        "min_level": 36
-                      }
-                    ],
-                    "evolves_to": [],
-                    "is_baby": false,
-                    "species": {
-                      "name": "charizard",
-                      "url": "https://pokeapi.co/api/v2/pokemon-species/6/"
-                    }
-                  }
-                ],
-                "is_baby": false,
-                "species": {
-                  "name": "charmeleon",
-                  "url": "https://pokeapi.co/api/v2/pokemon-species/5/"
-                }
-              }
-            ],
-            "is_baby": false,
-            "species": {
-              "name": "charmander",
-              "url": "https://pokeapi.co/api/v2/pokemon-species/4/"
-            }
-          },
-          "id": 2
-        }
-      ]
-    },{
-      "results": [
-        {
-          "baby_trigger_item": null,
-          "chain": {
-            "evolution_details": [],
-            "evolves_to": [
-              {
-                "evolution_details": [
-                  {
-                    "min_level": 16
-                  }
-                ],
-                "evolves_to": [
-                  {
-                    "evolution_details": [
-                      {
-                        "min_level": 36
-                      }
-                    ],
-                    "evolves_to": [],
-                    "is_baby": false,
-                    "species": {
-                      "name": "blastoise",
-                      "url": "https://pokeapi.co/api/v2/pokemon-species/9/"
-                    }
-                  }
-                ],
-                "is_baby": false,
-                "species": {
-                  "name": "wartortle",
-                  "url": "https://pokeapi.co/api/v2/pokemon-species/8/"
-                }
-              }
-            ],
-            "is_baby": false,
-            "species": {
-              "name": "squirtle",
-              "url": "https://pokeapi.co/api/v2/pokemon-species/7/"
-            }
-          },
-          "id": 3
-        }
-      ]
+      }
+    ],
+    "is_baby": false,
+    "species": {
+      "name": "bulbasaur",
+      "url": "https://pokeapi.co/api/v2/pokemon-species/1/"
     }
-  ]
+  },
+  "id": 1
 }

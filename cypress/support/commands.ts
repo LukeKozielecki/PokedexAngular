@@ -44,7 +44,8 @@ declare global {
   namespace Cypress {
     interface Chainable {
       login(): Chainable<any>;
-      setupMockPokemonList(): Chainable<any>
+      setupMockPokemonList(): Chainable<any>;
+      setupMockEvolutionChain(): Chainable<any>;
     }
   }
 }
@@ -99,5 +100,12 @@ Cypress.Commands.add('setupMockPokemonList', () => {
     cy.wait('@getPokemonList');
     cy.wait(`@getPokemonDetails${lastPokemonName}`);
   });
-
 });
+
+Cypress.Commands.add('setupMockEvolutionChain', () => {
+  cy.intercept('GET', 'https://pokeapi.co/api/v2/evolution-chain/1', {
+    statusCode: 200,
+    fixture: 'pokemon-evolution.json'
+  }).as('getEvolutionChain');
+});
+

@@ -6,7 +6,7 @@ describe('authentication-form-tests', () => {
     cy.visit('http://localhost:4200/login');
   });
 
-  it.only('should correctly initialize component', () => {
+  it('should correctly initialize component', () => {
     cy.get('[data-cy="auth-email-input-filed"]').should('have.value', '');
     cy.get('[data-cy="auth-password-input-filed"]').should('have.value', '');
     cy.get('[data-cy="auth-error-message-string"]').should('not.exist');
@@ -107,7 +107,7 @@ describe('authentication-form-tests', () => {
     cy.url().should('include', '/pokemon');
   });
 
-  it.only('should show an error message when registering with a taken email', () => {
+  it('should show an error message when registering with a taken email', () => {
     cy.intercept('POST', 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=*', {
       statusCode: 400,
       body: {

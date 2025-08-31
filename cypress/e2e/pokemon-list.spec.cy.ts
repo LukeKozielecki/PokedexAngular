@@ -36,6 +36,9 @@ describe('pokemon-list-component', () => {
 
   it('should navigate to "/pokemon-details/1" on click of the first Pokémon card', () => {
     cy.get('[data-cy="pokemon-list-pokemon-card-inner"]').first().click();
+
+    cy.setupMockEvolutionChain()
+
     cy.wait(NAVIGATION_DELAY)
     cy.url().should('include', '/pokemon-details/1');
   });

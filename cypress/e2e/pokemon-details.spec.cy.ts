@@ -1,47 +1,16 @@
-import {
-  cpMockEvolutionChainResponse,
-  cpMockEvolutionChainWrapper,
-  cpMockPokemonDetailsInterface
-} from '../support/backend-response-testing.interface';
 import '../support/commands';
 
 describe('pokemon-details-component', () => {
-  const POKEMON_LIST_JSON = 'pokemon-list.json'
-  const POKEMON_DETAILS_JSON = 'pokemon-details.json'
 
   beforeEach(() => {
-    cy.intercept('GET', 'https://pokeapi.co/api/v2/pokemon?offset=0&limit=6000', {
-      statusCode: 200,
-      fixture: POKEMON_LIST_JSON,
-    }).as('getPokemonList');
-
-
-    cy.fixture(POKEMON_LIST_JSON).then((pokemonList) => {
-      cy.fixture(POKEMON_DETAILS_JSON).then((pokemonDetails) => {
-        pokemonDetails.results.forEach((pokemon: cpMockPokemonDetailsInterface, index: number) => {
-          const alias = `getPokemonDetails${pokemon.name}`;
-          const urlToIntercept = pokemonList.results[index].url.slice(0, -1);
-          cy.intercept('GET', urlToIntercept, {
-            statusCode: 200,
-            body: pokemon,
-          }).as(alias);
-        });
-      });
-    });
-
-    cy.fixture('pokemon-evolution.json').then((data: cpMockEvolutionChainResponse) => {
-      data.results.forEach((evolutionChain: cpMockEvolutionChainWrapper) => {
-        cy.intercept('GET', `https://pokeapi.co/api/v2/evolution-chain/${evolutionChain.id}`, {
-          statusCode: 200,
-          body: evolutionChain,
-        }).as(`getEvolutionChain${evolutionChain.id}`);
-      });
-    });
+    cy.setupMockPokemonList();
 
     cy.intercept('GET', 'https://pokeapi.co/api/v2/pokemon-species/2', {
       statusCode: 200,
       fixture: 'pokemon-species.json',
     }).as('getPokemonSpecies');
+
+    cy.setupMockEvolutionChain()
 
     cy.visit('http://localhost:4200/pokemon-details/2');
 
