@@ -6,12 +6,14 @@
     placeholder="Search Pokemon by name..."
     class="search-input"
     id="pokemon-search-input-form"
+    data-cy="pokemon-search-input-form"
   />
   <select
     [(ngModel)]="selectedType"
     (change)="onTypeSelected()"
     class="pokemon-type-selector"
     id="pokemon-type-selector"
+    data-cy="search-form-pokemon-type-selector"
   >
     <option value="">Every type</option>
     @for (type of pokemonTypes; track type) {
@@ -21,7 +23,8 @@
   @if (isLoggedIn$ | async) {
     <button
       class="pokemon-type-selector"
-      id="pokemon-favourites-toggle"
+      id="search-form-favourites-toggle"
+      data-cy="search-form-favourites-toggle"
       (click)="onToggleFavorites()"
       [class.is-favorite-active]="isFavoritesOnly"
     >

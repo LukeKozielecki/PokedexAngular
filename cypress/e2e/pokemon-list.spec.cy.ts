@@ -35,26 +35,25 @@ describe('pokemon-list-component', () => {
   });
 
   it('should navigate to "/pokemon-details/1" on click of the first Pokémon card', () => {
-    cy.get('.pokemon-card-inner').first().click();
+    cy.get('[data-cy="pokemon-list-pokemon-card-inner"]').first().click();
     cy.wait(NAVIGATION_DELAY)
     cy.url().should('include', '/pokemon-details/1');
   });
 
   it('should mock a successful login and navigate to the pokemon list page', () => {
-    const favouritesButtonId = '#pokemon-favourites-toggle'
-    cy.get(favouritesButtonId).should('not.exist')
+    cy.get('[data-cy="search-form-favourites-toggle"]').should('not.exist')
 
     cy.login();
 
     cy.url().should('include', '/pokemon');
-    cy.get(favouritesButtonId).should('be.visible')
+    cy.get('[data-cy="search-form-favourites-toggle"]').should('be.visible')
   });
 
   describe('on-search-and-filter-tests', () => {
 
     it('should search for "charmander mocked" and display only that Pokémon', () => {
       const searchTerm = "charmander mocked";
-      cy.get('#pokemon-search-input-form').click().type(searchTerm);
+      cy.get('[data-cy="pokemon-search-input-form"]').click().type(searchTerm);
 
       cy.fixture(POKEMON_LIST_JSON).then((pokemonList) => {
         cy.contains(searchTerm, { matchCase: false }).should('be.visible');
@@ -70,7 +69,7 @@ describe('pokemon-list-component', () => {
     });
 
     it('should search for "non-existent-pokemon" and display only that Pokémon', () => {
-      cy.get('#pokemon-search-input-form').click().type('non-existent-pokemon');
+      cy.get('[data-cy="pokemon-search-input-form"]').click().type('non-existent-pokemon');
 
       cy.contains('No Pokémon Matched Your Search!', { matchCase: false }).should('be.visible');
 
@@ -84,7 +83,7 @@ describe('pokemon-list-component', () => {
     });
 
     it('should filter only fire pokemon when selecting type "fire"', () => {
-      cy.get('#pokemon-type-selector').select('Fire');
+      cy.get('[data-cy="search-form-pokemon-type-selector"]').select('Fire');
 
       cy.fixture(POKEMON_DETAILS_JSON).then((pokemonDetails: cpMockPokemonDetailsFixture) => {
         const firePokemon = pokemonDetails.results.filter(
@@ -106,8 +105,8 @@ describe('pokemon-list-component', () => {
     });
 
     it('should filter with both phrase and type', () => {
-      cy.get('#pokemon-search-input-form').type('mocked');
-      cy.get('#pokemon-type-selector').select('water');
+      cy.get('[data-cy="pokemon-search-input-form"]').type('mocked');
+      cy.get('[data-cy="search-form-pokemon-type-selector"]').select('water');
 
       cy.fixture(POKEMON_DETAILS_JSON).then((pokemonDetails: cpMockPokemonDetailsFixture) => {
         const visiblePokemon = pokemonDetails.results.filter(
@@ -134,12 +133,12 @@ describe('pokemon-list-component', () => {
 
     it('should display the full list when search term is cleared', () => {
       const searchTerm = 'charmander';
-      cy.get('#pokemon-search-input-form').type(searchTerm);
+      cy.get('[data-cy="pokemon-search-input-form"]').type(searchTerm);
 
       cy.contains(searchTerm, { matchCase: false }).should('be.visible');
       cy.contains('bulbasaur mocked', { matchCase: false }).should('not.exist');
 
-      cy.get('#pokemon-search-input-form').clear();
+      cy.get('[data-cy="pokemon-search-input-form"]').clear();
 
       cy.fixture(POKEMON_LIST_JSON).then((pokemonList) => {
         pokemonList.results.forEach((pokemon: cpMockPokemonListObject) => {
