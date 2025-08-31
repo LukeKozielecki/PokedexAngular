@@ -57,7 +57,7 @@ describe('auth-profile-tests', () => {
     validateNoMessageRemainsWhenEverythingValid();
   });
 
-  it.only('should correctly post password change request', () => {
+  it('should correctly post password change request', () => {
     cy.intercept('POST', 'https://identitytoolkit.googleapis.com/v1/accounts:update*', {
       fixture: 'firebase-successful-update-password-response.json'
     }).as('updatePassword');
