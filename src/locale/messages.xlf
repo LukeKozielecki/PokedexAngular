@@ -2,26 +2,116 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="searchForm.input.searchPlaceholder" datatype="html">
+        <source>Search Pokemon by name...</source>
+      </trans-unit>
+      <trans-unit id="searchForm.option.everyType" datatype="html">
+        <source>Every type</source>
+      </trans-unit>
+      <trans-unit id="searchForm.button.favourites" datatype="html">
+        <source>Favourites</source>
+      </trans-unit>
       <trans-unit id="noPokemonMatchedTitle" datatype="html">
         <source>No Pokémon Matched Your Search!</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/pokemon/presentation/pages/pokemon-list/pokemon-list.html</context>
-          <context context-type="linenumber">38,39</context>
-        </context-group>
+      </trans-unit>
+      <trans-unit id="pokemon-details-summary.heading.abilities|The heading for the section listing a Pokémon&apos;s abilities." datatype="html">
+        <source> Abilities </source>
+      </trans-unit>
+      <trans-unit id="pokemon-details-summary.heading.baseExperience|The heading for the section listing a Pokémon&apos;s base experience." datatype="html">
+        <source> Base Experience </source>
+      </trans-unit>
+      <trans-unit id="pokemon-details-summary.heading.height|The heading for the section listing a Pokémon&apos;s height." datatype="html">
+        <source> Height </source>
+      </trans-unit>
+      <trans-unit id="pokemon-details-summary.heading.types|The heading for the section listing a Pokémon&apos;s types." datatype="html">
+        <source> Types </source>
+      </trans-unit>
+      <trans-unit id="pokemon-details-summary.heading.weight|The heading for the section listing a Pokémon&apos;s weight." datatype="html">
+        <source> Weight </source>
+      </trans-unit>
+      <trans-unit id="pokemon-details.header.details" datatype="html">
+        <source> Details </source>
+      </trans-unit>
+      <trans-unit id="pokemon-details.header.evolution" datatype="html">
+        <source> Evolution </source>
+      </trans-unit>
+      <trans-unit id="pokemon-details.header.pokemon-of-similar-type" datatype="html">
+        <source> Pokemon of similar type </source>
+      </trans-unit>
+      <trans-unit id="pokemon-details.header.stats|The heading for pokemon statistics breakdown" datatype="html">
+        <source> Stats </source>
+      </trans-unit>
+      <trans-unit id="profile.button.abort-password-change|A button to abort the password change process." datatype="html">
+        <source> Abort </source>
+      </trans-unit>
+      <trans-unit id="profile.button.change-password|A button to show the change password form." datatype="html">
+        <source> Change Password </source>
+      </trans-unit>
+      <trans-unit id="profile.button.logout|A button to log the user out." datatype="html">
+        <source> Logout </source>
+      </trans-unit>
+      <trans-unit id="profile.button.update-password|A button to submit the password change form." datatype="html">
+        <source> Update Password </source>
+      </trans-unit>
+      <trans-unit id="profile.error.confirm-password-required|An error message shown when the confirm password field is required to match the new password field." datatype="html">
+        <source> This field needs to match the field above. </source>
+      </trans-unit>
+      <trans-unit id="profile.error.new-password-minlength|An error message shown when the new password is too short." datatype="html">
+        <source> New password must be at least 6 characters long. </source>
+      </trans-unit>
+      <trans-unit id="profile.error.new-password-required|An error message shown when the new password is required." datatype="html">
+        <source> New password is required. </source>
+      </trans-unit>
+      <trans-unit id="profile.error.passwords-not-matching|An error message shown when the two password fields do not match." datatype="html">
+        <source> Passwords do not match. </source>
+      </trans-unit>
+      <trans-unit id="profile.header.welcome-message|A welcome message for a logged-in user." datatype="html">
+        <source> Welcome, <x id="INTERPOLATION" equiv-text="{{ userEmail }}"/>! </source>
+      </trans-unit>
+      <trans-unit id="profile.label.confirm-password|A label for the confirm password input field." datatype="html">
+        <source> Confirm Password </source>
+      </trans-unit>
+      <trans-unit id="profile.label.new-password|A label for the new password input field." datatype="html">
+        <source> New Password </source>
+      </trans-unit>
+      <trans-unit id="profile.logged-in-message|A message confirming that the user is logged in." datatype="html">
+        <source> You are logged in </source>
       </trans-unit>
       <trans-unit id="tryDifferentSearchPrompt" datatype="html">
         <source>Please try different search term</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/pokemon/presentation/pages/pokemon-list/pokemon-list.html</context>
-          <context context-type="linenumber">39,40</context>
-        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.password-reset.email-required-error" datatype="html">
+        <source>Please enter your email address to reset your password.</source>
+      </trans-unit>
+      <trans-unit id="auth.password-reset.success-message" datatype="html">
+        <source>A password reset link has been sent to your email address. Please do check Spam</source>
+      </trans-unit>
+      <trans-unit id="evolution-chain-species.header.no-evolution-message|A message indicating that a Pokémon does not evolve." datatype="html">
+        <source> This Pokémon does not evolve. </source>
+      </trans-unit>
+      <trans-unit id="login-form.header.login|The heading for the login form." datatype="html">
+        <source> Login </source>
+      </trans-unit>
+      <trans-unit id="login-form.header.register|The heading for the registration form." datatype="html">
+        <source> Register </source>
+      </trans-unit>
+      <trans-unit id="login-form.label.email|The label for the email input field." datatype="html">
+        <source> Email: </source>
+      </trans-unit>
+      <trans-unit id="login-form.label.password|The label for the password input field." datatype="html">
+        <source> Password: </source>
+      </trans-unit>
+      <trans-unit id="login-form.link.forgot-password|A link to reset the password." datatype="html">
+        <source> Forgot password? </source>
+      </trans-unit>
+      <trans-unit id="login-form.paragraph.alreadyHaveAccount" datatype="html">
+        <source> Already have an account? </source>
+      </trans-unit>
+      <trans-unit id="login-form.paragraph.needToRegister" datatype="html">
+        <source> Need to register? </source>
       </trans-unit>
       <trans-unit id="noPokemonFoundText" datatype="html">
         <source>No Pokemon found.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/features/pokemon/presentation/pages/pokemon-list/pokemon-list.html</context>
-          <context context-type="linenumber">45,48</context>
-        </context-group>
       </trans-unit>
     </body>
   </file>

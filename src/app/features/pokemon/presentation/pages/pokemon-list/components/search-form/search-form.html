@@ -4,6 +4,7 @@
     [(ngModel)]="searchTerm"
     (keyup)="onSearchInput()"
     placeholder="Search Pokemon by name..."
+    i18n-placeholder="@@searchForm.input.searchPlaceholder"
     class="search-input"
     id="pokemon-search-input-form"
     data-cy="pokemon-search-input-form"
@@ -15,7 +16,7 @@
     id="pokemon-type-selector"
     data-cy="search-form-pokemon-type-selector"
   >
-    <option value="">Every type</option>
+    <option value="" i18n="@@searchForm.option.everyType">Every type</option>
     @for (type of pokemonTypes; track type) {
       <option [value]="type">{{ type | titlecase }}</option>
     }
@@ -28,7 +29,7 @@
       (click)="onToggleFavorites()"
       [class.is-favorite-active]="isFavoritesOnly"
     >
-      <span>Favourites</span>
+      <span i18n="@@searchForm.button.favourites">Favourites</span>
       <div class="spacer"></div>
       @if (isFavoritesOnly) {
         <mat-icon>favorite</mat-icon>

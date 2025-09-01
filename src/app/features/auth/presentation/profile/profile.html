@@ -2,30 +2,50 @@
   <button routerLink="/pokemon" class="navigate-to-home">
     <mat-icon>arrow_back</mat-icon>
   </button>
-  <h2 id="welcome-email-id">Welcome, {{ userEmail }}!</h2>
-  <p>You are logged in</p>
+  <h2 id="welcome-email-id"
+      i18n="@@profile.header.welcome-message|A welcome message for a logged-in user.">
+    Welcome, {{ userEmail }}!
+  </h2>
+  <p i18n="@@profile.logged-in-message|A message confirming that the user is logged in.">
+    You are logged in
+  </p>
   @if (!showUpdatePassword) {
-    <button (click)="onToggleUpdatePassword()" class="toggle-password-form" data-cy="button-toggle-password-form">
+    <button (click)="onToggleUpdatePassword()"
+            class="toggle-password-form"
+            data-cy="button-toggle-password-form"
+            i18n="@@profile.button.change-password|A button to show the change password form."
+    >
       Change Password
     </button>
   }
   @if (showUpdatePassword) {
     <div class="update-password-form">
-      <button (click)="onToggleUpdatePassword()" class="toggle-password-form">
+      <button (click)="onToggleUpdatePassword()"
+              class="toggle-password-form"
+              i18n="@@profile.button.abort-password-change|A button to abort the password change process."
+      >
         Abort
       </button>
       <form [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()" class="password-form">
         <div class="form-group">
-          <label for="newPassword">New Password</label>
+          <label for="newPassword"
+                 i18n="@@profile.label.new-password|A label for the new password input field."
+          >
+            New Password
+          </label>
           <input type="password" id="newPassword" formControlName="newPassword" data-cy="input-new-password-field">
           @if (passwordForm.get('newPassword')?.invalid && (passwordForm.get('newPassword')?.touched)) {
             <div class="error-message">
               @if (passwordForm.get('newPassword')?.errors?.['required']) {
-                <div data-cy="password-required-message">
+                <div data-cy="password-required-message"
+                     i18n="@@profile.error.new-password-required|An error message shown when the new password is required."
+                >
                   New password is required.
                 </div>
               } @if (passwordForm.get('newPassword')?.errors?.['minlength']) {
-              <div data-cy="password-too-short-message">
+              <div data-cy="password-too-short-message"
+                   i18n="@@profile.error.new-password-minlength|An error message shown when the new password is too short.@@profile.minlength-message|The message for a password that is too short. minlength placeholder:{minLength, number}"
+              >
                 New password must be at least 6 characters long.
               </div>
             }
@@ -33,12 +53,16 @@
           }
         </div>
         <div class="form-group">
-          <label for="confirmPassword">Confirm Password</label>
+          <label for="confirmPassword"
+                 i18n="@@profile.label.confirm-password|A label for the confirm password input field."
+          >
+            Confirm Password
+          </label>
           <input type="password" id="confirmPassword" formControlName="confirmPassword" data-cy="input-confirm-new-password-field">
           @if (passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched) {
             <div class="error-message">
               @if (passwordForm.get('confirmPassword')?.errors?.['required']) {
-                <div>
+                <div i18n="@@profile.error.confirm-password-required|An error message shown when the confirm password field is required to match the new password field.">
                   This field needs to match the field above.
                 </div>
               }
@@ -46,7 +70,10 @@
           }
         </div>
         @if (passwordForm.errors?.['passwordsNotMatching'] && passwordForm.get('confirmPassword')?.touched) {
-          <div class="error-message" data-cy="password-do-not-match-message">
+          <div class="error-message"
+               data-cy="password-do-not-match-message"
+               i18n="@@profile.error.passwords-not-matching|An error message shown when the two password fields do not match."
+          >
             Passwords do not match.
           </div>
         }
@@ -55,10 +82,17 @@
           [disabled]="!passwordForm.valid"
           class="update-password-button"
           data-cy="update-password-button"
-        >Update Password</button>
+          i18n="@@profile.button.update-password|A button to submit the password change form."
+        >
+          Update Password
+        </button>
       </form>
     </div>
   }
 
-  <button (click)="onLogout()" id="profile-logout-button">Logout</button>
+  <button (click)="onLogout()" id="profile-logout-button"
+          i18n="@@profile.button.logout|A button to log the user out."
+  >
+    Logout
+  </button>
 </div>

@@ -55,7 +55,9 @@
             </div>
 
             <div class="summary-card-container">
-              <h2>Details</h2>
+              <h2 i18n="@@pokemon-details.header.details">
+                Details
+              </h2>
               <app-pokemon-details-summary
                 [types]="pokemon.types"
                 [height]="pokemon.height"
@@ -71,7 +73,9 @@
           </div>
 
           <div class="details-section">
-            <h2>Stats</h2>
+            <h2 i18n="@@pokemon-details.header.stats|The heading for pokemon statistics breakdown">
+              Stats
+            </h2>
             <app-stats-breakdown
               [stats]="pokemon.stats"
               [isEditing]="isEditing"
@@ -82,7 +86,9 @@
 
         @if (pokemonEvolution$ | async; as evolutionChain) {
           <div class="evolution-container">
-            <h2>Evolution</h2>
+            <h2 i18n="@@pokemon-details.header.evolution">
+              Evolution
+            </h2>
             <div class="evolution-chain-wrapper">
               @if (evolutionChain.chain.length > 0) {
                 <app-evolution-chain-species
@@ -96,7 +102,9 @@
 
         @if (equalTypePokemonList$ | async; as equalTypePokemon) {
           <div class="similar-pokemon-container">
-            <h2>Pokemon of similar type</h2>
+            <h2 i18n="@@pokemon-details.header.pokemon-of-similar-type">
+              Pokemon of similar type
+            </h2>
             <div class="similar-pokemon-list">
               @for (equalTypePokemon of equalTypePokemon; track equalTypePokemon.id) {
                 <div class="pokemon-item" (click)="onPokemonCardClick(equalTypePokemon.id)">
