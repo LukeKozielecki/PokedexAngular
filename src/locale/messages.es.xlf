@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="noPokemonMatchedTitle" datatype="html">
+        <source>No Pokémon Matched Your Search!</source>
+        <target>¡Ningún Pokémon Coincidió con tu Búsqueda!</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/pokemon/presentation/pages/pokemon-list/pokemon-list.html</context>
+          <context context-type="linenumber">38,39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tryDifferentSearchPrompt" datatype="html">
+        <source>Please try different search term</source>
+        <target>Por favor, prueba con un término de búsqueda diferente</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/pokemon/presentation/pages/pokemon-list/pokemon-list.html</context>
+          <context context-type="linenumber">39,40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="noPokemonFoundText" datatype="html">
+        <source>No Pokemon found.</source>
+        <target>No se encontraron Pokémon.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/pokemon/presentation/pages/pokemon-list/pokemon-list.html</context>
+          <context context-type="linenumber">45,48</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
