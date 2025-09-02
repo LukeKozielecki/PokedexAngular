@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {PokemonRepository} from '../../domain/model/PokemonRepository';
 import {HttpClient} from '@angular/common/http';
-import {forkJoin, map, Observable, switchMap} from 'rxjs';
+import {forkJoin, map, Observable, of, switchMap} from 'rxjs';
 import {Pokemon} from '../../domain/model/Pokemon';
 import {PokemonDetailDto} from '../dtos/PokemonDetailDto';
 import {mapPokemonDetailDtoToPokemon, mapPokemonDetailDtoToPokemonDetails} from '../mappers/PokemonMappers';
@@ -44,16 +44,54 @@ export class PokeApiPokemonDataSource implements PokemonRepository, PokemonDetai
       })
     );
   }
-
-  getPokemonDetailsById(id: number): Observable<PokemonDetails> {
-    return this.http.get<PokemonDetailDto>(`${POKEMON_API_BASE_URL}/pokemon/${id}`).pipe(
-      map(mapPokemonDetailDtoToPokemonDetails)
-    );
+  getPokemonDetailsById(id: number, lang: string = 'en'): Observable<PokemonDetails> {
+    return this.auxGeneratePokemonDetails(id, lang)
   }
 
   getPokemonDetailsByName(name: string): Observable<PokemonDetails> {
-    return this.http.get<PokemonDetailDto>(`${POKEMON_API_BASE_URL}/pokemon/${name.toLowerCase()}`).pipe(
-      map(mapPokemonDetailDtoToPokemonDetails)
+    return this.auxGeneratePokemonDetails(name)
+  }
+
+  private auxGeneratePokemonDetails(id: number | string, lang: string = 'en') : Observable<PokemonDetails> {
+    const pokemonDetailUrl = `${POKEMON_API_BASE_URL}/pokemon/${id}`;
+    const getLocalizedName = (http: HttpClient, url: string, lang: string): Observable<string> => {
+      return http.get<any>(url).pipe(
+        map(data => {
+          const localizedName = data.names.find((nameObj: any) => nameObj.language.name === lang);
+          return localizedName ? localizedName.name : data.name;
+        })
+      );
+    };
+
+    return this.http.get<PokemonDetailDto>(pokemonDetailUrl).pipe(
+      switchMap(dto => {
+        // Create an array of observables for each translatable field
+        const statNameObservables = dto.stats.map(statSlot =>
+          getLocalizedName(this.http, statSlot.stat.url, lang)
+        );
+        const typeNameObservables = dto.types.map(typeSlot =>
+          getLocalizedName(this.http, typeSlot.type.url, lang)
+        );
+        const abilityNameObservables = dto.abilities.map(abilitySlot =>
+          getLocalizedName(this.http, abilitySlot.ability!.url, lang)
+        );
+
+        // Wait for all localized names to be fetched
+        return forkJoin([
+          of(dto),
+          forkJoin(statNameObservables),
+          forkJoin(typeNameObservables),
+          forkJoin(abilityNameObservables)
+        ]);
+      }),
+      map(([dto, localizedStatNames, localizedTypeNames, localizedAbilityNames]) => {
+        // Map the DTO and the fetched localized names to the final model
+        return mapPokemonDetailDtoToPokemonDetails(dto, {
+          stats: localizedStatNames,
+          types: localizedTypeNames,
+          abilities: localizedAbilityNames,
+        });
+      })
     );
   }
 

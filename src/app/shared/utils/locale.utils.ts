@@ -10,7 +10,7 @@ export function getCurrentLocale(pathname: string): string {
   } else if (pathname.startsWith('/es')) {
     return 'es';
   }
-  return "en";
+  return "en-US";
 }
 
 /**
