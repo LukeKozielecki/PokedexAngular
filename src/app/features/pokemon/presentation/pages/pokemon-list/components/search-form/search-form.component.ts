@@ -1,10 +1,12 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angular/core';
+import {CommonModule, DOCUMENT} from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {debounceTime, distinctUntilChanged, Observable, Subject, Subscription, tap} from 'rxjs';
+import {debounceTime, distinctUntilChanged, Observable, Subject, Subscription, takeUntil, tap} from 'rxjs';
 import {AuthService} from '../../../../../../auth/services/auth.service';
 import {MatIconModule} from '@angular/material/icon';
 import {LanguageSwitcher} from '../../../../../../../shared/components/language-switcher/language-switcher';
+import {PokemonDataService} from '../../../../../infrastructure/services/PokemonDataService';
+import {getCurrentLocale} from '../../../../../../../shared/utils/locale.utils';
 
 @Component({
   selector: 'app-search-form',
@@ -18,33 +20,19 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   selectedType: string = '';
   isFavoritesOnly: boolean = false;
   isLoggedIn$!: Observable<boolean>;
-  pokemonTypes = [
-    'normal',
-    'electric',
-    'fire',
-    'water',
-    'grass',
-    'dark',
-    'fairy',
-    'psychic',
-    'poison',
-    'bug',
-    'fighting',
-    'ice',
-    'ghost',
-    'dragon',
-    'steel',
-    'rock',
-    'ground',
-    'flying'
-  ];
+  pokemonTypes: string[] = [];
 
   @Output() searchSubmitted = new EventEmitter<{ term: string; types: string[]; favoritesOnly: boolean }>();
 
   private searchTerms = new Subject<string>();
   private subscription!: Subscription;
+  private destroy$ = new Subject<void>();
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private pokemonDataService: PokemonDataService,
+    @Inject(DOCUMENT) private document: Document
+  ) {}
 
   ngOnInit(): void {
     this.isLoggedIn$ = this.authService.isLoggedIn();
@@ -53,6 +41,13 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       tap(() => this.emitSearchPayload())
     ).subscribe();
+    const currentLang = getCurrentLocale(this.document.location.pathname);
+    this.pokemonDataService
+      .getPokemonTypes(currentLang || 'en')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((types) => {
+        this.pokemonTypes = types;
+      });
   }
 
   ngOnDestroy(): void {
