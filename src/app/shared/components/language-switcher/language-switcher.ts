@@ -3,6 +3,7 @@ import { DOCUMENT, Location } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import {getCurrentLocale, getNewLanguagePath} from '../../utils/locale.utils';
 
 /**
  * Component responsible for switching language block between Spanish and English.
@@ -46,26 +47,12 @@ export class LanguageSwitcher implements OnInit, OnDestroy {
   }
 
   private updateLocale() {
-    const currentPath = this.document.location.pathname;
-    console.log(currentPath)
-    if (currentPath.startsWith('/en-US')) {
-      this.currentLocale = 'en-US';
-    } else if (currentPath.startsWith('/es')) {
-      this.currentLocale = 'es';
-    } else {
-      this.currentLocale = null;
-    }
+    this.currentLocale = getCurrentLocale(this.document.location.pathname);
   }
 
   changeLanguage(lang: string) {
     const currentPath = this.location.path();
-    let newPath: string;
-    if (currentPath.startsWith('/es') || currentPath.startsWith('/en-US')) {
-      newPath = `/${lang}${currentPath.substring(currentPath.indexOf('/', 1))}`;
-    } else {
-      newPath = `/${lang}${currentPath}`;
-    }
-
+    const newPath = getNewLanguagePath(currentPath, lang);
     this.document.location.href = this.document.location.origin + newPath;
   }
 }
