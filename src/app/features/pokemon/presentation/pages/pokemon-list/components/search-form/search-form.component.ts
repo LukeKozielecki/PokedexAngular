@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import {debounceTime, distinctUntilChanged, Observable, Subject, Subscription, tap} from 'rxjs';
 import {AuthService} from '../../../../../../auth/services/auth.service';
 import {MatIconModule} from '@angular/material/icon';
+import {LanguageSwitcher} from '../../../../../../../shared/components/language-switcher/language-switcher';
 
 @Component({
   selector: 'app-search-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule],
+  imports: [CommonModule, FormsModule, MatIconModule, LanguageSwitcher],
   templateUrl: './search-form.html',
   styleUrl: './search-form.scss'
 })
