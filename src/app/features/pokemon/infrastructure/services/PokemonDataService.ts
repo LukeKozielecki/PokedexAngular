@@ -3,6 +3,8 @@ import {Observable, BehaviorSubject, finalize, tap, filter, map} from 'rxjs';
 import { POKEMON_REPOSITORY, PokemonRepository } from '../../domain/model/PokemonRepository';
 import { Pokemon } from '../../domain/model/Pokemon';
 import { shareReplay, take } from 'rxjs/operators';
+import {DOCUMENT} from '@angular/common';
+import {getCurrentLocale} from '../../../../shared/utils/locale.utils';
 
 /**
  * A data service that fetches and caches a list of all Pokémon.
@@ -16,7 +18,8 @@ export class PokemonDataService {
 
   // === Dependencies ===
   constructor(
-      @Inject(POKEMON_REPOSITORY) private pokemonRepository: PokemonRepository
+      @Inject(POKEMON_REPOSITORY) private pokemonRepository: PokemonRepository,
+      @Inject(DOCUMENT) private document: Document
   ) {}
 
   // === Reactive State ===
@@ -31,6 +34,16 @@ export class PokemonDataService {
    * simultaneous repository calls.
    */
   private loadingInProgress$?: Observable<Pokemon[]>;
+
+  /**
+   * Cache holder for the full list of Pokémon types.
+   */
+  private allPokemonTypesCache$ = new BehaviorSubject<string[] | null>(null);
+
+  /**
+   * Tracks a fetch in progress for the list of types.
+   */
+  private loadingTypesInProgress$?: Observable<string[]>;
 
 
   // === Exposed Methods ===
@@ -65,6 +78,33 @@ export class PokemonDataService {
   }
 
 
+  /**
+   * Returns a cached or newly fetched list of all Pokémon types.
+   * @param lang The language code for localization.
+   * @returns An Observable of a string array containing all Pokémon types.
+   */
+  public getPokemonTypes(lang: string): Observable<string[]> {
+    if (this.allPokemonTypesCache$.value) {
+      return this.allPokemonTypesCache$.asObservable().pipe(
+        filter(types => !!types),
+        map(types => types as string[]),
+        take(1)
+      );
+    }
+
+    if (!this.loadingTypesInProgress$) {
+      this.loadingTypesInProgress$ = this.pokemonRepository
+        .getPokemonTypes(lang)
+        .pipe(
+          tap(types => this.allPokemonTypesCache$.next(types)),
+          shareReplay({ bufferSize: 1, refCount: true }),
+          finalize(() => (this.loadingTypesInProgress$ = undefined))
+        );
+    }
+    return this.loadingTypesInProgress$;
+  }
+
+
   // === Internal Details ===
   /**
    * Calls the repository, pushes the result into cache,
@@ -72,8 +112,9 @@ export class PokemonDataService {
    */
   private fetchAndCachePokemon(): Observable<Pokemon[]> {
     if (!this.loadingInProgress$) {
+      const currentLang = getCurrentLocale(this.document.location.pathname);
       this.loadingInProgress$ = this.pokemonRepository
-          .getPokemonList(0, 6000)
+          .getPokemonList(currentLang || 'en', 0, 6000)
           .pipe(
               tap(list => this.allPokemonCache$.next(list)),
               shareReplay({ bufferSize: 1, refCount: true }),

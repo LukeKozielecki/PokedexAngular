@@ -62,7 +62,7 @@ export class LoginForm {
     if (this.email) {
       this.authService.resetPassword(this.email).subscribe({
         next: () => {
-          this.successMessage = 'A password reset link has been sent to your email address. Please do check Spam';
+          this.successMessage = $localize`:@@auth.password-reset.success-message:A password reset link has been sent to your email address. Please do check Spam`;
           this.errorMessage = '';
         },
         error: (error) => {
@@ -71,7 +71,7 @@ export class LoginForm {
         },
       });
     } else {
-      this.errorMessage = 'Please enter your email address to reset your password.';
+      this.errorMessage = $localize`:@@auth.password-reset.email-required-error:Please enter your email address to reset your password.`;
       this.successMessage = '';
     }
   }

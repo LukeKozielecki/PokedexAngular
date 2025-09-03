@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 import {InjectionToken} from '@angular/core';
 
 export interface PokemonDetailsRepository {
-  getPokemonDetailsById(id: number): Observable<PokemonDetails>;
+  getPokemonDetailsById(id: number, lang: string): Observable<PokemonDetails>;
   getPokemonDetailsByName(name: string): Observable<PokemonDetails>;
 }
 

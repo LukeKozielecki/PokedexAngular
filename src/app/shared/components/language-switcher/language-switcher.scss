@@ -1,0 +1,34 @@
+@use '../../../shared/constants/theme' as theme;
+@use '../../../shared/constants/theme' as search-theme;
+
+$font-weight-bold: 700;
+$spacing-x-small: 0.25rem;
+$minimum-height:75px;
+$min-width: 350px;
+
+.language-switcher {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.language-switcher button {
+  padding: 0.5rem 1rem;
+  background-color: theme.$secondary-color;
+  color: #fff;
+  border: 1px solid theme.$secondary-color;
+  border-radius: $spacing-x-small;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-weight: $font-weight-bold;
+  min-height: $minimum-height;
+
+  &:hover {
+    background-color: darken(theme.$secondary-color, 5%);
+  }
+
+  &:active {
+    background-color: darken(theme.$secondary-color, 10%);
+    transform: scale(0.95);
+  }
+}

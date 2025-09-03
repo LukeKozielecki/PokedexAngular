@@ -1,0 +1,7 @@
+<div class="language-switcher">
+  @if (currentLocale === 'en-US') {
+    <button (click)="changeLanguage('es')">Español</button>
+  } @else if (currentLocale === 'es') {
+    <button (click)="changeLanguage('en-US')">English</button>
+  }
+</div>

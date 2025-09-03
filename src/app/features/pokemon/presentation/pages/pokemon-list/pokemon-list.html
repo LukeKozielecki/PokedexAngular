@@ -35,14 +35,14 @@
 
       @if (pokemon.length === 0 && isInSearchState) {
         <div class="search-failed">
-          <h3>No Pokémon Matched Your Search!</h3>
-          <p><strong>Please try different search term</strong></p>
+          <h3 i18n="@@noPokemonMatchedTitle">No Pokémon Matched Your Search!</h3>
+          <p><strong i18n="@@tryDifferentSearchPrompt">Please try different search term</strong></p>
           <pre>{{ noPokemonArt }}</pre>
         </div>
       }
 
       @if (pokemon.length === 0 && !isInSearchState) {
-        <div class="no-pokemon-found">No Pokemon found.</div>
+        <div class="no-pokemon-found" i18n="@@noPokemonFoundText">No Pokemon found.</div>
       }
 
       <div class="lazy-loader"></div>

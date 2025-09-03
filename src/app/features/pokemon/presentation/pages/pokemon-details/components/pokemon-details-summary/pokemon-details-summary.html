@@ -1,7 +1,9 @@
 <div class="details-section">
   <div class="summary-grid">
     <div class="summary-item">
-      <h3>Types</h3>
+      <h3 i18n="@@pokemon-details-summary.heading.types|The heading for the section listing a Pokémon's types.">
+        Types
+      </h3>
       @for (type of types; track type){
         <span
           class="type-pill"
@@ -12,7 +14,9 @@
       }
     </div>
     <div class="summary-item">
-      <h3>Height</h3>
+      <h3 i18n="@@pokemon-details-summary.heading.height|The heading for the section listing a Pokémon's height.">
+        Height
+      </h3>
       @if (isEditing) {
         <input
           type="number"
@@ -30,7 +34,9 @@
       }
     </div>
     <div class="summary-item">
-      <h3>Weight</h3>
+      <h3 i18n="@@pokemon-details-summary.heading.weight|The heading for the section listing a Pokémon's weight.">
+        Weight
+      </h3>
       @if (isEditing) {
         <input
           type="number"
@@ -48,7 +54,9 @@
       }
     </div>
     <div class="summary-item">
-      <h3>Base Experience</h3>
+      <h3 i18n="@@pokemon-details-summary.heading.baseExperience|The heading for the section listing a Pokémon's base experience.">
+        Base Experience
+      </h3>
       @if (isEditing) {
         <input
           type="number"
@@ -66,7 +74,11 @@
       }
     </div>
     <div class="summary-item">
-      <h3 class="section-title">Abilities</h3>
+      <h3 class="section-title"
+          i18n="@@pokemon-details-summary.heading.abilities|The heading for the section listing a Pokémon's abilities."
+      >
+        Abilities
+      </h3>
       <ul class="section-list">
         @for (ability of abilities; track ability.name) {
           <li>{{ ability.name }} @if (ability.isHidden) { (Hidden) }</li>

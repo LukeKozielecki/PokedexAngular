@@ -3,6 +3,8 @@ import {POKEMON_DETAILS_REPOSITORY, PokemonDetailsRepository} from '../../domain
 import {finalize, Observable, of, tap} from 'rxjs';
 import {PokemonDetails} from '../../domain/model/PokemonDetails';
 import {shareReplay} from 'rxjs/operators';
+import {getCurrentLocale} from '../../../../shared/utils/locale.utils';
+import {DOCUMENT} from '@angular/common';
 
 /**
  * A service for managing and providing Pokémon details.
@@ -19,7 +21,8 @@ import {shareReplay} from 'rxjs/operators';
 export class PokemonDetailsDataService {
 
   constructor(
-    @Inject(POKEMON_DETAILS_REPOSITORY) private pokemonDetailsRepository : PokemonDetailsRepository
+    @Inject(POKEMON_DETAILS_REPOSITORY) private pokemonDetailsRepository : PokemonDetailsRepository,
+    @Inject(DOCUMENT) private document: Document
   ) {}
 
   // === Reactive State ===
@@ -43,6 +46,7 @@ export class PokemonDetailsDataService {
    */
   public getPokemonDetailsById(id: number): Observable<PokemonDetails> {
     const cachedDetails = this.pokemonDetailsCache.get(id);
+    const currentLang = getCurrentLocale(this.document.location.pathname);
 
     if (cachedDetails) {
       return of(cachedDetails);
@@ -54,7 +58,7 @@ export class PokemonDetailsDataService {
     }
 
     // No cache and no in-progress request, so fetch from the repository
-    const request$ = this.pokemonDetailsRepository.getPokemonDetailsById(id).pipe(
+    const request$ = this.pokemonDetailsRepository.getPokemonDetailsById(id, currentLang || 'en').pipe(
       tap(details => this.pokemonDetailsCache.set(id, details)),
       shareReplay({ bufferSize: 1, refCount: true }),
       finalize(() => this.loadingInProgress.delete(id))

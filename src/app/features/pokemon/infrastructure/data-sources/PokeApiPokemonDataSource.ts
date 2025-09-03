@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {PokemonRepository} from '../../domain/model/PokemonRepository';
 import {HttpClient} from '@angular/common/http';
-import {forkJoin, map, Observable, switchMap} from 'rxjs';
+import {forkJoin, map, Observable, of, switchMap} from 'rxjs';
 import {Pokemon} from '../../domain/model/Pokemon';
 import {PokemonDetailDto} from '../dtos/PokemonDetailDto';
 import {mapPokemonDetailDtoToPokemon, mapPokemonDetailDtoToPokemonDetails} from '../mappers/PokemonMappers';
@@ -12,6 +12,9 @@ import {PokemonDetails} from '../../domain/model/PokemonDetails';
 import {PokemonSpeciesDto} from '../dtos/PokemonSpeciesDto';
 import {POKEMON_API_BASE_URL} from '../../../../shared/constants/app.constants';
 import {PokemonDetailsRepository} from '../../domain/model/PokemonDetailsRepository';
+import {PokemonTypeDto} from '../dtos/PokemonTypeDto';
+import {PokemonListDto} from '../dtos/PokemonListDto';
+import {LocalizedNameResponseDto} from '../dtos/LocalizedNamesDto';
 
 @Injectable({
   providedIn: 'root'
@@ -32,28 +35,87 @@ export class PokeApiPokemonDataSource implements PokemonRepository, PokemonDetai
     );
   }
 
-  getPokemonList(offset: number = 0, limit: number = 20): Observable<Pokemon[]> {
-    return this.http.get<any>(`${POKEMON_API_BASE_URL}/pokemon?offset=${offset}&limit=${limit}`).pipe(
+  getPokemonList(lang: string = "en", offset: number = 0, limit: number = 20): Observable<Pokemon[]> {
+    const getLocalizedName = (http: HttpClient, url: string, lang: string): Observable<string> => {
+      return http.get<LocalizedNameResponseDto>(url).pipe(
+        map(data => {
+          const localizedName = data.names.find((nameObj) => nameObj.language.name === lang);
+          return localizedName ? localizedName.name : data.name;
+        })
+      );
+    };
+
+    return this.http.get<PokemonListDto>(`${POKEMON_API_BASE_URL}/pokemon?offset=${offset}&limit=${limit}`).pipe(
       switchMap((response): Observable<Pokemon[]> => {
-        const pokemonDetailsRequests : Pokemon[] = response.results.map((result: { name: string, url: string }) => {
+        const pokemonObservables = response.results.map((result: { name: string, url: string }) => {
           const idMatch = result.url.match(/\/(\d+)\/$/);
           const id = idMatch ? parseInt(idMatch[1], 10) : 0;
-          return this.getPokemonById(id);
+
+          return this.getPokemonById(id).pipe(
+            switchMap(pokemon => {
+              const typeObservables = pokemon.types.map(type =>
+                getLocalizedName(this.http, `https://pokeapi.co/api/v2/type/${type}`, lang)
+              );
+              return forkJoin([of(pokemon), forkJoin(typeObservables)]);
+            }),
+            map(([pokemon, localizedTypes]) => {
+              return {...pokemon, types: localizedTypes};
+            })
+          );
         });
-        return forkJoin(pokemonDetailsRequests);
+        return forkJoin(pokemonObservables) as Observable<Pokemon[]>;
       })
     );
   }
 
-  getPokemonDetailsById(id: number): Observable<PokemonDetails> {
-    return this.http.get<PokemonDetailDto>(`${POKEMON_API_BASE_URL}/pokemon/${id}`).pipe(
-      map(mapPokemonDetailDtoToPokemonDetails)
-    );
+  getPokemonDetailsById(id: number, lang: string = 'en'): Observable<PokemonDetails> {
+    return this.auxGeneratePokemonDetails(id, lang)
   }
 
   getPokemonDetailsByName(name: string): Observable<PokemonDetails> {
-    return this.http.get<PokemonDetailDto>(`${POKEMON_API_BASE_URL}/pokemon/${name.toLowerCase()}`).pipe(
-      map(mapPokemonDetailDtoToPokemonDetails)
+    return this.auxGeneratePokemonDetails(name)
+  }
+
+  private auxGeneratePokemonDetails(id: number | string, lang: string = 'en') : Observable<PokemonDetails> {
+    const pokemonDetailUrl = `${POKEMON_API_BASE_URL}/pokemon/${id}`;
+    const getLocalizedName = (http: HttpClient, url: string, lang: string): Observable<string> => {
+      return http.get<LocalizedNameResponseDto>(url).pipe(
+        map(data => {
+          const localizedName = data.names.find((nameObj) => nameObj.language.name === lang);
+          return localizedName ? localizedName.name : data.name;
+        })
+      );
+    };
+
+    return this.http.get<PokemonDetailDto>(pokemonDetailUrl).pipe(
+      switchMap(dto => {
+        // Create an array of observables for each translatable field
+        const statNameObservables = dto.stats.map(statSlot =>
+          getLocalizedName(this.http, statSlot.stat.url, lang)
+        );
+        const typeNameObservables = dto.types.map(typeSlot =>
+          getLocalizedName(this.http, typeSlot.type.url, lang)
+        );
+        const abilityNameObservables = dto.abilities.map(abilitySlot =>
+          getLocalizedName(this.http, abilitySlot.ability!.url, lang)
+        );
+
+        // Wait for all localized names to be fetched
+        return forkJoin([
+          of(dto),
+          forkJoin(statNameObservables),
+          forkJoin(typeNameObservables),
+          forkJoin(abilityNameObservables)
+        ]);
+      }),
+      map(([dto, localizedStatNames, localizedTypeNames, localizedAbilityNames]) => {
+        // Map the DTO and the fetched localized names to the final model
+        return mapPokemonDetailDtoToPokemonDetails(dto, {
+          stats: localizedStatNames,
+          types: localizedTypeNames,
+          abilities: localizedAbilityNames,
+        });
+      })
     );
   }
 
@@ -64,6 +126,27 @@ export class PokeApiPokemonDataSource implements PokemonRepository, PokemonDetai
   getEvolutionChainById(id: number): Observable<EvolutionChain> {
     return this.http.get<EvolutionChainDto>(`${POKEMON_API_BASE_URL}/evolution-chain/${id}`).pipe(
       map(mapEvolutionChainDtoToEvolutionChain)
+    );
+  }
+
+  getPokemonTypes(lang: string = 'en'): Observable<string[]> {
+    const getLocalizedName = (url: string, lang: string): Observable<string> => {
+      return this.http.get<any>(url).pipe(
+        map((data: any) => {
+          const localizedName = data.names.find((nameObj: any) => nameObj.language.name === lang);
+          return localizedName ? localizedName.name : data.name;
+        })
+      );
+    };
+
+    return this.http.get<PokemonTypeDto>(`${POKEMON_API_BASE_URL}/type?limit=20`).pipe(
+      switchMap((response: PokemonTypeDto) => {
+        const typeObservables = response.results.map((type: { url: string }) =>
+          getLocalizedName(type.url, lang)
+        );
+        return forkJoin(typeObservables) as Observable<string[]>;
+      }),
+      map(localizedNames => localizedNames.sort())
     );
   }
 }

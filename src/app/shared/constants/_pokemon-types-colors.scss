@@ -2,6 +2,14 @@
  * SCSS Variables for Pokémon type colors.
  * This file contains a map of Pokémon types and their corresponding hexadecimal color codes.
  * These colors are used to style "type pills" throughout the application to ensure consistency.
+ *
+ * @remarks This is a quick fix because refactoring type-pills to dynamically fetch $type-colors-[Suffix]
+ * offers relatively minor performance increase for 2 language-project. Should this grow to 2+ supported languages
+ * this would need to be refactored to use URL and determine color by that, since API response.
+ * "results": [{
+ *     "name": "normal",
+ *     "url": "https://pokeapi.co/api/v2/type/1/" //this is the only static element in the response
+ *   }]
  */
 $type-colors: (
   normal:   #a4acaf,
@@ -21,5 +29,23 @@ $type-colors: (
   steel:    #9eb7b8,
   rock:     #a38c21,
   ground:   #ab9842,
-  flying:   #2987a2
+  flying:   #2987a2,
+  // Spanish translations
+  electrico: #eed535,  // electric
+  fuego:     #fd7d23,  // fire
+  agua:    #4592c4,    // water
+  planta:    #9bcc50,  // grass
+  siniestro: #707070,  // dark
+  hada:      #fdb9e9,  // fairy
+  psiquico:  #f366b9,  // psychic
+  veneno:    #b97fc9,  // poison
+  bicho:     #729f3f,  // bug
+  lucha:     #d56723,  // fighting
+  hielo:      #51c4e7,  // ice
+  fantasma:  #7b62a3,  // ghost
+  dragón:   #be5644,  // dragon
+  acero:    #9eb7b8,  // steel
+  roca:      #a38c21,  // rock
+  tierra:   #ab9842,  // ground
+  volador:   #2987a2,  // flying
 );

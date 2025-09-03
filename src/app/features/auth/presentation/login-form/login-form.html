@@ -1,18 +1,38 @@
 <div class="login-container">
   <form (ngSubmit)="isLoginMode ? onLogin() : onRegister()">
     @if (isLoginMode) {
-      <h2 id="form-title-login">Login</h2>
+      <h2
+        id="form-title-login"
+        i18n="@@login-form.header.login|The heading for the login form."
+      >
+        Login
+      </h2>
     } @else {
-      <h2 id="form-title-register">Register</h2>
+      <h2
+        id="form-title-register"
+        i18n="@@login-form.header.register|The heading for the registration form."
+      >
+        Register
+      </h2>
     }
 
     <div class="form-group">
-      <label for="email">Email:</label>
+      <label
+        for="email"
+        i18n="@@login-form.label.email|The label for the email input field."
+      >
+        Email:
+      </label>
       <input type="email" id="email" data-cy="auth-email-input-filed" [(ngModel)]="email" name="email" required>
     </div>
 
     <div class="form-group">
-      <label for="password">Password:</label>
+      <label
+        for="password"
+        i18n="@@login-form.label.password|The label for the password input field."
+      >
+        Password:
+      </label>
       <input type="password" id="password" data-cy="auth-password-input-filed" [(ngModel)]="password" name="password" required>
     </div>
 
@@ -26,7 +46,12 @@
     @if (isLoginMode) {
       <button id="submit-button-login" data-cy="auth-login-button" type="submit">Login</button>
       <button class="reset-password-link" data-cy="auth-reset-password-button">
-        <a href="#" (click)="onPasswordReset($event)">Forgot password?</a>
+        <a href="#"
+           (click)="onPasswordReset($event)"
+           i18n="@@login-form.link.forgot-password|A link to reset the password."
+        >
+          Forgot password?
+        </a>
       </button>
     } @else {
       <button id="submit-button-register" data-cy="auth-register-button" type="submit">Register</button>
@@ -34,7 +59,17 @@
     <button routerLink="/pokemon" class="navigate-to-home" data-cy="auth-navigate-back-button" ><mat-icon>arrow_back</mat-icon></button>
 
     <button class="toggle-mode-button" data-cy="auth-toggle-login-register-button" (click)="toggleMode(); $event.preventDefault()">
-      <a data-cy="auth-toggle-login-text">{{ isLoginMode ? 'Need to register?' : 'Already have an account?' }}</a>
+      <a data-cy="auth-toggle-login-text">
+        @if(isLoginMode) {
+          <span i18n="@@login-form.paragraph.needToRegister">
+            Need to register?
+          </span>
+        } @else {
+        <span i18n="@@login-form.paragraph.alreadyHaveAccount">
+          Already have an account?
+        </span>
+        }
+      </a>
     </button>
   </form>
 </div>
