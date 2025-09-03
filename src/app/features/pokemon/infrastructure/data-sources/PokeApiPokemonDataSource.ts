@@ -13,6 +13,8 @@ import {PokemonSpeciesDto} from '../dtos/PokemonSpeciesDto';
 import {POKEMON_API_BASE_URL} from '../../../../shared/constants/app.constants';
 import {PokemonDetailsRepository} from '../../domain/model/PokemonDetailsRepository';
 import {PokemonTypeDto} from '../dtos/PokemonTypeDto';
+import {PokemonListDto} from '../dtos/PokemonListDto';
+import {LocalizedNameResponseDto} from '../dtos/LocalizedNamesDto';
 
 @Injectable({
   providedIn: 'root'
@@ -35,15 +37,15 @@ export class PokeApiPokemonDataSource implements PokemonRepository, PokemonDetai
 
   getPokemonList(lang: string = "en", offset: number = 0, limit: number = 20): Observable<Pokemon[]> {
     const getLocalizedName = (http: HttpClient, url: string, lang: string): Observable<string> => {
-      return http.get<any>(url).pipe(
+      return http.get<LocalizedNameResponseDto>(url).pipe(
         map(data => {
-          const localizedName = data.names.find((nameObj: any) => nameObj.language.name === lang);
+          const localizedName = data.names.find((nameObj) => nameObj.language.name === lang);
           return localizedName ? localizedName.name : data.name;
         })
       );
     };
 
-    return this.http.get<any>(`${POKEMON_API_BASE_URL}/pokemon?offset=${offset}&limit=${limit}`).pipe(
+    return this.http.get<PokemonListDto>(`${POKEMON_API_BASE_URL}/pokemon?offset=${offset}&limit=${limit}`).pipe(
       switchMap((response): Observable<Pokemon[]> => {
         const pokemonObservables = response.results.map((result: { name: string, url: string }) => {
           const idMatch = result.url.match(/\/(\d+)\/$/);
@@ -77,9 +79,9 @@ export class PokeApiPokemonDataSource implements PokemonRepository, PokemonDetai
   private auxGeneratePokemonDetails(id: number | string, lang: string = 'en') : Observable<PokemonDetails> {
     const pokemonDetailUrl = `${POKEMON_API_BASE_URL}/pokemon/${id}`;
     const getLocalizedName = (http: HttpClient, url: string, lang: string): Observable<string> => {
-      return http.get<any>(url).pipe(
+      return http.get<LocalizedNameResponseDto>(url).pipe(
         map(data => {
-          const localizedName = data.names.find((nameObj: any) => nameObj.language.name === lang);
+          const localizedName = data.names.find((nameObj) => nameObj.language.name === lang);
           return localizedName ? localizedName.name : data.name;
         })
       );
